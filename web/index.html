@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <!-- Bootstrap core CSS -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Latest compiled and minified JavaScript --> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <!-- Custom styles for this template -->
+    <link href="css/cover.css" rel="stylesheet">
+
+    <title>Cover Template for Bootstrap</title>        
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+    <h1 class="cover-heading" id="logo" hidden onclick='return window.location.href = "index.html";'>Zen<span>du</span></h1>
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+                  
+
+          <div class="inner cover" id="start">
+            <h1 class="cover-heading">Zen<span>du</span></h1>
+            <p class="lead">De slimme manier om aangetekende brieven<br>te verzenden en te ontvangen.</p>
+            <p class="lead">
+              <a id="verzendbutton" class="btn btn-lg btn-default">Verzenden</a><br><br>
+              <a id="loginbutton" class="btn btn-lg btn-default">Inloggen</a><br>
+
+            </p>
+          </div>
+          
+          <div class="inner cover" id="loginform" style="display:none;text-align:left;">
+
+          <div class="well bs-component">           
+          <form method="post" action="login.jsp">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email address</label>
+              <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Password</label>
+              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-lg btn-default" value="Inloggen"/>
+            </div>
+          </form>
+          </div>
+
+            </p>
+          </div>
+
+          <div class="inner cover" id="getstartedform" style="display:none;text-align:left;">
+
+          <div class="well bs-component">                      
+          <form action="upload" method="post" enctype="multipart/form-data">
+            <legend>Gegevens bestemmeling</legend>
+            <div class="form-group">             
+              <input type="email" class="form-control" id="exampleInputEmail1" name="destinationfirstname" placeholder="Voornaam">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="exampleInputPassword1" name="destinationlastname" placeholder="Naam">
+            </div>
+            <div class="form-group">              
+              <input type="text" class="form-control" id="exampleInputPassword1" name="destinationstreet" placeholder="Straat">
+            </div>
+            <div class="form-group">              
+              <input type="text" class="form-control" id="exampleInputPassword1" name="destinationzipcode" placeholder="Postcode">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="exampleInputPassword1" name="destinationcity" placeholder="Stad">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="exampleInputPassword1" name="destinationEmail" placeholder="E-mail adres">
+            </div>
+            <legend>Te verzenden document</legend>
+            <div class="form-group">
+              <input id="input-1" name="file" type="file" class="file">
+            </div>
+            <legend>Uw gegevens</legend>
+            <div class="form-group">             
+              <input type="email" class="form-control" id="exampleInputEmail1" name="senderfirstname" placeholder="Voornaam">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="exampleInputPassword1" name="senderlastname" placeholder="Naam">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="exampleInputPassword1" name="senderemail" placeholder="E-mail adres">
+            </div>
+            <div class="form-group">
+              <input type="submit" class="btn btn-lg btn-default" value="verzenden"/>
+              <a id="closebutton" class="btn btn-lg btn-default">Cancel</a><br>
+              
+            </div>
+
+          </form>
+          </div>
+
+       
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <script>
+
+        $(document).ready(function(){
+
+            $("#loginbutton").click(function(){
+
+                $("#start").hide();
+
+                $("#loginform").fadeIn(3000);
+                $("#logo").fadeIn(3000);
+            });
+
+            $("#verzendbutton").click(function(){
+
+                $("#start").hide();
+
+                $("#getstartedform").fadeIn(3000);
+                $("#logo").fadeIn(3000);
+
+            });
+            
+            $("#closebutton").click(function(){
+
+                $("#getstartedform").hide();
+                $("#logo").hide();
+                $("#start").fadeIn(3000);
+                
+
+            });
+
+        });
+
+    </script>
+  
+  </body>
+</html>
