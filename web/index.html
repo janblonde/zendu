@@ -1,167 +1,172 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
 
-    <!-- Bootstrap core CSS -->
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<html class="no-js" lang="en">
+<head>
+  <!-- title and meta -->
+  <meta charset="utf-8">
+  <meta content="width=device-width,initial-scale=1.0" name="viewport">
+  <meta content="description" name="In this tutorial, we take a look at a beautiful parallax scrolling effect in the simplest of ways, with stationary backgrounds and scrolling content.">
 
-    <!-- Latest compiled and minified JavaScript --> 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <title>Simple Parallax Scrolling Effect</title>
 
-    <!-- Custom styles for this template -->
-    <link href="css/cover.css" rel="stylesheet">
+  <!-- css -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:900">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"> -->
 
-    <title>Cover Template for Bootstrap</title>        
+  <!-- js -->
+  <script src="js/modernizr.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
+</head>
 
-  <body>
+<body>
 
-    <div class="site-wrapper">
-    <h1 class="cover-heading" id="logo" hidden onclick='return window.location.href = "index.html";'>Zen<span>du</span></h1>
+<div class="wrapper">
 
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-                  
-
-          <div class="inner cover" id="start">
-            <h1 class="cover-heading">Zen<span>du</span></h1>
-            <p class="lead">De slimme manier om aangetekende brieven<br>te verzenden en te ontvangen.</p>
-            <p class="lead">
-              <a id="verzendbutton" class="btn btn-lg btn-default">Verzenden</a><br><br>
-              <a id="loginbutton" class="btn btn-lg btn-default">Inloggen</a><br>
-
-            </p>
-          </div>
-          
-          <div class="inner cover" id="loginform" style="display:none;text-align:left;">
-
-          <div class="well bs-component">           
-          <form method="post" action="login.jsp">
-            <div class="form-group">
-              <label for="exampleInputEmail1">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-            </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-lg btn-default" value="Inloggen"/>
-            </div>
-          </form>
-          </div>
-
-            </p>
-          </div>
-
-          <div class="inner cover" id="getstartedform" style="display:none;text-align:left;">
-
-          <div class="well bs-component">                      
-          <form action="upload" method="post" enctype="multipart/form-data">
-            <legend>Gegevens bestemmeling</legend>
-            <div class="form-group">             
-              <input type="email" class="form-control" id="exampleInputEmail1" name="destinationfirstname" placeholder="Voornaam">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="exampleInputPassword1" name="destinationlastname" placeholder="Naam">
-            </div>
-            <div class="form-group">              
-              <input type="text" class="form-control" id="exampleInputPassword1" name="destinationstreet" placeholder="Straat">
-            </div>
-            <div class="form-group">              
-              <input type="text" class="form-control" id="exampleInputPassword1" name="destinationzipcode" placeholder="Postcode">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="exampleInputPassword1" name="destinationcity" placeholder="Stad">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="exampleInputPassword1" name="destinationEmail" placeholder="E-mail adres">
-            </div>
-            <legend>Te verzenden document</legend>
-            <div class="form-group">
-              <input id="input-1" name="file" type="file" class="file">
-            </div>
-            <legend>Uw gegevens</legend>
-            <div class="form-group">             
-              <input type="email" class="form-control" id="exampleInputEmail1" name="senderfirstname" placeholder="Voornaam">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="exampleInputPassword1" name="senderlastname" placeholder="Naam">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="exampleInputPassword1" name="senderemail" placeholder="E-mail adres">
-            </div>
-            <div class="form-group">
-              <input type="submit" class="btn btn-lg btn-default" value="verzenden"/>
-              <a id="closebutton" class="btn btn-lg btn-default">Cancel</a><br>
-              
-            </div>
-
-          </form>
-          </div>
-
-       
-          </div>
-
+  <div class="info-bar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-1">
+          <a class="logo" href="http://www.zendu.be"><span style="color:black;">Zen</span><span style="color:red;">du</span></a>
         </div>
-
+        <div class="col-md-11 pull-right" style="text-align:right;">
+          <a href=#>TEST</a>
+          <a class="icon cmn-tut" data-title="Back To Tutorial" href="http://callmenick.com/?p=718"></a>
+          <!--<a class="icon cmn-prev" data-title="Pevious Demo - Revealing Content Overlays With CSS3 Transitions" href="http://callmenick.com/tutorial-demos/revealing-content-overlays/"></a>-->
+          <!-- <a class="icon cmn-next" data-title="Next Demo - " href="http://callmenick.com/tutorial-demos/..."></a> -->
+          <!--<a class="icon cmn-download" data-title="Download Source" href="http://callmenick.com/tutorial-demos/simple-parallax-effect/simple-parallax-effect-source.zip"></a>-->
+          <!--<a class="icon cmn-archive" data-title="Tutorial Archives" href="http://callmenick.com/category/tutorials/"></a>-->
+        </div>
       </div>
-
     </div>
+  </div>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <main>
+      
+      <section class="module parallax parallax-1">
+        <div class="container">
+          <h1 style="border-top-width: 1px;margin-top: 1%;margin-left: 5%;"><span style="color:white;">Zen</span><span style="color:red;">du</span></h1>          
+          <a class="btn btn-primary btn-lg" href="#form1" role="button">Learn more</a>
+        </div>
+      </section>
 
-    <script>
+      <section class="module content">
+        <div class="container">
+          <h2>Lorem Ipsum Dolor</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil consequuntur, nesciunt dicta, esse rem ducimus itaque quis. Adipisci ullam nam qui illum debitis sit ad in delectus, repudiandae non dolorum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit veritatis, facere aliquid itaque tempore consequatur nihil sint enim aliquam id saepe magnam totam repellat placeat a fugit nulla molestias voluptas.</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta cum distinctio eum asperiores rem enim fugit eaque voluptas est laboriosam in repudiandae architecto placeat, illum atque quasi explicabo, culpa, molestias!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit voluptas, aperiam quae provident, recusandae rem quis. Ut quaerat, quasi iste voluptate et dolorem atque sed neque voluptates, molestias dolor enim!</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam odit tempore, quibusdam impedit deserunt. Natus quisquam, facilis numquam, molestias nesciunt modi, at debitis maxime sunt et quo quas labore perferendis.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde delectus laborum doloremque recusandae, debitis maxime a! Nihil distinctio ex, cumque tempore ea voluptas omnis odit, quaerat natus nam excepturi corporis!</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque eius harum atque unde nihil aut quam provident sunt, iste error vitae suscipit dolores cupiditate totam, eum quae alias! Dicta, nisi.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate beatae impedit officia quis odit rerum sequi, explicabo commodi illum suscipit, tempore eum doloremque quae obcaecati tempora quidem neque sapiente modi?</p>
+        </div>
+      </section>
 
-        $(document).ready(function(){
+      <section class="module parallax parallax-2">
+        <div class="container">
+          <h1>Rise</h1>
+        </div>
+      </section>
 
-            $("#loginbutton").click(function(){
+      <section class="module content">
+        <div id="form1" class="container">
+          <h2>Lorem Ipsum Dolor</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil consequuntur, nesciunt dicta, esse rem ducimus itaque quis. Adipisci ullam nam qui illum debitis sit ad in delectus, repudiandae non dolorum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit veritatis, facere aliquid itaque tempore consequatur nihil sint enim aliquam id saepe magnam totam repellat placeat a fugit nulla molestias voluptas.</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta cum distinctio eum asperiores rem enim fugit eaque voluptas est laboriosam in repudiandae architecto placeat, illum atque quasi explicabo, culpa, molestias!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit voluptas, aperiam quae provident, recusandae rem quis. Ut quaerat, quasi iste voluptate et dolorem atque sed neque voluptates, molestias dolor enim!</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam odit tempore, quibusdam impedit deserunt. Natus quisquam, facilis numquam, molestias nesciunt modi, at debitis maxime sunt et quo quas labore perferendis.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde delectus laborum doloremque recusandae, debitis maxime a! Nihil distinctio ex, cumque tempore ea voluptas omnis odit, quaerat natus nam excepturi corporis!</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque eius harum atque unde nihil aut quam provident sunt, iste error vitae suscipit dolores cupiditate totam, eum quae alias! Dicta, nisi.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate beatae impedit officia quis odit rerum sequi, explicabo commodi illum suscipit, tempore eum doloremque quae obcaecati tempora quidem neque sapiente modi?</p>
+        </div>
+      </section>
 
-                $("#start").hide();
+      <section class="module parallax parallax-3">
+        <div class="container">
+          <h1>Calm</h1>
+        </div>
+      </section>
 
-                $("#loginform").fadeIn(3000);
-                $("#logo").fadeIn(3000);
-            });
+      <section class="module content">
+        <div class="container">
+          <h2>Lorem Ipsum Dolor</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil consequuntur, nesciunt dicta, esse rem ducimus itaque quis. Adipisci ullam nam qui illum debitis sit ad in delectus, repudiandae non dolorum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit veritatis, facere aliquid itaque tempore consequatur nihil sint enim aliquam id saepe magnam totam repellat placeat a fugit nulla molestias voluptas.</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta cum distinctio eum asperiores rem enim fugit eaque voluptas est laboriosam in repudiandae architecto placeat, illum atque quasi explicabo, culpa, molestias!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit voluptas, aperiam quae provident, recusandae rem quis. Ut quaerat, quasi iste voluptate et dolorem atque sed neque voluptates, molestias dolor enim!</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam odit tempore, quibusdam impedit deserunt. Natus quisquam, facilis numquam, molestias nesciunt modi, at debitis maxime sunt et quo quas labore perferendis.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde delectus laborum doloremque recusandae, debitis maxime a! Nihil distinctio ex, cumque tempore ea voluptas omnis odit, quaerat natus nam excepturi corporis!</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque eius harum atque unde nihil aut quam provident sunt, iste error vitae suscipit dolores cupiditate totam, eum quae alias! Dicta, nisi.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate beatae impedit officia quis odit rerum sequi, explicabo commodi illum suscipit, tempore eum doloremque quae obcaecati tempora quidem neque sapiente modi?</p>
+        </div>
+      </section>
 
-            $("#verzendbutton").click(function(){
+  </main><!-- /main -->
 
-                $("#start").hide();
-
-                $("#getstartedform").fadeIn(3000);
-                $("#logo").fadeIn(3000);
-
-            });
-            
-            $("#closebutton").click(function(){
-
-                $("#getstartedform").hide();
-                $("#logo").hide();
-                $("#start").fadeIn(3000);
-                
-
-            });
-
-        });
-
-    </script>
+  <footer>
+    <div class="container">
+      <div class="asides clearfix">
+        <aside>
+          <nav>
+            <ul>
+              <li><a href="http://callmenick.com/">Welcome</a></li>
+              <li><a href="http://callmenick.com/category/tutorials">Tutorials</a></li>
+              <li><a href="http://callmenick.com/category/snippets">Snippets</a></li>
+              <li><a href="http://callmenick.com/category/articles">Articles</a></li>
+              <li><a href="http://callmenick.com/category/resources">Resources</a></li>
+            </ul>
+          </nav>
+        </aside>
+        <aside>
+          <nav>
+            <ul>
+              <li><a href="http://callmenick.com/archive/">Archive</a></li>
+              <li><a href="http://callmenick.com/about">About</a></li>
+              <li><a href="http://callmenick.com/contact">Contact</a></li>
+              <li><a href="http://callmenick.com/subscribe">Subscribe</a></li>
+            </ul>
+          </nav>
+        </aside>
+        <aside class="logo">
+          <a href="http://callmenick.com/"><img alt="Tutorials, Snippets, Resources, and Articles for Web Design and Web Development" onerror="this.src=logo.png" src="img/core/logo.svg"></a>
+        </aside>
+      </div>
+      <div class="copyright">
+        <small>
+          &copy; 2014, Nick Salloum<br><a href="http://callmenick.com">callmenick.com</a>
+        </small>
+      </div>
+    </div>
+  </footer><!-- /footer -->
   
-  </body>
+</div><!-- /#wrapper -->
+
+<!-- ads -->
+<script src="js/fusionad.js"></script>
+
+<!-- analytics -->
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-34160351-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+<script>
+$(document).ready(function(){
+  $('a[href^="#"]').on('click',function (e) {
+      e.preventDefault();
+
+      var target = this.hash;
+      var $target = $(target);
+
+      $('html, body').stop().animate({
+          'scrollTop': $target.offset().top
+      }, 900, 'swing', function () {
+          window.location.hash = target;
+      });
+  });
+});
+</script>
+
+</body>
 </html>
