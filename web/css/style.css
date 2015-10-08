@@ -44,7 +44,7 @@ section.module.parallax-3 {
 section.module.parallax-1 h1 {
   font-family:"Roboto";
   font-size: 48px;
-  line-height: 600px;
+  /*line-height: 300px;*/
   font-weight: 900;
   text-align: center;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
