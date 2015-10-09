@@ -53,11 +53,11 @@
           <a class="btn btn-primary btn-lg" href="#form1" role="button" style="border-radius:2px">Van start gaan</a></div>
           <div class="col-sm-6">
       		<div class="login">
-      				<div id="loginform">
-      					<input type="text" placeholder="username" name="user"><br>
-      					<input type="password" placeholder="password" name="password"><br>
-      					<input type="button" value="Login" id="submit">
-      				</div>
+      				<form method="post" action="login.jsp" id="loginform">
+      					<input type="text" placeholder="email" name="email"><br>
+      					<input type="password" placeholder="password" name="pass"><br>
+      					<input type="submit" value="Login" id="submit">
+      				</form>
       		</div>
       		</div>
         </div>
@@ -86,22 +86,25 @@
               <form action="upload" method="post" enctype="multipart/form-data">
                 <legend>Gegevens bestemmeling</legend>
                 <div class="form-group">             
-                  <input type="email" class="form-control" id="exampleInputEmail1" name="destinationfirstname" placeholder="Voornaam">
+                  <input type="email" class="form-control" name="destinationfirstname" placeholder="Voornaam">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="exampleInputPassword1" name="destinationlastname" placeholder="Naam">
+                  <input type="text" class="form-control" name="destinationlastname" placeholder="Naam">
                 </div>
                 <div class="form-group">              
-                  <input type="text" class="form-control" id="exampleInputPassword1" name="destinationstreet" placeholder="Straat">
+                  <input type="text" class="form-control" name="destinationstreetname" placeholder="Straatnaam">
                 </div>
                 <div class="form-group">              
-                  <input type="text" class="form-control" id="exampleInputPassword1" name="destinationzipcode" placeholder="Postcode">
+                  <input type="text" class="form-control" name="destinationstreetnumber" placeholder="Straatnummer">
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control" name="destinationzipcode" placeholder="Postcode">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="exampleInputPassword1" name="destinationcity" placeholder="Stad">
+                  <input type="text" class="form-control" name="destinationcity" placeholder="Stad">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="exampleInputPassword1" name="destinationEmail" placeholder="E-mail adres">
+                  <input type="email" class="form-control" name="destinationEmail" placeholder="E-mail adres">
                 </div>
                 <legend>Te verzenden document</legend>
                 <div class="form-group">
@@ -109,13 +112,31 @@
                 </div>
                 <legend>Uw gegevens</legend>
                 <div class="form-group">             
-                  <input type="email" class="form-control" id="exampleInputEmail1" name="senderfirstname" placeholder="Voornaam">
+                  <input type="text" class="form-control" name="senderfirstname" placeholder="Voornaam">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="exampleInputPassword1" name="senderlastname" placeholder="Naam">
+                  <input type="text" class="form-control" name="senderlastname" placeholder="Naam">
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control" name="senderstreetname" placeholder="Straatnaam">
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control" name="senderstreetnumber" placeholder="Straatnummer">
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control" name="senderzipcode" placeholder="Postcode">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="exampleInputPassword1" name="senderemail" placeholder="E-mail adres">
+                  <input type="text" class="form-control" name="sendercity" placeholder="Stad">
+                </div>
+                <div class="form-group">
+                  <input type="email" class="form-control" name="senderemail" placeholder="E-mail adres">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" name="senderpassword" placeholder="Kies een paswoord">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" name="senderpasswordcheck" placeholder="Herhaal het paswoord">
                 </div>
                 <div class="form-group">
                   <input type="submit" class="btn btn-lg btn-default" value="verzenden"/>

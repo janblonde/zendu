@@ -32,20 +32,6 @@ public class FileUploadLeaflet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String myMessage="";
-        
-        String destinationLastName = "";
-        String destinationFirstName = "";
-        String destinationStreet = "";
-        String destinationStreetNumber = "";
-        String destinationZipCode = "";
-        String destinationCity = "";
-        String destinationEmail = "";
-        
-        String senderLastName = "";
-        String senderFirstName = "";
-        String senderEmail = "";
-        
         String id = "";
       
         //process only if its multipart content

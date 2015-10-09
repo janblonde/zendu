@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * Servlet to handle File upload request from Client
@@ -37,7 +38,7 @@ public class FileUploadHandler extends HttpServlet {
         
         String destinationLastName = "";
         String destinationFirstName = "";
-        String destinationStreet = "";
+        String destinationStreetName = "";
         String destinationStreetNumber = "";
         String destinationZipCode = "";
         String destinationCity = "";
@@ -45,9 +46,15 @@ public class FileUploadHandler extends HttpServlet {
         
         String senderLastName = "";
         String senderFirstName = "";
+        String senderStreetName = "";
+        String senderStreetNumber = "";
+        String senderZipCode = "";
+        String senderCity = "";        
         String senderEmail = "";
+        String senderPassword = "";
         
         int id = 0;
+        int idMembers = 0;
       
         //process only if its multipart content
         if(ServletFileUpload.isMultipartContent(request)){
@@ -70,8 +77,8 @@ public class FileUploadHandler extends HttpServlet {
                             destinationLastName = fieldValue;
                         if(fieldName.equals("destinationfirstname"))
                             destinationFirstName = fieldValue;
-                        if(fieldName.equals("destinationstreet"))
-                            destinationStreet = fieldValue;
+                        if(fieldName.equals("destinationstreetname"))
+                            destinationStreetName = fieldValue;
                         if(fieldName.equals("destinationstreetnumber"))
                             destinationStreetNumber = fieldValue;
                         if(fieldName.equals("destinationzipcode"))
@@ -84,8 +91,18 @@ public class FileUploadHandler extends HttpServlet {
                             senderLastName = fieldValue;
                         if(fieldName.equals("senderfirstname"))
                             senderFirstName = fieldValue;
+                        if(fieldName.equals("senderstreetname"))
+                            senderStreetName = fieldValue;
+                        if(fieldName.equals("senderstreetnumber"))
+                            senderStreetNumber = fieldValue;
+                        if(fieldName.equals("senderzipcode"))
+                            senderZipCode = fieldValue;
+                        if(fieldName.equals("sendercity"))
+                            senderCity = fieldValue;
                         if(fieldName.equals("senderemail"))
                             senderEmail = fieldValue;
+                        if(fieldName.equals("senderpassword"))
+                            senderPassword = fieldValue;
                                                 
                         
                     }
@@ -101,21 +118,55 @@ public class FileUploadHandler extends HttpServlet {
                 try{
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
                     
-                    String SQL = "INSERT INTO Brieven (destinationLastName,destinationFirstName,destinationStreet," +
-                    "destinationStreetNumber,destinationZipCode,destinationCity,destinationEmail,senderLastName,"+
-                    "senderFirstName,senderEmail) VALUES (?,?,?,?,?,?,?,?,?,?)";
+                    String SQLfind = "SELECT id from Members where email = ?";
+                    PreparedStatement statementFind = con.prepareStatement(SQLfind);
+                    statementFind.setString(1,senderEmail);
+                    ResultSet rsFind = statementFind.executeQuery();
                     
-                    PreparedStatement statement = con.prepareStatement(SQL,Statement.RETURN_GENERATED_KEYS);
+                    if(rsFind.next()){
+                        idMembers = rsFind.getInt(1);
+                    }else{
+                
+                        String SQLmembers = "INSERT INTO Members(first_name,last_name,email,pass) VALUES (?,?,?,?)";
+                        
+                        PreparedStatement statementMembers = con.prepareStatement(SQLmembers,Statement.RETURN_GENERATED_KEYS);
+                        statementMembers.setString(1,senderFirstName);
+                        statementMembers.setString(2,senderLastName);
+                        statementMembers.setString(3,senderEmail);
+                        
+                        String hashed = BCrypt.hashpw(senderPassword, BCrypt.gensalt());
+                        statementMembers.setString(4,hashed);
+                        
+                        statementMembers.execute();
+                        
+                        ResultSet rsMembers = statementMembers.getGeneratedKeys();
+                        
+                        if(rsMembers.next()){
+                            idMembers = rsMembers.getInt(1);
+                        }
+                    }
+                    
+                    String SQLbrieven = "INSERT INTO Brieven (destinationLastName,destinationFirstName,destinationStreetName," +
+                    "destinationStreetNumber,destinationZipCode,destinationCity,destinationEmail,senderLastName,"+
+                    "senderFirstName,senderStreetName,senderStreetNumber,senderZipCode,senderCity,senderEmail,member_id)"+
+                    " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    
+                    PreparedStatement statement = con.prepareStatement(SQLbrieven,Statement.RETURN_GENERATED_KEYS);
                     statement.setString(1,destinationLastName);
                     statement.setString(2,destinationFirstName);
-                    statement.setString(3,destinationStreet);
+                    statement.setString(3,destinationStreetName);
                     statement.setString(4,destinationStreetNumber);
                     statement.setString(5,destinationZipCode);
                     statement.setString(6,destinationCity);
                     statement.setString(7,destinationEmail);
                     statement.setString(8,senderLastName);
                     statement.setString(9,senderFirstName);
-                    statement.setString(10,senderEmail);
+                    statement.setString(10,senderStreetName);
+                    statement.setString(11,senderStreetNumber);
+                    statement.setString(12,senderZipCode);
+                    statement.setString(13,senderCity);
+                    statement.setString(14,senderEmail);
+                    statement.setInt(15,idMembers);
                     
                     statement.execute();
                     
