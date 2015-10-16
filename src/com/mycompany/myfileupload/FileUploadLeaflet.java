@@ -26,7 +26,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  * @author Javin Paul
  */
 public class FileUploadLeaflet extends HttpServlet {
-    private final String UPLOAD_DIRECTORY = "/home/ubuntu/workspace/";
+    private final String UPLOAD_DIRECTORY = "/home/ubuntu/workspace/apache-tomcat-8.0.23/webapps/zendu/leaflet";
   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -79,7 +79,7 @@ public class FileUploadLeaflet extends HttpServlet {
                     Statement stmt = con.createStatement();                   
                    
 
-                    String SQL = "UPDATE Brieven SET leaflet=1 where id=" + id;
+                    String SQL = "UPDATE Brieven SET status='sent' where id=" + id;
                     
                     stmt.executeUpdate(SQL);
 

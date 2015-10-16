@@ -18,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -28,11 +29,13 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author Javin Paul
  */
 public class FileUploadHandler extends HttpServlet {
-    private final String UPLOAD_DIRECTORY = "/home/ubuntu/workspace/";
+    private final String UPLOAD_DIRECTORY = "/home/ubuntu/workspace/apache-tomcat-8.0.23/webapps/zendu/brieven";
   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+                
+        boolean testUser = false;
         
         String myMessage="";
         
@@ -114,6 +117,21 @@ public class FileUploadHandler extends HttpServlet {
                 }catch(ClassNotFoundException e){
                     System.out.println(e);
                 }
+                
+                //if email empty: retrieve userid from session
+                System.err.println("senderEmail 1: " + senderEmail);
+                if(senderEmail.equals("")){
+                    HttpSession session = request.getSession();
+                    if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
+                        request.setAttribute("message","no user session - please login first");
+                        request.getRequestDispatcher("/error.jsp").forward(request, response);
+                    }else{
+                        senderEmail = (String)session.getAttribute("userid");
+                        System.err.println("senderEmail 2: " + senderEmail);
+                    }
+                }else{
+                    testUser = true;
+                }
 
                 try{
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
@@ -125,6 +143,7 @@ public class FileUploadHandler extends HttpServlet {
                     
                     if(rsFind.next()){
                         idMembers = rsFind.getInt(1);
+                        
                     }else{
                 
                         String SQLmembers = "INSERT INTO Members(first_name,last_name,email,pass) VALUES (?,?,?,?)";
@@ -148,8 +167,8 @@ public class FileUploadHandler extends HttpServlet {
                     
                     String SQLbrieven = "INSERT INTO Brieven (destinationLastName,destinationFirstName,destinationStreetName," +
                     "destinationStreetNumber,destinationZipCode,destinationCity,destinationEmail,senderLastName,"+
-                    "senderFirstName,senderStreetName,senderStreetNumber,senderZipCode,senderCity,senderEmail,member_id)"+
-                    " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    "senderFirstName,senderStreetName,senderStreetNumber,senderZipCode,senderCity,senderEmail,member_id,status)"+
+                    " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     
                     PreparedStatement statement = con.prepareStatement(SQLbrieven,Statement.RETURN_GENERATED_KEYS);
                     statement.setString(1,destinationLastName);
@@ -167,6 +186,7 @@ public class FileUploadHandler extends HttpServlet {
                     statement.setString(13,senderCity);
                     statement.setString(14,senderEmail);
                     statement.setInt(15,idMembers);
+                    statement.setString(16,"stored");
                     
                     statement.execute();
                     
@@ -174,6 +194,7 @@ public class FileUploadHandler extends HttpServlet {
                     if (rs.next()){
                         id=rs.getInt(1);
                     }
+                    System.err.println("id:" + id);
                               
 
                 }catch(SQLException e){
@@ -195,6 +216,8 @@ public class FileUploadHandler extends HttpServlet {
            
                //File uploaded successfully
                request.setAttribute("message", "File Uploaded Successfully " + returnMessage);
+               System.err.println("id in attribute: " + id);
+               request.setAttribute("orderid", Integer.toString(id));
             } catch (Exception ex) {
                request.setAttribute("message", "File Upload Failed due to " + ex);
             }          
@@ -203,9 +226,19 @@ public class FileUploadHandler extends HttpServlet {
             request.setAttribute("message",
                                  "Sorry this Servlet only handles file upload request");
         }
-    
-        request.getRequestDispatcher("/result.jsp").forward(request, response);
-     
+        String userPath=request.getServletPath();
+        System.err.println(userPath);
+        
+        HttpSession session = request.getSession();
+        session.setAttribute("userid", senderEmail);
+        
+        //if first time or credits: dispatch to user home page
+        //if second time and no credits: dispatch to payment page
+        if (testUser){
+            request.getRequestDispatcher("/success.jsp").forward(request, response);
+        }else{
+            request.getRequestDispatcher("/payment.jsp").forward(request, response);
+        }
+        
     }
-  
 }

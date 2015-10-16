@@ -34,6 +34,9 @@ while(rs.next())
     <tr><td><%=rs.getInt("id") %></td>
         <td><%=rs.getString("destinationLastName") %></td>
         <td><%=rs.getString("destinationFirstName") %></td>
+        <td><%=rs.getString("status") %></td>
+        <td><a href="brieven/<%=rs.getInt("id")%>.pdf">Download brief</a></td>
+        <td><a href="leaflet/<%=rs.getInt("id")%>.pdf">Download leaflet</a></td>
         <td><a href="edit.jsp?id=<%=rs.getInt("id")%>">Edit</a></td></tr>
 <%
 }

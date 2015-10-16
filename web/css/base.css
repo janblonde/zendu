@@ -399,7 +399,7 @@ a:hover {
 .login input[type=text]{
 	width: 250px;
 	height: 30px;
-	background: transparent;
+	background: red;
 	border: 1px solid rgba(255,255,255,0.6);
 	border-radius: 2px;
 	color: white;
@@ -412,7 +412,7 @@ a:hover {
 .login input[type=password]{
 	width: 250px;
 	height: 30px;
-	background: transparent;
+	background: red;
 	border: 1px solid rgba(255,255,255,0.6);
 	border-radius: 2px;
 	color: #fff;
@@ -426,7 +426,7 @@ a:hover {
 .login input[type=button]{
 	width: 260px;
 	/*height: 35px;*/
-	background: #fff;
+	background: red;
 	border: 1px solid #fff;
 	cursor: pointer;
 	border-radius: 2px;
