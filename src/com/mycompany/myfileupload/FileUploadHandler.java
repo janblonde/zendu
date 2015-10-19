@@ -29,7 +29,7 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author Javin Paul
  */
 public class FileUploadHandler extends HttpServlet {
-    private final String UPLOAD_DIRECTORY = "/home/ubuntu/workspace/apache-tomcat-8.0.23/webapps/zendu/brieven";
+    private final String UPLOAD_DIRECTORY = "/home/ubuntu/workspace/documents";
   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -119,15 +119,13 @@ public class FileUploadHandler extends HttpServlet {
                 }
                 
                 //if email empty: retrieve userid from session
-                System.err.println("senderEmail 1: " + senderEmail);
                 if(senderEmail.equals("")){
                     HttpSession session = request.getSession();
                     if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
                         request.setAttribute("message","no user session - please login first");
-                        request.getRequestDispatcher("/error.jsp").forward(request, response);
+                        request.getRequestDispatcher("/index.html").forward(request, response);
                     }else{
                         senderEmail = (String)session.getAttribute("userid");
-                        System.err.println("senderEmail 2: " + senderEmail);
                     }
                 }else{
                     testUser = true;
@@ -136,14 +134,20 @@ public class FileUploadHandler extends HttpServlet {
                 try{
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
                     
-                    String SQLfind = "SELECT id from Members where email = ?";
+                    String SQLfind = "SELECT id, first_name, last_name from Members where email = ?";
                     PreparedStatement statementFind = con.prepareStatement(SQLfind);
                     statementFind.setString(1,senderEmail);
                     ResultSet rsFind = statementFind.executeQuery();
                     
                     if(rsFind.next()){
-                        idMembers = rsFind.getInt(1);
-                        
+                        if(testUser){
+                            request.setAttribute("message"," 1 gratis verzending reeds opgebruikt - please login first");
+                            request.getRequestDispatcher("/index.html").forward(request, response);
+                        }else{
+                            idMembers = rsFind.getInt(1);
+                            senderFirstName = rsFind.getString(2);
+                            senderLastName = rsFind.getString(3);
+                        }
                     }else{
                 
                         String SQLmembers = "INSERT INTO Members(first_name,last_name,email,pass) VALUES (?,?,?,?)";
@@ -186,7 +190,12 @@ public class FileUploadHandler extends HttpServlet {
                     statement.setString(13,senderCity);
                     statement.setString(14,senderEmail);
                     statement.setInt(15,idMembers);
-                    statement.setString(16,"stored");
+                    
+                    if (testUser){
+                        statement.setString(16,"paid");
+                    }else{
+                        statement.setString(16,"stored");
+                    }
                     
                     statement.execute();
                     
@@ -204,14 +213,14 @@ public class FileUploadHandler extends HttpServlet {
                 //upload file, using row id as filename
                 for(FileItem item : multiparts){
                     if(!item.isFormField()){
-                        item.write( new File(UPLOAD_DIRECTORY + File.separator + id + ".pdf"));
+                        item.write( new File(UPLOAD_DIRECTORY + File.separator + "brieven" + id + ".pdf"));
                     }
                 }
 
                 //send e-mail
                 SendFileEmail myMail = new SendFileEmail();
                 myMail.setMailTo("jan.blonde@icloud.com");
-                myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + id +".pdf");
+                myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + "brieven" + id +".pdf");
                 String returnMessage = myMail.getMessage();
            
                //File uploaded successfully
@@ -226,14 +235,13 @@ public class FileUploadHandler extends HttpServlet {
             request.setAttribute("message",
                                  "Sorry this Servlet only handles file upload request");
         }
-        String userPath=request.getServletPath();
-        System.err.println(userPath);
         
         HttpSession session = request.getSession();
         session.setAttribute("userid", senderEmail);
         
         //if first time or credits: dispatch to user home page
         //if second time and no credits: dispatch to payment page
+        session.setAttribute("naam", senderFirstName + " " + senderLastName);
         if (testUser){
             request.getRequestDispatcher("/success.jsp").forward(request, response);
         }else{

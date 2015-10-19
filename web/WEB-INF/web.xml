@@ -8,6 +8,10 @@
         <servlet-name>FileUploadLeaflet</servlet-name>
         <servlet-class>com.mycompany.myfileupload.FileUploadLeaflet</servlet-class>
     </servlet>
+        <servlet>
+        <servlet-name>DocumentServlet</servlet-name>
+        <servlet-class>com.mycompany.myfileupload.DocumentServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>FileUploadHandler</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>FileUploadLeaflet</servlet-name>
         <url-pattern>/uploadleaflet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DocumentServlet</servlet-name>
+        <url-pattern>/documentservlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

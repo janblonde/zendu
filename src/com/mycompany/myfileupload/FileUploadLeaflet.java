@@ -26,7 +26,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  * @author Javin Paul
  */
 public class FileUploadLeaflet extends HttpServlet {
-    private final String UPLOAD_DIRECTORY = "/home/ubuntu/workspace/apache-tomcat-8.0.23/webapps/zendu/leaflet";
+    private final String UPLOAD_DIRECTORY = "/home/ubuntu/workspace/documents";
   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -57,14 +57,14 @@ public class FileUploadLeaflet extends HttpServlet {
                 //upload file, using row id as filename
                 for(FileItem item : multiparts){
                     if(!item.isFormField()){
-                        item.write( new File(UPLOAD_DIRECTORY + File.separator + "LEAFLET" + id + ".pdf"));
+                        item.write( new File(UPLOAD_DIRECTORY + File.separator + "bewijs" + id + ".pdf"));
                     }
                 }
 
                 //send e-mail
                 SendFileEmail myMail = new SendFileEmail();
                 myMail.setMailTo("jan.blonde@icloud.com");
-                myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + id +".pdf");
+                myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + "bewijs" + id +".pdf");
                 String returnMessage = myMail.getMessage();
                 
                 //update database
