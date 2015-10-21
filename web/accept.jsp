@@ -113,7 +113,7 @@ else
                         <a class="page-scroll" href="#pricing">Facturen</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="agency.html">Uitloggen</a>
+                        <a class="page-scroll" href="index.html">Uitloggen</a>
                     </li>
                 </ul>
             </div>

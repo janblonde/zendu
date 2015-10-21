@@ -1,6 +1,4 @@
 <%@ page import ="java.sql.*" %>
-<%@ page import ="java.security.*" %>
-<%@ page import ="java.math.*" %>
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=iso-8859-1" pageEncoding="iso-8859-1"%>
 <html lang="en">
@@ -58,6 +56,7 @@
 <%
     ResultSet rs2 = null;
     String naam = "";
+    int huidigTotaal = 0;
 
 if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
 %>
@@ -68,6 +67,24 @@ else
 {
     String userid = (String)session.getAttribute("userid");
     naam = (String)session.getAttribute("naam");
+
+    Class.forName("com.mysql.jdbc.Driver");
+    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
+    Statement st = con.createStatement();
+    ResultSet rs1;
+    rs1 = st.executeQuery("select * from Members where email='" + userid + "';");
+    
+    if (rs1.next()){
+        String memberID = rs1.getString("id");
+        
+        ResultSet rs3 = st.executeQuery("select SUM(amount) as huidigTotaal from CreditLog where member_id=" + memberID +";");
+        if (rs3.next()){
+            huidigTotaal = rs3.getInt("huidigTotaal");
+        }
+
+        rs2 = st.executeQuery("select * from CreditLog where member_id=" + memberID + ";");
+        
+    }
 }%>
 
     <!-- Navigation -->
@@ -96,13 +113,13 @@ else
                         <a class="page-scroll" href="#about">Welkom <%=naam%></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#process">Profiel</a>
+                        <a class="page-scroll" href="profile.jsp">Profiel</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#work">Credits</a>
+                        <a class="page-scroll" href="credits.jsp">Credits</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#pricing">Facturen</a>
+                        <a class="page-scroll" href="invoices.jsp">Facturen</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="index.html">Uitloggen</a>
@@ -114,67 +131,37 @@ else
         <!-- /.container -->
     </nav>
     <header>
-        <div class="intro-content" style="top:150px;">
-        
-<%String orderID = (String)request.getAttribute("orderid");
-
-String text = "ACCEPTURL=https://java-tomcat-janblonde.c9.io/zendu/accept.jspweliveinnumber76AMOUNT=980weliveinnumber76CURRENCY=EURweliveinnumber76LANGUAGE=en_USweliveinnumber76ORDERID="+ orderID +"weliveinnumber76PSPID=zenduweliveinnumber76";
-
-text = text + "TITLE=PAYMENTweliveinnumber76";
-
-MessageDigest crypt = MessageDigest.getInstance("SHA-1");
-crypt.reset();
-crypt.update(text.getBytes("UTF-8"));
-
-String result = new BigInteger(1, crypt.digest()).toString(16);
-%>
-
-<h1>Kies een betaalmethode</h1>
-
-<FORM METHOD="post" ACTION="https://secure.ogone.com/ncol/test/orderstandard.asp" id=form1 name=form1>
-<INPUT type="hidden" NAME="PSPID" value="zendu">
-<INPUT NAME="orderID" style="color:black" VALUE="<%=orderID%>">
-<INPUT NAME="amount" style="color:black" VALUE="980">
-<INPUT NAME="currency" style="color:black" VALUE="EUR">
-<INPUT type="hidden" NAME="language" VALUE="en_US">
-<!-- lay out information -->
-
-<!--<INPUT type="hidden" NAME="MANDATEID" VALUE="">
-<INPUT type="hidden" NAME="SIGNDATE" VALUE="">
-<INPUT type="hidden" NAME="SEQUENCETYPE" VALUE="">-->
-
-<INPUT type="hidden" NAME="TITLE" VALUE="PAYMENT">
-<!--<INPUT type="hidden" NAME="TXTCOLOR" VALUE="#FFFFFF">
-<INPUT type="hidden" NAME="TBLBGCOLOR" VALUE="#FFFFFF">
-<INPUT type="hidden" NAME="TBLTXTCOLOR" VALUE="#000000">
-<INPUT type="hidden" NAME="BUTTONBGCOLOR" VALUE="#00467F">
-<INPUT type="hidden" NAME="BUTTONTXTCOLOR" VALUE="#FFFFFF">
-<INPUT type="hidden" NAME="LOGO" VALUE="<fill here your logo file name>">
-<INPUT type="hidden" NAME="FONTTYPE" VALUE="Verdana">-->
-
-<INPUT type="hidden" NAME="SHASIGN" VALUE="<%= result %>">
-<INPUT type="hidden" NAME="ACCEPTURL" VALUE="https://java-tomcat-janblonde.c9.io/zendu/accept.jsp">
-
-<!--<INPUT type="hidden" NAME="TP" VALUE="<fill here your template page>">
-
-
-<INPUT type="hidden" NAME="declineurl" VALUE="">
-<INPUT type="hidden" NAME="exceptionurl" VALUE="">
-<INPUT type="hidden" NAME="cancelurl" VALUE="">
-
-<INPUT type="hidden" NAME="COM" VALUE="<fill here your order description>">
-<INPUT type="hidden" NAME="CN" VALUE="<fill here your Client name>">
-<INPUT type="hidden" name="EMAIL" value="<fill here your Client email>">
-<INPUT type="hidden" NAME="PM" VALUE="">
-<INPUT type="hidden" NAME="BRAND" VALUE="">
-<INPUT type="hidden" NAME="ownerZIP" VALUE="">
-<INPUT type="hidden" NAME="owneraddress" VALUE="">
-<INPUT type="hidden" NAME="owneraddress2" VALUE="">
-<INPUT type="hidden" NAME="owneraddress3" VALUE="">-->
-<input type="submit" value="SUBMIT" id=submit2 name=submit2>
-</form>
-        
-            
+        <div>
+            <button type="submit" class="btn btn-outline-dark" id="payment_button" style="position:relative;top:80px;left:80px">Credits aankopen</button><br><br>
+            <div style="position:absolute;left:400px;top:80px;border-color:red;border-style:solid;padding:10px;border-radius:6px;border-width:2px;font-size:30px;">huidig aantal: <%=huidigTotaal%></div>
+            <div id="payment_choices" style="position:relative;top:120px;left:80px" hidden>
+              <div>10 credits: 88 EUR
+              </div><br>
+              <div>50 credits: 390 EUR
+              </div><br>
+              <div>100 credits: 680 EUR
+              </div>
+            </div>
+        </div>
+        <div class="intro-content" style="top:120px;left:350px;position:relative">
+            <table id="hor-minimalist-b" >
+            <thead>
+              <tr>
+                <th scope="col">Datum</th>
+                <th scope="col">Transactie</th>
+                <th scope="col">Briefnummer</th>
+              </tr>
+            </thead>
+            <tbody>
+            <%while (rs2.next()){%>
+                <tr>
+                  <td style="color:black;"><%=rs2.getString("reg_date")%></td>
+                  <td style="color:black;"><%=rs2.getString("amount")%></td>
+                  <td style="color:black;"><%=rs2.getString("brief_id")%></td>
+                </tr>
+            <%}%>
+            </tbody>
+            </table>
         </div>
         
         <div class="login-form">
@@ -246,6 +233,13 @@ String result = new BigInteger(1, crypt.digest()).toString(16);
     <script src="assets/js/plugins/jqBootstrapValidation.js"></script>
     <!-- Vitality Theme Scripts -->
     <script src="assets/js/vitality.js"></script>
+    <!--<script>
+        $(document).ready(function(){
+            $("#payment_button").click(function(){
+                $("#payment_options").toggle();
+            });
+        });
+    </script>-->
 </body>
 
 </html>

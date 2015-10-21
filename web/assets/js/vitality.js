@@ -95,8 +95,37 @@
     $('body').scrollspy({
         target: '.navbar-fixed-top',
         offset: 51
-    })
-
+    });
+    
+    $("#payment_button").click(function(){
+        console.log("click!");
+        $("#payment_choices").toggle();
+    });
+	
+	// Add an event that triggers when the submit
+	// button is pressed.
+    $("#mc-embedded-subscribe").click(function() {
+    	
+    	// Get the text from the two inputs.
+    	var email = $("#mce-EMAIL").val();
+    	
+    	// Fail if one of the two inputs is empty, as we need
+    	// both a band name and albums to make an insertion.
+    	if (email === "") {
+    		return;
+    	}
+    	
+    	// Ajax POST request, similar to the GET request.
+    	$.post('emailservlet',{"email": email},
+            function() { // on success
+                $("#mce-EMAIL").val("");
+                $("#mce-success-response").append("Uw e-mail werd geregistreerd.");
+            })
+            .fail(function() { //on failure
+                alert("Insertion failed.");
+            });
+    });
+    
     // Portfolio Filtering Scripts & Hover Effect
     var filterList = {
         init: function() {

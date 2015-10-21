@@ -8,10 +8,18 @@
         <servlet-name>FileUploadLeaflet</servlet-name>
         <servlet-class>com.mycompany.myfileupload.FileUploadLeaflet</servlet-class>
     </servlet>
-        <servlet>
+    <servlet>
         <servlet-name>DocumentServlet</servlet-name>
         <servlet-class>com.mycompany.myfileupload.DocumentServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EmailServlet</servlet-name>
+        <servlet-class>com.mycompany.myfileupload.EmailServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ContactServlet</servlet-name>
+        <servlet-class>com.mycompany.myfileupload.ContactServlet</servlet-class>
+    </servlet> 
     <servlet-mapping>
         <servlet-name>FileUploadHandler</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -23,6 +31,14 @@
     <servlet-mapping>
         <servlet-name>DocumentServlet</servlet-name>
         <url-pattern>/documentservlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EmailServlet</servlet-name>
+        <url-pattern>/emailservlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ContactServlet</servlet-name>
+        <url-pattern>/contactservlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

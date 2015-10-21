@@ -1,8 +1,5 @@
 <%@ page import ="java.sql.*" %>
-<%@ page import ="java.security.*" %>
-<%@ page import ="java.math.*" %>
 <!DOCTYPE html>
-<%@ page language="java" contentType="text/html; charset=iso-8859-1" pageEncoding="iso-8859-1"%>
 <html lang="en">
 
 <head>
@@ -58,7 +55,9 @@
 <%
     ResultSet rs2 = null;
     String naam = "";
-
+    String firstName = "";
+    String lastName = "";
+    
 if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
 %>
     You are not logged in<br/>
@@ -68,7 +67,23 @@ else
 {
     String userid = (String)session.getAttribute("userid");
     naam = (String)session.getAttribute("naam");
+
+    Class.forName("com.mysql.jdbc.Driver");
+    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
+    Statement st = con.createStatement();
+    ResultSet rs1;
+    rs1 = st.executeQuery("select * from Members where email='" + userid + "';");
+    
+    if (rs1.next()){
+        String memberID = rs1.getString("id");
+        firstName = rs1.getString("first_name");
+        lastName = rs1.getString("last_name");
+        
+        rs2 = st.executeQuery("select * from Brieven where member_id=" + memberID + ";");
+    }
 }%>
+
+
 
     <!-- Navigation -->
     <!-- Note: navbar-default and navbar-inverse are both supported with this theme. -->
@@ -96,13 +111,13 @@ else
                         <a class="page-scroll" href="#about">Welkom <%=naam%></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#process">Profiel</a>
+                        <a class="page-scroll" href="profile.jsp">Profiel</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#work">Credits</a>
+                        <a class="page-scroll" href="credits.jsp">Credits</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#pricing">Facturen</a>
+                        <a class="page-scroll" href="invoices.jsp">Facturen</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="index.html">Uitloggen</a>
@@ -113,69 +128,69 @@ else
         </div>
         <!-- /.container -->
     </nav>
-    <header>
-        <div class="intro-content" style="top:150px;">
-        
-<%String orderID = (String)request.getAttribute("orderid");
-
-String text = "ACCEPTURL=https://java-tomcat-janblonde.c9.io/zendu/accept.jspweliveinnumber76AMOUNT=980weliveinnumber76CURRENCY=EURweliveinnumber76LANGUAGE=en_USweliveinnumber76ORDERID="+ orderID +"weliveinnumber76PSPID=zenduweliveinnumber76";
-
-text = text + "TITLE=PAYMENTweliveinnumber76";
-
-MessageDigest crypt = MessageDigest.getInstance("SHA-1");
-crypt.reset();
-crypt.update(text.getBytes("UTF-8"));
-
-String result = new BigInteger(1, crypt.digest()).toString(16);
-%>
-
-<h1>Kies een betaalmethode</h1>
-
-<FORM METHOD="post" ACTION="https://secure.ogone.com/ncol/test/orderstandard.asp" id=form1 name=form1>
-<INPUT type="hidden" NAME="PSPID" value="zendu">
-<INPUT NAME="orderID" style="color:black" VALUE="<%=orderID%>">
-<INPUT NAME="amount" style="color:black" VALUE="980">
-<INPUT NAME="currency" style="color:black" VALUE="EUR">
-<INPUT type="hidden" NAME="language" VALUE="en_US">
-<!-- lay out information -->
-
-<!--<INPUT type="hidden" NAME="MANDATEID" VALUE="">
-<INPUT type="hidden" NAME="SIGNDATE" VALUE="">
-<INPUT type="hidden" NAME="SEQUENCETYPE" VALUE="">-->
-
-<INPUT type="hidden" NAME="TITLE" VALUE="PAYMENT">
-<!--<INPUT type="hidden" NAME="TXTCOLOR" VALUE="#FFFFFF">
-<INPUT type="hidden" NAME="TBLBGCOLOR" VALUE="#FFFFFF">
-<INPUT type="hidden" NAME="TBLTXTCOLOR" VALUE="#000000">
-<INPUT type="hidden" NAME="BUTTONBGCOLOR" VALUE="#00467F">
-<INPUT type="hidden" NAME="BUTTONTXTCOLOR" VALUE="#FFFFFF">
-<INPUT type="hidden" NAME="LOGO" VALUE="<fill here your logo file name>">
-<INPUT type="hidden" NAME="FONTTYPE" VALUE="Verdana">-->
-
-<INPUT type="hidden" NAME="SHASIGN" VALUE="<%= result %>">
-<INPUT type="hidden" NAME="ACCEPTURL" VALUE="https://java-tomcat-janblonde.c9.io/zendu/accept.jsp">
-
-<!--<INPUT type="hidden" NAME="TP" VALUE="<fill here your template page>">
-
-
-<INPUT type="hidden" NAME="declineurl" VALUE="">
-<INPUT type="hidden" NAME="exceptionurl" VALUE="">
-<INPUT type="hidden" NAME="cancelurl" VALUE="">
-
-<INPUT type="hidden" NAME="COM" VALUE="<fill here your order description>">
-<INPUT type="hidden" NAME="CN" VALUE="<fill here your Client name>">
-<INPUT type="hidden" name="EMAIL" value="<fill here your Client email>">
-<INPUT type="hidden" NAME="PM" VALUE="">
-<INPUT type="hidden" NAME="BRAND" VALUE="">
-<INPUT type="hidden" NAME="ownerZIP" VALUE="">
-<INPUT type="hidden" NAME="owneraddress" VALUE="">
-<INPUT type="hidden" NAME="owneraddress2" VALUE="">
-<INPUT type="hidden" NAME="owneraddress3" VALUE="">-->
-<input type="submit" value="SUBMIT" id=submit2 name=submit2>
-</form>
-        
-            
+    <header style="height:1500px;">
+        <div>
+            <button type="submit" class="btn btn-outline-dark" onclick="window.location.href='credits.jsp'" style="position:relative;top:80px;left:80px">Terug naar overzicht</button><br><br>
         </div>
+
+    <section id="process" class="services">
+        <div class="container">        
+            <div class="row content-row">
+                
+              <form action="upload" method="post" enctype="multipart/form-data">
+                <legend>Gegevens bestemmeling</legend>
+                <div class="form-group">             
+                  <input type="text" class="form-control" name="destinationfirstname" placeholder="Voornaam">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="destinationlastname" placeholder="Naam">
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control" name="destinationstreetname" placeholder="Straatnaam">
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control" name="destinationstreetnumber" placeholder="Straatnummer">
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control" name="destinationzipcode" placeholder="Postcode">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="destinationcity" placeholder="Stad">
+                </div>
+                <div class="form-group">
+                  <input type="email" class="form-control" name="destinationEmail" placeholder="E-mail adres">
+                </div>
+                <legend>Te verzenden document</legend>
+                <div class="form-group">
+                  <input id="input-1" name="file" type="file" class="file">
+                </div>
+                <legend>Uw gegevens</legend>
+                <div class="form-group">             
+                  <input type="text" class="form-control" name="senderfirstname" placeholder="Voornaam" value="<%=firstName%>">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="senderlastname" placeholder="Naam" value="<%=lastName%>">
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control" name="senderstreetname" placeholder="Straatnaam">
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control" name="senderstreetnumber" placeholder="Straatnummer">
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control" name="senderzipcode" placeholder="Postcode">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="sendercity" placeholder="Stad">
+                </div>
+                <div class="form-group">
+                  <input type="submit" class="btn btn-lg btn-default" value="verzenden"/>
+                  <a id="closebutton" class="btn btn-lg btn-default">Cancel</a><br>
+                </div>
+              </form>
+            </div>
+        </div>
+    </section>
         
         <div class="login-form">
         </div>

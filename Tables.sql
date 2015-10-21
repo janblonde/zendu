@@ -32,3 +32,23 @@ email VARCHAR(30),
 pass VARCHAR(60),
 reg_date TIMESTAMP
 ) ENGINE=INNODB;
+
+CREATE TABLE CreditLog (
+id INT NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (id),
+member_id INT(6),
+amount INT(6),
+reg_date TIMESTAMP,
+brief_id INT(6),
+INDEX member_idx(member_id),
+INDEX brief_idx(brief_id),
+FOREIGN KEY (member_id) REFERENCES Members(id) ON DELETE CASCADE,
+FOREIGN KEY(brief_id) REFERENCES Brieven(id) ON DELETE CASCADE
+) ENGINE=INNODB;
+
+CREATE TABLE Emails (
+id INT NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (id),
+email VARCHAR(30),
+reg_date TIMESTAMP
+) ENGINE=INNODB;

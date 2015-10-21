@@ -9,7 +9,7 @@ public class SendFileEmail{
     
     String mailTo = "";
     String attachmentName = "";
-    String message = "";
+    String textMessage = "This is message body";
     
     public void setMailTo(String mailTo){
         this.mailTo = mailTo;
@@ -17,6 +17,10 @@ public class SendFileEmail{
     
     public void setAttachmentName(String attachmentName) {
         this.attachmentName = attachmentName;
+    }
+    
+    public void setMessage(String message) {
+        this.textMessage = message;
     }
 
     public String getMessage() {
@@ -70,7 +74,7 @@ public class SendFileEmail{
          BodyPart messageBodyPart = new MimeBodyPart();
 
          // Fill the message
-         messageBodyPart.setText("This is message body");
+         messageBodyPart.setText(textMessage);
          
          // Create a multipar message
          Multipart multipart = new MimeMultipart();

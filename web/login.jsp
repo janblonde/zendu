@@ -11,10 +11,12 @@
     
     if (rs.next()){
         String hashed = rs.getString("pass");
+        String firstName = rs.getString("first_name");
+        String lastName = rs.getString("last_name");
     
         if (BCrypt.checkpw(pwd, hashed)){
-	        out.println("It matches");
 	        session.setAttribute("userid",email);
+	        session.setAttribute("naam", firstName + " " + lastName);
 	        response.sendRedirect("success.jsp");
         }else{
 	        out.println("Invalid password <a href='index.jsp'>try again</a>");
