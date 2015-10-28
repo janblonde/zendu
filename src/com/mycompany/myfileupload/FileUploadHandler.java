@@ -36,9 +36,11 @@ public class FileUploadHandler extends HttpServlet {
             throws ServletException, IOException {
                 
         boolean testUser = false;
+        boolean creditUser = false;
         
         String myMessage="";
         
+        String destinationCompany = "";
         String destinationLastName = "";
         String destinationFirstName = "";
         String destinationStreetName = "";
@@ -47,6 +49,8 @@ public class FileUploadHandler extends HttpServlet {
         String destinationCity = "";
         String destinationEmail = "";
         
+        String senderCompany = "";
+        String senderVAT = "";
         String senderLastName = "";
         String senderFirstName = "";
         String senderStreetName = "";
@@ -72,10 +76,10 @@ public class FileUploadHandler extends HttpServlet {
                     }else{
                         String fieldName = item.getFieldName();
                         String fieldValue = item.getString();
-                        
-                        System.err.println(fieldName);
-                        System.err.println(fieldValue);
+
                         //get form parameters
+                        if(fieldName.equals("destinationcompany"))
+                            destinationCompany = fieldValue;
                         if(fieldName.equals("destinationlastname"))
                             destinationLastName = fieldValue;
                         if(fieldName.equals("destinationfirstname"))
@@ -90,6 +94,10 @@ public class FileUploadHandler extends HttpServlet {
                             destinationCity = fieldValue;
                         if(fieldName.equals("destinationemail"))
                             destinationEmail = fieldValue;
+                        if(fieldName.equals("sendercompany"))
+                            senderCompany = fieldValue;
+                        if(fieldName.equals("sendervat"))
+                            senderVAT = fieldValue;
                         if(fieldName.equals("senderlastname"))
                             senderLastName = fieldValue;
                         if(fieldName.equals("senderfirstname"))
@@ -147,10 +155,12 @@ public class FileUploadHandler extends HttpServlet {
                             idMembers = rsFind.getInt(1);
                             senderFirstName = rsFind.getString(2);
                             senderLastName = rsFind.getString(3);
+                            
+                            
                         }
                     }else{
                 
-                        String SQLmembers = "INSERT INTO Members(first_name,last_name,email,pass) VALUES (?,?,?,?)";
+                        String SQLmembers = "INSERT INTO Members(first_name,last_name,email,pass,streetname,streetnumber,zipcode,city,company,vat_number) VALUES (?,?,?,?,?,?,?,?,?,?)";
                         
                         PreparedStatement statementMembers = con.prepareStatement(SQLmembers,Statement.RETURN_GENERATED_KEYS);
                         statementMembers.setString(1,senderFirstName);
@@ -159,6 +169,12 @@ public class FileUploadHandler extends HttpServlet {
                         
                         String hashed = BCrypt.hashpw(senderPassword, BCrypt.gensalt());
                         statementMembers.setString(4,hashed);
+                        statementMembers.setString(5,senderStreetName);
+                        statementMembers.setString(6,senderStreetNumber);
+                        statementMembers.setString(7,senderZipCode);
+                        statementMembers.setString(8,senderCity);
+                        statementMembers.setString(9,senderCompany);
+                        statementMembers.setString(10,senderVAT);
                         
                         statementMembers.execute();
                         
@@ -171,8 +187,8 @@ public class FileUploadHandler extends HttpServlet {
                     
                     String SQLbrieven = "INSERT INTO Brieven (destinationLastName,destinationFirstName,destinationStreetName," +
                     "destinationStreetNumber,destinationZipCode,destinationCity,destinationEmail,senderLastName,"+
-                    "senderFirstName,senderStreetName,senderStreetNumber,senderZipCode,senderCity,senderEmail,member_id,status)"+
-                    " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    "senderFirstName,senderStreetName,senderStreetNumber,senderZipCode,senderCity,senderEmail,member_id,status,destinationCompay,senderCompany)"+
+                    " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     
                     PreparedStatement statement = con.prepareStatement(SQLbrieven,Statement.RETURN_GENERATED_KEYS);
                     statement.setString(1,destinationLastName);
@@ -197,13 +213,41 @@ public class FileUploadHandler extends HttpServlet {
                         statement.setString(16,"stored");
                     }
                     
+                    statement.setString(17,destinationCompany);
+                    statement.setString(18,senderCompany);
+                    
                     statement.execute();
                     
                     ResultSet rs = statement.getGeneratedKeys();
                     if (rs.next()){
                         id=rs.getInt(1);
                     }
-                    System.err.println("id:" + id);
+                    
+                    //check credits
+                    SQLfind = "SELECT SUM(amount) as huidigTotaal FROM CreditLog where member_id = ?;";
+                    statementFind = con.prepareStatement(SQLfind);
+                    statementFind.setInt(1,idMembers);
+                    rsFind = statementFind.executeQuery();
+                    
+                    //if credits - deduct 1
+                    if(rsFind.next()){
+                        int huidigTotaal = rsFind.getInt("huidigTotaal");
+                        if(huidigTotaal>0){
+                            creditUser = true;
+                            
+                            String SQLCredits = "INSERT INTO CreditLog (member_id,amount,brief_id) VALUES(?,-1,?);";
+                            statement = con.prepareStatement(SQLCredits,Statement.RETURN_GENERATED_KEYS);
+                            statement.setInt(1,idMembers);
+                            statement.setInt(2,id);
+                            statement.execute();
+                            
+                            //set brief paid
+                            SQLCredits = "UPDATE Brieven SET status='paid' WHERE id=?";
+                            statement = con.prepareStatement(SQLCredits,Statement.RETURN_GENERATED_KEYS);
+                            statement.setInt(1,id);
+                            statement.execute();
+                        }
+                    }
                               
 
                 }catch(SQLException e){
@@ -220,7 +264,10 @@ public class FileUploadHandler extends HttpServlet {
                 //send e-mail
                 SendFileEmail myMail = new SendFileEmail();
                 myMail.setMailTo("jan.blonde@icloud.com");
+                //myMail.setMailTo(senderEmail);
                 myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + "brieven" + id +".pdf");
+                myMail.setSubject("Uw brief werd succesvol opgeladen op zendu.be");
+                myMail.setMessage("We verzenden de brief zo snel mogelijk aangetekend. U vindt de door u opgeladen brief als bijlage bij deze e-mail.");
                 String returnMessage = myMail.getMessage();
            
                //File uploaded successfully
@@ -238,14 +285,22 @@ public class FileUploadHandler extends HttpServlet {
         
         HttpSession session = request.getSession();
         session.setAttribute("userid", senderEmail);
+        session.setAttribute("naam", senderFirstName + " " + senderLastName);
         
         //if first time or credits: dispatch to user home page
-        //if second time and no credits: dispatch to payment page
-        session.setAttribute("naam", senderFirstName + " " + senderLastName);
+        //if second time and no credits: dispatch to payment page        
         if (testUser){
-            request.getRequestDispatcher("/success.jsp").forward(request, response);
+            session.setAttribute("origin","testuser");
+            response.sendRedirect("/zendu/success.jsp");
+            //request.getRequestDispatcher("/success.jsp").forward(request, response);
         }else{
-            request.getRequestDispatcher("/payment.jsp").forward(request, response);
+            if(creditUser){
+                session.setAttribute("origin","testuser");
+                response.sendRedirect("/zendu/success.jsp");
+                //request.getRequestDispatcher("/success.jsp").forward(request, response);        
+            }else{
+                request.getRequestDispatcher("/payment.jsp").forward(request, response);
+            }
         }
         
     }

@@ -1,4 +1,6 @@
 <%@ page import ="java.sql.*" %>
+<%@ page import ="java.security.*" %>
+<%@ page import ="java.math.*" %>
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=iso-8859-1" pageEncoding="iso-8859-1"%>
 <html lang="en">
@@ -56,6 +58,12 @@
 <%
     ResultSet rs2 = null;
     String naam = "";
+    String orderID = "";
+    String result10 = "";
+    String result50 = "";
+    String result100 = "";
+    boolean successfulPayment = false;
+    
     int huidigTotaal = 0;
 
 if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
@@ -70,21 +78,67 @@ else
 
     Class.forName("com.mysql.jdbc.Driver");
     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
+    
     Statement st = con.createStatement();
     ResultSet rs1;
     rs1 = st.executeQuery("select * from Members where email='" + userid + "';");
     
     if (rs1.next()){
         String memberID = rs1.getString("id");
+        orderID = memberID;
+        
+        if(null!=request.getParameter("amount")){
+            int credits = 0;
+            String amount = request.getParameter("amount");
+            if(amount.equals("88")){
+                credits = 10;
+            }
+            if(amount.equals("425")){
+                credits = 50;
+            }
+            if(amount.equals("820")){
+                credits = 100;
+            }
+            Statement paymentStatement = con.createStatement();
+            paymentStatement.executeUpdate("INSERT INTO CreditLog (member_id, amount) VALUES("+memberID+","+credits+");");
+            successfulPayment = true;
+        }
         
         ResultSet rs3 = st.executeQuery("select SUM(amount) as huidigTotaal from CreditLog where member_id=" + memberID +";");
         if (rs3.next()){
             huidigTotaal = rs3.getInt("huidigTotaal");
         }
 
-        rs2 = st.executeQuery("select * from CreditLog where member_id=" + memberID + ";");
+        rs2 = st.executeQuery("select * from CreditLog where member_id=" + memberID + " ORDER BY reg_date DESC;");
         
     }
+    
+    //String orderID = (String)request.getAttribute("orderid");
+
+    String text10 = "ACCEPTURL=https://java-tomcat-janblonde.c9.io/zendu/credits.jspweliveinnumber76AMOUNT=8800weliveinnumber76CURRENCY=EUR" +
+                  "weliveinnumber76LANGUAGE=en_USweliveinnumber76ORDERID="+ orderID +"weliveinnumber76PSPID=zenduweliveinnumber76" +
+                  "TITLE=PAYMENTweliveinnumber76";
+
+    String text50 = "ACCEPTURL=https://java-tomcat-janblonde.c9.io/zendu/credits.jspweliveinnumber76AMOUNT=42500weliveinnumber76CURRENCY=EUR" +
+                  "weliveinnumber76LANGUAGE=en_USweliveinnumber76ORDERID="+ orderID +"weliveinnumber76PSPID=zenduweliveinnumber76" +
+                  "TITLE=PAYMENTweliveinnumber76";
+                  
+    String text100 = "ACCEPTURL=https://java-tomcat-janblonde.c9.io/zendu/credits.jspweliveinnumber76AMOUNT=82000weliveinnumber76CURRENCY=EUR" +
+                  "weliveinnumber76LANGUAGE=en_USweliveinnumber76ORDERID="+ orderID +"weliveinnumber76PSPID=zenduweliveinnumber76" +
+                  "TITLE=PAYMENTweliveinnumber76";
+    
+    MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+    crypt.reset();
+    crypt.update(text10.getBytes("UTF-8"));
+    result10 = new BigInteger(1, crypt.digest()).toString(16);
+    
+    crypt.reset();
+    crypt.update(text50.getBytes("UTF-8"));
+    result50 = new BigInteger(1, crypt.digest()).toString(16);
+    
+    crypt.reset();
+    crypt.update(text100.getBytes("UTF-8"));
+    result100 = new BigInteger(1, crypt.digest()).toString(16);
 }%>
 
     <!-- Navigation -->
@@ -99,7 +153,7 @@ else
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll" href="#page-top">
+                <a class="navbar-brand page-scroll" href="success.jsp">
                     Zen<span style="color:firebrick">du</span>
                 </a>
             </div>
@@ -133,18 +187,8 @@ else
     <header>
         <div>
             <button type="submit" class="btn btn-outline-dark" id="payment_button" style="position:relative;top:80px;left:80px">Credits aankopen</button><br><br>
-            <div style="position:absolute;left:400px;top:80px;border-color:red;border-style:solid;padding:10px;border-radius:6px;border-width:2px;font-size:30px;">huidig aantal: <%=huidigTotaal%></div>
-            <div id="payment_choices" style="position:relative;top:120px;left:80px" hidden>
-              <div>10 credits: 88 EUR
-              </div><br>
-              <div>50 credits: 390 EUR
-              </div><br>
-              <div>100 credits: 680 EUR
-              </div>
-            </div>
-        </div>
-        <div class="intro-content" style="top:120px;left:350px;position:relative">
-            <table id="hor-minimalist-b" >
+            
+            <table id="hor-minimalist-b" style="position:relative;top:80px;left:80px">
             <thead>
               <tr>
                 <th scope="col">Datum</th>
@@ -162,9 +206,55 @@ else
             <%}%>
             </tbody>
             </table>
+            
+            <div style="position:absolute;left:400px;top:80px;border-color:red;border-style:solid;padding:10px;border-radius:6px;border-width:2px;font-size:30px;">huidig aantal: <%=huidigTotaal%></div>
+            <div id="payment_choices" style="position:relative;top:120px;left:80px" hidden>
+              <div class="btn btn-lg btn-default" onclick="document.getElementById('paymentform10').submit();">10 credits: 88 EUR
+              </div><br><br>
+              <div class="btn btn-lg btn-default" onclick="document.getElementById('paymentform50').submit();">50 credits: 425 EUR
+              </div><br><br>
+              <div class="btn btn-lg btn-default" onclick="document.getElementById('paymentform100').submit();">100 credits: 820 EUR
+              </div>
+            </div>
+        </div>
+        <div class="intro-content">
+
         </div>
         
         <div class="login-form">
+        <FORM id="paymentform10" METHOD="post" ACTION="https://secure.ogone.com/ncol/test/orderstandard.asp">
+            <INPUT type="hidden" NAME="PSPID" value="zendu">
+            <INPUT type="hidden" NAME="orderID" style="color:black" VALUE="<%=orderID%>">
+            <INPUT type="hidden" NAME="amount" style="color:black" VALUE="8800">
+            <INPUT type="hidden" NAME="currency" style="color:black" VALUE="EUR">
+            <INPUT type="hidden" NAME="language" VALUE="en_US">
+            <INPUT type="hidden" NAME="TITLE" VALUE="PAYMENT">
+            <INPUT type="hidden" NAME="SHASIGN" VALUE="<%= result10 %>">
+            <INPUT type="hidden" NAME="ACCEPTURL" VALUE="https://java-tomcat-janblonde.c9.io/zendu/credits.jsp">
+            <input type="submit" value="SUBMIT" id=submit2 name=submit2 hidden>
+        </FORM>
+        <FORM id="paymentform50" METHOD="post" ACTION="https://secure.ogone.com/ncol/test/orderstandard.asp">
+            <INPUT type="hidden" NAME="PSPID" value="zendu">
+            <INPUT type="hidden" NAME="orderID" style="color:black" VALUE="<%=orderID%>">
+            <INPUT type="hidden" NAME="amount" style="color:black" VALUE="42500">
+            <INPUT type="hidden" NAME="currency" style="color:black" VALUE="EUR">
+            <INPUT type="hidden" NAME="language" VALUE="en_US">
+            <INPUT type="hidden" NAME="TITLE" VALUE="PAYMENT">
+            <INPUT type="hidden" NAME="SHASIGN" VALUE="<%= result50 %>">
+            <INPUT type="hidden" NAME="ACCEPTURL" VALUE="https://java-tomcat-janblonde.c9.io/zendu/credits.jsp">
+            <input type="submit" value="SUBMIT" id=submit2 name=submit2 hidden>
+        </FORM>
+        <FORM id="paymentform100" METHOD="post" ACTION="https://secure.ogone.com/ncol/test/orderstandard.asp">
+            <INPUT type="hidden" NAME="PSPID" value="zendu">
+            <INPUT type="hidden" NAME="orderID" style="color:black" VALUE="<%=orderID%>">
+            <INPUT type="hidden" NAME="amount" style="color:black" VALUE="82000">
+            <INPUT type="hidden" NAME="currency" style="color:black" VALUE="EUR">
+            <INPUT type="hidden" NAME="language" VALUE="en_US">
+            <INPUT type="hidden" NAME="TITLE" VALUE="PAYMENT">
+            <INPUT type="hidden" NAME="SHASIGN" VALUE="<%= result100 %>">
+            <INPUT type="hidden" NAME="ACCEPTURL" VALUE="https://java-tomcat-janblonde.c9.io/zendu/credits.jsp">
+            <input type="submit" value="SUBMIT" id=submit2 name=submit2 hidden>
+        </FORM>
         </div>
     
         <div class="getstarted-form">

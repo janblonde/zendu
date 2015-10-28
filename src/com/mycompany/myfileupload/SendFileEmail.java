@@ -10,6 +10,7 @@ public class SendFileEmail{
     String mailTo = "";
     String attachmentName = "";
     String textMessage = "This is message body";
+    String subject = "";
     
     public void setMailTo(String mailTo){
         this.mailTo = mailTo;
@@ -17,6 +18,10 @@ public class SendFileEmail{
     
     public void setAttachmentName(String attachmentName) {
         this.attachmentName = attachmentName;
+    }
+    
+    public void setSubject(String message) {
+        this.subject = message;
     }
     
     public void setMessage(String message) {
@@ -68,7 +73,7 @@ public class SendFileEmail{
                                   new InternetAddress(to));
 
          // Set Subject: header field
-         message.setSubject("This is the Subject Line!");
+         message.setSubject(subject);
 
          // Create the message part 
          BodyPart messageBodyPart = new MimeBodyPart();
@@ -83,12 +88,14 @@ public class SendFileEmail{
          multipart.addBodyPart(messageBodyPart);
 
          // Part two is attachment
-         messageBodyPart = new MimeBodyPart();
-         String filename = attachmentName;
-         DataSource source = new FileDataSource(filename);
-         messageBodyPart.setDataHandler(new DataHandler(source));
-         messageBodyPart.setFileName(filename);
-         multipart.addBodyPart(messageBodyPart);
+        if(!attachmentName.equals("")){
+             messageBodyPart = new MimeBodyPart();
+             String filename = attachmentName;
+             DataSource source = new FileDataSource(filename);
+             messageBodyPart.setDataHandler(new DataHandler(source));
+             messageBodyPart.setFileName(filename);
+             multipart.addBodyPart(messageBodyPart);
+        }
 
          // Send the complete message parts
          message.setContent(multipart );

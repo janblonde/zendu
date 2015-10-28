@@ -64,7 +64,10 @@ public class FileUploadLeaflet extends HttpServlet {
                 //send e-mail
                 SendFileEmail myMail = new SendFileEmail();
                 myMail.setMailTo("jan.blonde@icloud.com");
+                //myMail.setMailTo(senderEmail);
                 myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + "bewijs" + id +".pdf");
+                myMail.setSubject("Uw brief werd aangetekend verzonden door zendu.be");
+                myMail.setMessage("Uw brief werd zojuist via BPost aangetekend verzonden. U vindt een scan van het bewijsstrookje als bijlage bij deze e-mail.");
                 String returnMessage = myMail.getMessage();
                 
                 //update database
@@ -82,13 +85,17 @@ public class FileUploadLeaflet extends HttpServlet {
                     String SQL = "UPDATE Brieven SET status='sent' where id=" + id;
                     
                     stmt.executeUpdate(SQL);
+                    
+                    SQL = "UPDATE Brieven SET sent_date = NOW() where id=" + id;
+                    
+                    stmt.executeUpdate(SQL);
 
                 }catch(SQLException e){
                     System.err.println(e);
                 }
            
                //File uploaded successfully
-               request.setAttribute("message", "File Uploaded Successfully " + returnMessage);
+               request.setAttribute("message", "File Uploaded Successfully ");
             } catch (Exception ex) {
                request.setAttribute("message", "File Upload Failed due to " + ex);
             }          
@@ -98,7 +105,8 @@ public class FileUploadLeaflet extends HttpServlet {
                                  "Sorry this Servlet only handles file upload request");
         }
     
-        request.getRequestDispatcher("/admin.jsp").forward(request, response);
+        //request.getRequestDispatcher("/admin.jsp").forward(request, response);
+        response.sendRedirect("/zendu/admin.jsp");
      
     }
   

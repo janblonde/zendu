@@ -35,7 +35,9 @@ input.form-control {
   border-radius: 0 !important;
 }
 input.form-control:focus {
-  border-color: #ef4035;
+  /*border-color: #ef4035;*/
+  border-color: black;
+  border-width: 1px;
   box-shadow: none;
 }
 .btn,
@@ -1224,8 +1226,6 @@ body.vintage .testimonials .testimonials-carousel .owl-controls .owl-next {
 	font-family: "Ubuntu", Sans-Serif;
 	font-size: 12px;
 	background: #fff;
-	margin: 45px;
-	width: 480px;
 	border-collapse: collapse;
 	text-align: left;
 }
@@ -1246,4 +1246,24 @@ body.vintage .testimonials .testimonials-carousel .owl-controls .owl-next {
 #hor-minimalist-b tbody tr:hover td
 {
 	color: black;
+}
+
+/* Custom */
+
+.error{
+  display:none;
+  margin-left:10px;
+}
+
+.error_show{
+  color:red;
+  margin-left:10px;
+}
+
+input.invalid{
+  border: 1px solid red;
+}
+
+input.valid{
+  border: 1px solid #ccc;
 }

@@ -56,8 +56,10 @@
 <%
     ResultSet rs2 = null;
     String naam = "";
+    boolean successfulPayment = false;
+    boolean testUser = false;
 
-if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
+if (null == (session.getAttribute("userid")) || ("" == session.getAttribute("userid"))) {
 %>
     You are not logged in<br/>
     <a href="agency.html">Log on</a>
@@ -69,6 +71,21 @@ else
 
     Class.forName("com.mysql.jdbc.Driver");
     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
+    
+    //return from payment screens
+    if(null!=request.getParameter("orderID")){
+        System.err.println(request.getParameter("orderID"));
+        Statement paymentStatement = con.createStatement();
+        paymentStatement.executeUpdate("UPDATE Brieven set status='paid' where id=" + request.getParameter("orderID") + ";");
+        successfulPayment = true;
+    }
+    
+    //check for testuser
+    if("testuser".equals((String)session.getAttribute("origin"))){
+        testUser = true;
+        session.removeAttribute("origin");
+    }
+    
     Statement st = con.createStatement();
     ResultSet rs1;
     rs1 = st.executeQuery("select * from Members where email='" + userid + "';");
@@ -128,10 +145,8 @@ else
     <header>
         <div>
             <button type="submit" class="btn btn-outline-dark" onclick="window.location.href='new.jsp'" style="position:relative;top:80px;left:80px">Nieuwe aangetekende brief</button><br><br>
-        </div>
-        <div class="intro-content" style="top:150px;">
-            <br>
-            <table id="hor-minimalist-b" >
+            
+            <table id="hor-minimalist-b" style="position:relative;top:80px;left:80px;">
             <thead>
               <tr>
                 <th scope="col">Nummer</th>
@@ -143,7 +158,8 @@ else
                 <th scope="col">Stad</th>
                 <th scope="col">Email</th>
                 <th scope="col">Status</th>
-                <th scope="col">Document ontvangen op</th>
+                <th scope="col">Opgeladen</th>
+                <th scope="col">Verzonden</th>
                 <th scope="col">Brief</th>
                 <th scope="col">Bewijs</th>
               </tr>
@@ -159,14 +175,42 @@ else
                   <td style="color:black;"><%=rs2.getString("destinationZipCode")%></td>
                   <td style="color:black;"><%=rs2.getString("destinationCity")%></td>
                   <td style="color:black;"><%=rs2.getString("destinationEmail")%></td>
-                  <td style="color:black;"><%=rs2.getString("status")%></td>
-                  <td style="color:black;"><%=rs2.getString("reg_date")%></td>
+                  <td style="color:black;">
+                  <% if (rs2.getString("status").equals("paid")){ %>opgeladen<%}%>
+                  <% if (rs2.getString("status").equals("sent")){ %>verzonden<%}%>
+                  </td>
+                  <td style="color:black;"><%=rs2.getString("reg_date").substring(0,16)%></td>
+                  <td style="color:black;">
+                  <% if (rs2.getString("status").equals("sent")){ %>
+                  <%=rs2.getString("sent_date").substring(0,16)%>
+                  <%}%>
+                  </td>
                   <td style="color:black;"><a href="/zendu/documentservlet?docid=<%=rs2.getInt("id")%>&doctype=brieven" target="_blank"><img src="/zendu/assets/img/ico_pdf.png" height=20px width=20px/></a></td>
-                  <td style="color:black;"><a href="/zendu/documentservlet?docid=<%=rs2.getInt("id")%>&doctype=bewijs" target="_blank">Bewijs</a></td>
+                  <%if("sent".equals(rs2.getString("status"))){%>
+                    <td style="color:black;"><a href="/zendu/documentservlet?docid=<%=rs2.getInt("id")%>&doctype=bewijs" target="_blank"><img src="/zendu/assets/img/ico_pdf.png" height=20px width=20px/></a></td>
+                  <%}else{%>
+                    <td></td>
+                  <%}%>
                 </tr>
             <%}%>
             </tbody>
             </table>
+        </div>
+        <% if(successfulPayment){%>
+            <div class='alert alert-success' style="width:580px;padding:5px;position:absolute;left:500px;top:80px;z-index:1000;">
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                <strong> Uw betaling werd succesvol uitgevoerd. Uw brief wordt aangetekend verzonden.</strong>
+            </div>
+        <%}%>
+        <% if(testUser){%>
+            <div class='alert alert-success' style="width:580px;padding:5px;position:absolute;left:500px;top:80px;z-index:1000;">
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                <strong> Uw brief werd goed door ons ontvangen en wordt aangetekend verzonden.</strong>
+            </div>
+        <%}%>
+        <div class="intro-content">
+            <br>
+
         </div>
         
         <div class="login-form">

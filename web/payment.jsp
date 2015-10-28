@@ -72,9 +72,9 @@ else
 
     <!-- Navigation -->
     <!-- Note: navbar-default and navbar-inverse are both supported with this theme. -->
-    <nav class="navbar navbar-inverse navbar-fixed">
+    <!--<nav class="navbar navbar-inverse navbar-fixed">
         <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
+            <!-- Brand and toggle get grouped for better mobile display 
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
@@ -86,7 +86,7 @@ else
                     Zen<span style="color:firebrick">du</span>
                 </a>
             </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
+            <!-- Collect the nav links, forms, and other content for toggling 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="hidden">
@@ -109,16 +109,16 @@ else
                     </li>
                 </ul>
             </div>
-            <!-- /.navbar-collapse -->
+            <!-- /.navbar-collapse 
         </div>
-        <!-- /.container -->
-    </nav>
+        <!-- /.container 
+    </nav>-->
     <header>
         <div class="intro-content" style="top:150px;">
         
 <%String orderID = (String)request.getAttribute("orderid");
 
-String text = "ACCEPTURL=https://java-tomcat-janblonde.c9.io/zendu/accept.jspweliveinnumber76AMOUNT=980weliveinnumber76CURRENCY=EURweliveinnumber76LANGUAGE=en_USweliveinnumber76ORDERID="+ orderID +"weliveinnumber76PSPID=zenduweliveinnumber76";
+String text = "ACCEPTURL=https://java-tomcat-janblonde.c9.io/zendu/success.jspweliveinnumber76AMOUNT=980weliveinnumber76CURRENCY=EURweliveinnumber76LANGUAGE=en_USweliveinnumber76ORDERID="+ orderID +"weliveinnumber76PSPID=zenduweliveinnumber76";
 
 text = text + "TITLE=PAYMENTweliveinnumber76";
 
@@ -129,13 +129,11 @@ crypt.update(text.getBytes("UTF-8"));
 String result = new BigInteger(1, crypt.digest()).toString(16);
 %>
 
-<h1>Kies een betaalmethode</h1>
-
-<FORM METHOD="post" ACTION="https://secure.ogone.com/ncol/test/orderstandard.asp" id=form1 name=form1>
+<FORM id="paymentform" METHOD="post" ACTION="https://secure.ogone.com/ncol/test/orderstandard.asp" id=form1 name=form1>
 <INPUT type="hidden" NAME="PSPID" value="zendu">
-<INPUT NAME="orderID" style="color:black" VALUE="<%=orderID%>">
-<INPUT NAME="amount" style="color:black" VALUE="980">
-<INPUT NAME="currency" style="color:black" VALUE="EUR">
+<INPUT type="hidden" NAME="orderID" style="color:black" VALUE="<%=orderID%>">
+<INPUT type="hidden" NAME="amount" style="color:black" VALUE="980">
+<INPUT type="hidden" NAME="currency" style="color:black" VALUE="EUR">
 <INPUT type="hidden" NAME="language" VALUE="en_US">
 <!-- lay out information -->
 
@@ -153,7 +151,7 @@ String result = new BigInteger(1, crypt.digest()).toString(16);
 <INPUT type="hidden" NAME="FONTTYPE" VALUE="Verdana">-->
 
 <INPUT type="hidden" NAME="SHASIGN" VALUE="<%= result %>">
-<INPUT type="hidden" NAME="ACCEPTURL" VALUE="https://java-tomcat-janblonde.c9.io/zendu/accept.jsp">
+<INPUT type="hidden" NAME="ACCEPTURL" VALUE="https://java-tomcat-janblonde.c9.io/zendu/success.jsp">
 
 <!--<INPUT type="hidden" NAME="TP" VALUE="<fill here your template page>">
 
@@ -171,67 +169,20 @@ String result = new BigInteger(1, crypt.digest()).toString(16);
 <INPUT type="hidden" NAME="owneraddress" VALUE="">
 <INPUT type="hidden" NAME="owneraddress2" VALUE="">
 <INPUT type="hidden" NAME="owneraddress3" VALUE="">-->
-<input type="submit" value="SUBMIT" id=submit2 name=submit2>
+<input type="submit" value="SUBMIT" id=submit2 name=submit2 hidden>
 </form>
         
             
         </div>
         
-        <div class="login-form">
-        </div>
-    
-        <div class="getstarted-form">
-        </div>
-    
-    
         
-        <div class="scroll-down">
-            <a class="btn page-scroll" href="#about"><i class="fa fa-angle-down fa-fw"></i></a>
-        </div>
     </header>
-
-    <footer class="footer" style="background-image: url('assets/img/bg-footer.jpg')">
-        <div class="container text-center">
-            <div class="row">
-                <div class="col-md-4 contact-details">
-                    <h4><i class="fa fa-phone"></i> Call</h4>
-                    <p>555-213-4567</p>
-                </div>
-                <div class="col-md-4 contact-details">
-                    <h4><i class="fa fa-map-marker"></i> Visit</h4>
-                    <p>3481 Melrose Place
-                        <br>Beverly Hills, CA 90210</p>
-                </div>
-                <div class="col-md-4 contact-details">
-                    <h4><i class="fa fa-envelope"></i> Email</h4>
-                    <p><a href="mailto:mail@example.com">mail@example.com</a>
-                    </p>
-                </div>
-            </div>
-            <div class="row social">
-                <div class="col-lg-12">
-                    <ul class="list-inline">
-                        <li><a href="#"><i class="fa fa-facebook fa-fw fa-2x"></i></a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-twitter fa-fw fa-2x"></i></a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-linkedin fa-fw fa-2x"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="row copyright">
-                <div class="col-lg-12">
-                    <p class="small">&copy; 2015 Start Bootstrap Themes</p>
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <!-- Core Scripts -->
     <script src="assets/js/jquery.js"></script>
+    <!--
     <script src="assets/js/bootstrap/bootstrap.min.js"></script>
-    <!-- Plugin Scripts -->
+     Plugin Scripts 
     <script src="assets/js/plugins/jquery.easing.min.js"></script>
     <script src="assets/js/plugins/classie.js"></script>
     <script src="assets/js/plugins/cbpAnimatedHeader.js"></script>
@@ -245,7 +196,11 @@ String result = new BigInteger(1, crypt.digest()).toString(16);
     <script src="assets/js/contact_me.js"></script>
     <script src="assets/js/plugins/jqBootstrapValidation.js"></script>
     <!-- Vitality Theme Scripts -->
-    <script src="assets/js/vitality.js"></script>
+    <script>
+    $(document).ready(function(){
+      $("#paymentform").submit();
+    });
+    </script>
 </body>
 
 </html>

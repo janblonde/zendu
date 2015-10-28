@@ -303,7 +303,7 @@
                 <div class="col-lg-12 wow fadeIn">
                     <h2>starten</h2>
                     <hr class="colored">
-                    <p>Probeer het uit en verzend één gratis aangetekende brief.</p>
+                    <p>Probeer het uit en verzend 1 gratis aangetekende brief.</p>
                 </div>
             </div>
             <div class="row content-row">
@@ -315,6 +315,9 @@
                 </div>
                 <div class="form-group">
                   <input type="text" class="form-control" name="destinationlastname" placeholder="Naam">
+                </div>
+                <div class="form-group">             
+                  <input type="text" class="form-control" name="destinationcompany" placeholder="Vennootschap">
                 </div>
                 <div class="form-group">              
                   <input type="text" class="form-control" name="destinationstreetname" placeholder="Straatnaam">
@@ -342,6 +345,12 @@
                 <div class="form-group">
                   <input type="text" class="form-control" name="senderlastname" placeholder="Naam">
                 </div>
+                <div class="form-group">             
+                  <input type="text" class="form-control" name="sendercompany" placeholder="Vennootschap">
+                </div>
+                <div class="form-group">             
+                  <input type="text" class="form-control" name="sendervat" placeholder="BTW-nummer">
+                </div>
                 <div class="form-group">              
                   <input type="text" class="form-control" name="senderstreetname" placeholder="Straatnaam">
                 </div>
@@ -363,8 +372,9 @@
                 <div class="form-group">
                   <input type="password" class="form-control" name="senderpasswordcheck" placeholder="Herhaal het paswoord">
                 </div>
+                <div id="success_test"></div>
                 <div class="form-group">
-                  <input type="submit" class="btn btn-lg btn-default" value="verzenden"/>
+                  <input id="payment_test" type="submit" class="btn btn-lg btn-default" value="verzenden"/>
                   <a id="closebutton" class="btn btn-lg btn-default">Cancel</a><br>
                 </div>
               </form>
@@ -703,7 +713,7 @@
                     <div class="pricing-item featured-first">
                         <h3>Basic</h3>
                         <hr class="colored">
-                        <div class="price"><span class="number"><sup>€</sup>9.80</span> / brief</div>
+                        <div class="price"><span class="number">9.80<sup>€</sup></span> / brief</div>
                         <ul class="list-group">
                             <li class="list-group-item">1 individuele brief</li>
                             <li class="list-group-item">Maximum 10 pagina's</li>
@@ -717,7 +727,7 @@
                     <div class="pricing-item featured">
                         <h3>Plus</h3>
                         <hr class="colored">
-                        <div class="price"><span class="number"><sup>€</sup>8.80</span> / brief</div>
+                        <div class="price"><span class="number">8.80<sup>€</sup></span> / brief</div>
                         <ul class="list-group">
                             <li class="list-group-item">Pakket van <strong>10</strong> brieven</li>
                             <li class="list-group-item">Totaal: € 88, inc. BTW</li>
@@ -730,10 +740,10 @@
                     <div class="pricing-item featured-last">
                         <h3>Premium</h3>
                         <hr class="colored">
-                        <div class="price"><span class="number"><sup>$</sup>7.80</span> / brief</div>
+                        <div class="price"><span class="number">8.50<sup>€</sup></span> / brief</div>
                         <ul class="list-group">
                             <li class="list-group-item">Pakket van 50 brieven</li>
-                            <li class="list-group-item">Totaal: € 390, inc. BTW</li>
+                            <li class="list-group-item">Totaal: € 425, inc. BTW</li>
                             <li class="list-group-item">Opgeladen voor 15u00, dezelfde dag verzonden</li>
                         </ul>
                         <a href="#" class="btn btn-outline-dark">Log in om te bestellen</a>
@@ -781,28 +791,28 @@
                     <form name="sentMessage" id="contactForm" novalidate>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Name</label>
+                                <label>Naam</label>
                                 <input type="text" class="form-control" placeholder="Naam" id="name" required data-validation-required-message="Laat uw naam achter aub.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Email Address</label>
+                                <label>Email Adres</label>
                                 <input type="email" class="form-control" placeholder="Email" id="email" required data-validation-required-message="Laat uw email achter aub.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Phone Number</label>
-                                <input type="tel" class="form-control" placeholder="Telefoonnummber" id="phone">
+                                <label>Telefoonnummer</label>
+                                <input type="tel" class="form-control" placeholder="Telefoonnummer" id="phone">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Message</label>
+                                <label>Boodschap</label>
                                 <textarea rows="5" class="form-control" placeholder="Boodschap" id="message" required data-validation-required-message="Laat een boodschap achter aub."></textarea>
                                 <p class="help-block text-danger"></p>
                             </div>
