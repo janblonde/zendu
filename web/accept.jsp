@@ -60,7 +60,7 @@
 if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
 %>
     You are not logged in<br/>
-    <a href="agency.html">Log on</a>
+    <a href="index.html">Log on</a>
 <%}
 else
 {

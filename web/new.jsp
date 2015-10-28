@@ -57,6 +57,10 @@
     String naam = "";
     String firstName = "";
     String lastName = "";
+    String streetName = "";
+    String streetNumber = "";
+    String zipCode = "";
+    String city = "";
     boolean credits = false; 
     
 if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
@@ -79,6 +83,11 @@ else
         String memberID = rs1.getString("id");
         firstName = rs1.getString("first_name");
         lastName = rs1.getString("last_name");
+        streetName = rs1.getString("streetname");
+        streetNumber = rs1.getString("streetnumber");
+        zipCode = rs1.getString("zipcode");
+        city = rs1.getString("city");
+        company = rs1.getString("company");
         
         ResultSet rs3 = st.executeQuery("select SUM(amount) as huidigTotaal from CreditLog where member_id=" + memberID +";");
         if (rs3.next()){
@@ -103,7 +112,7 @@ else
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll" href="#page-top">
+                <a class="navbar-brand page-scroll" href="success.jsp">
                     Zen<span style="color:firebrick">du</span>
                 </a>
             </div>
@@ -143,58 +152,90 @@ else
         <div class="container">        
             <div class="row content-row">
                 
-              <form action="upload" method="post" enctype="multipart/form-data">
+              <form id="upload" action="upload" method="post" enctype="multipart/form-data">
                 <legend>Gegevens bestemmeling</legend>
-                <div class="form-group">             
-                  <input type="text" class="form-control" name="destinationfirstname" placeholder="Voornaam">
+                <div class="form-group">
+                  <label for="destinationfirstname">Voornaam:</label>
+                  <input id="destinationfirstname" type="text" class="form-control valid" name="destinationfirstname" style="width:40%">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" name="destinationlastname" placeholder="Naam">
-                </div>
-                <div class="form-group">              
-                  <input type="text" class="form-control" name="destinationstreetname" placeholder="Straatnaam">
-                </div>
-                <div class="form-group">              
-                  <input type="text" class="form-control" name="destinationstreetnumber" placeholder="Straatnummer">
-                </div>
-                <div class="form-group">              
-                  <input type="text" class="form-control" name="destinationzipcode" placeholder="Postcode">
+                  <label for="destinationlastname">Naam: <span style="color:red">*</span></label>
+                  <input id="destinationlastname" type="text" class="form-control" name="destinationlastname" style="width:40%">
+                  <span class="error">Dit is een verplicht veld</span>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" name="destinationcity" placeholder="Stad">
+                  <label for="destinationlastname">Vennootschap: </span></label>
+                  <input id="destinationcompany" type="text" class="form-control valid" name="destinationcompany" style="width:40%">
                 </div>
                 <div class="form-group">
-                  <input type="email" class="form-control" name="destinationEmail" placeholder="E-mail adres">
+                  <label for="destinationstreetname">Straatnaam: <span style="color:red">*</span></label>
+                  <input id="destinationstreetname" type="text" class="form-control" name="destinationstreetname" style="width:70%">
+                  <span class="error">Dit is een verplicht veld</span>
                 </div>
-                <legend>Te verzenden document</legend>
                 <div class="form-group">
-                  <input id="input-1" name="file" type="file" class="file">
+                  <label for="destinationstreetnumber">Straatnummer: <span style="color:red">*</span></label>
+                  <input id="destinationstreetnumber" type="text" class="form-control" name="destinationstreetnumber" style="width:10%">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <label for="destinationzipcode">Postcode: <span style="color:red">*</span></label>
+                  <input id="destinationzipcode" type="text" class="form-control" name="destinationzipcode" style="width:20%">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <label for="destinationcity">Stad: <span style="color:red">*</span></label>
+                  <input id="destinationcity" type="text" class="form-control" name="destinationcity" style="width:40%">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <label for="destinationemail">E-mail adres:</label>
+                  <input id="destinationemail" type="email" class="form-control valid" name="destinationemail" style="width:40%">
+                  <span class="error">Gelieve een geldig email adres in te geven</span>
+                </div>
+                <legend>Te verzenden document <span style="color:red">*</span></legend>
+                <div class="form-group">
+                  <input id="file" name="file" type="file" class="file">
                 </div>
                 <legend>Uw gegevens</legend>
-                <div class="form-group">             
-                  <input type="text" class="form-control" name="senderfirstname" placeholder="Voornaam" value="<%=firstName%>">
+                <div class="form-group">
+                  <label for="senderfirstname">Voornaam:</label>
+                  <input id="senderfirstname" type="text" class="form-control valid" name="senderfirstname" value="<%=firstName%>">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" name="senderlastname" placeholder="Naam" value="<%=lastName%>">
-                </div>
-                <div class="form-group">              
-                  <input type="text" class="form-control" name="senderstreetname" placeholder="Straatnaam">
-                </div>
-                <div class="form-group">              
-                  <input type="text" class="form-control" name="senderstreetnumber" placeholder="Straatnummer">
-                </div>
-                <div class="form-group">              
-                  <input type="text" class="form-control" name="senderzipcode" placeholder="Postcode">
+                  <label for="senderlastname">Naam: <span style="color:red">*</span></label>
+                  <input id="senderlastname" type="text" class="form-control valid" name="senderlastname" value="<%=lastName%>">
+                  <span class="error">Dit is een verplicht veld</span>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" name="sendercity" placeholder="Stad">
+                  <label for="sendercompany">Vennootschap:</label>
+                  <input id="sendercompany" type="text" class="form-control valid" name="sendercompany" value="<%=company%>">
                 </div>
+                <div class="form-group">
+                  <label for="senderstreetname">Straatnaam: <span style="color:red">*</span></label>
+                  <input id="senderstreetname" type="text" class="form-control valid" name="senderstreetname" value="<%=streetName%>">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <label for="senderstreetnumber">Straatnummer: <span style="color:red">*</span></label>
+                  <input id="senderstreetnumber" type="text" class="form-control valid" name="senderstreetnumber" value="<%=streetNumber%>">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <label for="senderzipcode">Postcode: <span style="color:red">*</span></label>
+                  <input id="senderzipcode" type="text" class="form-control valid" name="senderzipcode" value="<%=zipCode%>">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <label for="sendercity">Stad: <span style="color:red">*</span></label>
+                  <input id="sendercity" type="text" class="form-control valid" name="sendercity" value="<%=city%>">
+                </div>
+                <div id="success_upload"></div>
                 <div class="form-group"><% if (credits){%>
-                  <input type="submit" class="btn btn-lg btn-default" value="verzenden"/>
+                  <input id="upload_new" type="submit" class="btn btn-lg btn-default" name="upload_new" value="verzenden"/>
                                         <% }else{ %>
-                  <input type="submit" class="btn btn-lg btn-default" value="betalen en verzenden"/>
+                  <input id="payment_new" type="submit" class="btn btn-lg btn-default" name="payment_new" value="betalen en verzenden"/>
                                         <% } %>
-                  <a id="closebutton" class="btn btn-lg btn-default">Cancel</a><br>
+                  <a id="closebutton" name="closebutton" class="btn btn-lg btn-default">Cancel</a><br>
                 </div>
               </form>
             </div>
