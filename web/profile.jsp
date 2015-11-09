@@ -1,7 +1,6 @@
 <%@ page import ="java.sql.*" %>
 <%@ page import ="com.mycompany.myfileupload.Properties" %>
 <!DOCTYPE html>
-<%@ page language="java" contentType="text/html; charset=iso-8859-1" pageEncoding="iso-8859-1"%>
 <html lang="en">
 
 <head>
@@ -57,42 +56,100 @@
 <%
     ResultSet rs2 = null;
     String naam = "";
-    boolean successfulPayment = false;
-    boolean testUser = false;
-
-if (null == (session.getAttribute("userid")) || ("" == session.getAttribute("userid"))) {
-  response.sendRedirect("index.jsp");
+    String firstName = "";
+    String lastName = "";
+    String streetName = "";
+    String streetNumber = "";
+    String zipCode = "";
+    String city = "";
+    String company = "";
+    String email = "";
+    String vat = "";
+    
+if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
+    response.sendRedirect("index.jsp");
 }else{
+
     String userid = (String)session.getAttribute("userid");
     naam = (String)session.getAttribute("naam");
 
+    //prepare db
     Class.forName("com.mysql.jdbc.Driver");
     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", Properties.username, Properties.password);
-    
-    //return from payment screens
-    if(null!=request.getParameter("orderID")){
-        System.err.println(request.getParameter("orderID"));
-        Statement paymentStatement = con.createStatement();
-        paymentStatement.executeUpdate("UPDATE Brieven set status='paid' where id=" + request.getParameter("orderID") + ";");
-        successfulPayment = true;
-    }
-    
-    //check for testuser
-    if("testuser".equals((String)session.getAttribute("origin"))){
-        testUser = true;
-        session.removeAttribute("origin");
-    }
-    
     Statement st = con.createStatement();
+    
+    boolean change = false;
+
+    //get eventual edit parameters
+    if (request.getParameter("senderfirstname")!=null){
+        firstName = request.getParameter("senderfirstname");
+        change=true;
+    }
+    if (request.getParameter("senderlastname")!=null){
+        lastName = request.getParameter("senderlastname");
+        change=true;
+    }
+    if (request.getParameter("email")!=null){
+        email = request.getParameter("email");
+        change=true;
+    }
+    if (request.getParameter("senderstreetname")!=null){
+        streetName = request.getParameter("senderstreetname");
+        change=true;
+    }
+    if (request.getParameter("senderstreetnumber")!=null){
+        streetNumber = request.getParameter("senderstreetnumber");
+        change=true;
+    }
+    if (request.getParameter("senderzipcode")!=null){
+        zipCode = request.getParameter("senderzipcode");
+        change=true;
+    }
+    if (request.getParameter("sendercity")!=null){
+        city = request.getParameter("sendercity");
+        change=true;
+    }
+    if (request.getParameter("sendercompany")!=null){
+        company = request.getParameter("sendercompany");
+        change=true;
+    }
+    if (request.getParameter("vat")!=null){
+        vat = request.getParameter("vat");
+        change=true;
+    }
+    
+    //store to database
+    if(change){
+        String SQL = "UPDATE Members SET first_name=?,last_name=?,email=?,streetname=?,streetnumber=?,zipcode=?,city=?,company=?,vat_number=? WHERE email=?";
+        PreparedStatement statement = con.prepareStatement(SQL);
+        statement.setString(1,firstName);
+        statement.setString(2,lastName);
+        statement.setString(3,email);
+        statement.setString(4,streetName);
+        statement.setString(5,streetNumber);
+        statement.setString(6,zipCode);
+        statement.setString(7,city);
+        statement.setString(8,company);
+        statement.setString(9,vat);
+        statement.setString(10,userid);
+        statement.execute();
+    }
+    
     ResultSet rs1;
     rs1 = st.executeQuery("select * from Members where email='" + userid + "';");
     
     if (rs1.next()){
         String memberID = rs1.getString("id");
-
-        rs2 = st.executeQuery("select * from Brieven where member_id=" + memberID + " and status='paid' OR status='sent';");
+        firstName = rs1.getString("first_name");
+        lastName = rs1.getString("last_name");
+        streetName = rs1.getString("streetname");
+        streetNumber = rs1.getString("streetnumber");
+        zipCode = rs1.getString("zipcode");
+        city = rs1.getString("city");
+        company = rs1.getString("company");
+        email = rs1.getString("email");
+        vat = rs1.getString("vat_number");
     }%>
-
 
     <!-- Navigation -->
     <!-- Note: navbar-default and navbar-inverse are both supported with this theme. -->
@@ -106,7 +163,7 @@ if (null == (session.getAttribute("userid")) || ("" == session.getAttribute("use
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll" href="#page-top">
+                <a class="navbar-brand page-scroll" href="success.jsp">
                     Zen<span style="color:firebrick">du</span>
                 </a>
             </div>
@@ -134,85 +191,65 @@ if (null == (session.getAttribute("userid")) || ("" == session.getAttribute("use
         </div>
         <!-- /.container -->
     </nav>
-    <header>
+    <header style="height:1800px;">
         <div>
-            <button type="submit" class="btn btn-outline-dark" onclick="window.location.href='new.jsp'" style="position:relative;top:80px;left:80px">Nieuwe aangetekende brief</button><br><br>
+            <button type="submit" class="btn btn-outline-dark" onclick="window.location.href='success.jsp'" style="position:relative;top:80px;left:80px">Terug naar overzicht</button><br><br>
         </div>
-        
+
     <section id="process" class="services">
         <div class="container">        
             <div class="row content-row">
-            <legend>Overzicht van brieven</legend>
-            
-            <table id="hor-minimalist-b">
-            <thead>
-              <tr>
-                <th scope="col">Nummer</th>
-                <th scope="col">Voornaam</th>
-                <th scope="col">Naam</th>
-                <th scope="col">Straatnaam</th>
-                <th scope="col">Straatnummer</th>
-                <th scope="col">Postcode</th>
-                <th scope="col">Stad</th>
-                <th scope="col">Email</th>
-                <th scope="col">Status</th>
-                <th scope="col">Opgeladen</th>
-                <th scope="col">Brief</th>
-                <th scope="col">Verzonden</th>
-                <th scope="col">Bewijs</th>
-              </tr>
-            </thead>
-            <tbody>
-            <%while (rs2.next()){%>
-                <tr>
-                  <td style="color:black;"><%=rs2.getString("id")%></td>
-                  <td style="color:black;"><%=rs2.getString("destinationLastName")%></td>
-                  <td style="color:black;"><%=rs2.getString("destinationFirstName")%></td>
-                  <td style="color:black;"><%=rs2.getString("destinationStreetName")%></td>
-                  <td style="color:black;"><%=rs2.getString("destinationStreetNumber")%></td>
-                  <td style="color:black;"><%=rs2.getString("destinationZipCode")%></td>
-                  <td style="color:black;"><%=rs2.getString("destinationCity")%></td>
-                  <td style="color:black;"><%=rs2.getString("destinationEmail")%></td>
-                  <td style="color:black;">
-                  <% if (rs2.getString("status").equals("paid")){ %>opgeladen<%}%>
-                  <% if (rs2.getString("status").equals("sent")){ %>verzonden<%}%>
-                  </td>
-                  <td style="color:black;"><%=rs2.getString("reg_date").substring(0,16)%></td>
-                  <td style="color:black;"><a href="/zendu/documentservlet?docid=<%=rs2.getInt("id")%>&doctype=brieven" target="_blank"><img src="/zendu/assets/img/ico_pdf.png" height=20px width=20px/></a></td>
-                  <td style="color:black;">
-                  <% if (rs2.getString("status").equals("sent")){ %>
-                  <%=rs2.getString("sent_date").substring(0,16)%>
-                  <%}%>
-                  </td>
-                  <%if("sent".equals(rs2.getString("status"))){%>
-                    <td style="color:black;"><a href="/zendu/documentservlet?docid=<%=rs2.getInt("id")%>&doctype=bewijs" target="_blank"><img src="/zendu/assets/img/ico_pdf.png" height=20px width=20px/></a></td>
-                  <%}else{%>
-                    <td></td>
-                  <%}%>
-                </tr>
-            <%}%>
-            </tbody>
-            </table>
-        </div>
+                
+            <form id="upload" action="profile.jsp" method="post">
+                <legend>Uw gegevens</legend>
+                <div class="form-group">
+                  <label for="senderfirstname">Voornaam:</label>
+                  <input id="senderfirstname" type="text" class="form-control valid" name="senderfirstname" value="<%=firstName%>" readonly>
+                </div>
+                <div class="form-group">
+                  <label for="senderlastname">Naam: <span style="color:red">*</span></label>
+                  <input id="senderlastname" type="text" class="form-control valid" name="senderlastname" value="<%=lastName%>" readonly>
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <label for="email">E-mail: <span style="color:red">*</span></label>
+                  <input id="email" type="text" class="form-control valid" name="email" value="<%=email%>" readonly>
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <label for="sendercompany">Bedrijf:</label>
+                  <input id="sendercompany" type="text" class="form-control valid" name="sendercompany" value="<%=company%>" readonly>
+                </div>
+                <div class="form-group">
+                  <label for="vat">BTW nummer:</label>
+                  <input id="vat" type="text" class="form-control valid" name="vat" value="<%=vat%>" readonly>
+                </div>
+                <div class="form-group">
+                  <label for="senderstreetname">Straatnaam: <span style="color:red">*</span></label>
+                  <input id="senderstreetname" type="text" class="form-control valid" name="senderstreetname" value="<%=streetName%>" readonly>
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <label for="senderstreetnumber">Straatnummer: <span style="color:red">*</span></label>
+                  <input id="senderstreetnumber" type="text" class="form-control valid" name="senderstreetnumber" value="<%=streetNumber%>" readonly>
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <label for="senderzipcode">Postcode: <span style="color:red">*</span></label>
+                  <input id="senderzipcode" type="text" class="form-control valid" name="senderzipcode" value="<%=zipCode%>" readonly>
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <label for="sendercity">Stad: <span style="color:red">*</span></label>
+                  <input id="sendercity" type="text" class="form-control valid" name="sendercity" value="<%=city%>" readonly>
+                </div>
+                <a id="editprofile" name="editprofile" class="btn btn-lg btn-default">Aanpassen</a>
+                <input id="save" type="submit" class="btn btn-lg btn-default" name="save" value="opslaan" style="display:none;"/>
+                <a id="closebutton" name="closebutton" class="btn btn-lg btn-default">Cancel</a><br>
+              </form>
+            </div>
         </div>
     </section>
-        
-        <% if(successfulPayment){%>
-            <div class='alert alert-success' style="width:580px;padding:5px;position:absolute;left:500px;top:80px;z-index:1000;">
-                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                <strong> Uw betaling werd succesvol uitgevoerd. Uw brief wordt aangetekend verzonden.</strong>
-            </div>
-        <%}%>
-        <% if(testUser){%>
-            <div class='alert alert-success' style="width:580px;padding:5px;position:absolute;left:500px;top:80px;z-index:1000;">
-                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                <strong> Uw brief werd goed door ons ontvangen en wordt aangetekend verzonden.</strong>
-            </div>
-        <%}%>
-        <div class="intro-content">
-            <br>
-
-        </div>
         
         <div class="login-form">
         </div>
@@ -283,7 +320,7 @@ if (null == (session.getAttribute("userid")) || ("" == session.getAttribute("use
     <script src="assets/js/plugins/jqBootstrapValidation.js"></script>
     <!-- Vitality Theme Scripts -->
     <script src="assets/js/vitality.js"></script>
-    <%}%>
+<%}%>
 </body>
 
 </html>

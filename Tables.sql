@@ -60,3 +60,11 @@ PRIMARY KEY (id),
 email VARCHAR(30),
 reg_date TIMESTAMP
 ) ENGINE=INNODB;
+
+CREATE TABLE PasswordReset (
+id INT NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (id),
+random VARCHAR(30),
+userid INT(6),
+reg_date TIMESTAMP
+) ENGINE=INNODB;

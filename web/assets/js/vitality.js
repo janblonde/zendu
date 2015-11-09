@@ -104,7 +104,7 @@
     });
 	
 	// Add an event that triggers when the submit
-	// button is pressed.
+	// button is pressed when sending an e-mail (temporary index page).
     $("#mc-embedded-subscribe").click(function() {
     	
     	// Get the text from the two inputs.
@@ -126,8 +126,48 @@
                 alert("Insertion failed.");
             });
     });
+
+    //validation for website only
     
-    //form validation
+    //form validation - existing user account
+    $('#senderemail').on('focusout', function() {
+        var username = $("#senderemail").val();
+        var error_element=$("p", $('#senderemail').parent());
+	    
+	    var re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    	var is_email=re.test(username);
+    	if(is_email){$("#senderemail").removeClass("invalid").addClass("valid");}
+    	else{$("#senderemail").removeClass("valid").addClass("invalid");}
+        
+        $.post('checkusername',{"username": username},
+            function(){ // on success
+                console.log("success");
+                error_element.removeClass("error_show").addClass("error");
+            })
+            .fail(function(){ //on failure
+                console.log("failure");
+    		    error_element.removeClass("error").addClass("error_show");
+            });
+    });
+    
+    //form validation - identical passwords
+    $('#senderpasswordcheck').on('focusout',function(){
+        var password = $('#senderpassword').val();
+        var check = $('#senderpasswordcheck').val();
+        
+        var error_element=$("p", $('#senderpasswordcheck').parent());
+        if(password!=check){
+            error_element.removeClass("error").addClass("error_show");
+        }else{
+            error_element.removeClass("error_show").addClass("error");
+        }
+
+        
+    });
+    
+    //validation for both forms (site+application)
+    
+    //form validation - required fields
     $('#destinationlastname').on('focusout', function() {
 	    var input=$(this);
 	    var is_name=input.val();
@@ -206,6 +246,12 @@
 	    else{input.removeClass("valid").addClass("invalid");}
     });
     
+    $('#senderpassword').on('focusout', function() {
+	    var input=$(this);
+	    var is_name=input.val();
+	    if(is_name){input.removeClass("invalid").addClass("valid");}
+	    else{input.removeClass("valid").addClass("invalid");}
+    });
     
     //async notification on button click
     $("#payment_new").click(function(){
@@ -224,7 +270,7 @@
     		    var element=$("#"+form_data[input]['name']);
     		    var valid=element.hasClass("valid")||element==$("#");
     		    var error_element=$("span", element.parent());
-    		    if (!valid){error_element.removeClass("error").addClass("error_show"); error_free=false;console.log('error');}
+    		    if (!valid){error_element.removeClass("error").addClass("error_show"); error_free=false;}
     		    else{error_element.removeClass("error_show").addClass("error");}
     	    }
     	}
@@ -245,12 +291,101 @@
     });
     
     $("#payment_test").click(function(){
-        $('#success_test').html("<div class='alert alert-success'>");
-        $('#success_test > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;").append("</button>");
-        $('#success_test > .alert-success').append("<img height='20px' width='20px' src='assets/img/loader.gif'/><strong> Even geduld, ww brief wordt opgeladen.</strong>");
-        $('#success_test > .alert-success').append('</div>');
-    });
+        var form_data=$("#upload").serializeArray();
+    	var error_free=true;
+    	for (var input in form_data){
+    	    console.log(form_data[input]['name']);
+    	    if(form_data[input]['name']){
+    		    var element=$("#"+form_data[input]['name']);
+    		    console.log(element);
+    		    var valid=element.hasClass("valid")||element==$("#");
+    		    console.log(valid);
+    		    var error_element=$("span", element.parent());
+    		    if (!valid){error_element.removeClass("error").addClass("error_show"); error_free=false;}
+    		    else{error_element.removeClass("error_show").addClass("error");}
+    	    }
+    	}
+    	if (!error_free){
+    		event.preventDefault();
+    		$('#success_test').html("<div class='alert alert-danger'>");
+            $('#success_test > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;").append("</button>");
+            $('#success_test > .alert-danger').append("<strong>Er ontbreken gegevens, kijk even na aub.</strong>");
+            $('#success_test > .alert-danger').append('</div>');
+    	}
+    	else{
+            $('#success_test').html("<div class='alert alert-success'>");
+            $('#success_test > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;").append("</button>");
+            $('#success_test > .alert-success').append("<img height='20px' width='20px' src='assets/img/loader.gif'/><strong> Even geduld, ww brief wordt opgeladen.</strong>");
+            $('#success_test > .alert-success').append('</div>');
+    	}
 
+    });
+    
+    //check on file extension
+    $("#file").change(function(){
+        var filename = $("#file").val();
+        var extension = filename.match(/\.([^\.]+)$/)[1];
+        console.log(extension);
+        var error_element=$("span",$("#file").parent());
+        if(extension!="pdf"){
+            error_element.removeClass("error").addClass("error_show");
+        }else{
+            error_element.removeClass("error_show").addClass("error");
+        }
+    });
+    
+    //reset password
+    $("#reset1").click(function(){
+        $('#pass').hide();
+        $('#reset2').show();
+        $('#back1').show();
+        $('#reset1').hide();
+        $('#login').hide();
+    });
+    
+    //terug naar login
+    $("#back1").click(function(){
+        $('#pass').show();
+        $('#reset2').hide();
+        $('#back1').hide();
+        $('#reset1').show();
+        $('#login').show();
+    });
+    
+    //click reset
+    $("#reset2").click(function(){
+        console.log("reset");
+        var email = $('#email').val(); 
+        //ajax call
+        $.post('requestpassword',{"email": email},
+            function(){ // on success
+                $('#pass').show();
+                $('#reset2').hide();
+                $('#back1').hide();
+                $('a#reset1').text("We zenden u een e-mail die toelaat om een nieuw paswoord te kiezen.");
+                $('#reset1').show();
+                $('#login').show();
+            })
+            .fail(function(){ //on failure
+                $('#pass').show();
+                $('#reset2').hide();
+                $('#back1').hide();
+                $('a#reset1').text("Er ging iets mis. Meld het probleem via info@zendu.be aub.");
+                $('#reset1').show();
+                $('#login').show();
+            });
+    });
+    
+    //edit profile
+    $("a#editprofile").click(function(){
+        $("#save").show();
+        $("a#editprofile").hide();
+        $("input").removeAttr("readonly");
+        //$("#senderfirstname").removeAttr("readonly");
+        //$("#senderlastname").removeAttr("readonly");
+        
+    });
+    
     
     // Portfolio Filtering Scripts & Hover Effect
     var filterList = {

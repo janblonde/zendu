@@ -1,9 +1,24 @@
+package com.mycompany.myfileupload;
+
 import javax.xml.soap.*;
 //import javax.xml.namsespace.*;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
+import java.util.*;
+import org.w3c.dom.*;
 
-public class CreatePayment {
+public class CreatePaymentRequest {
+    
+    public static String myOrderRef = "O005";
+    public static String myClientID = "1234";
+    public static String myFirst = "Jan";
+    public static String myLast = "Blonde";
+    public static String myEmail = "jan.blonde@icloud.com";
+    public static String myAmount = "980";
+    public static String myStreet = "Huybrechtsstraat";
+    public static String myHouseNumber = "76";
+    public static String myPostalCode = "2140";
+    public static String myCity = "Borgerhout";
 
     /**
      * Starting point for the SAAJ - SOAP Client Testing
@@ -26,6 +41,46 @@ public class CreatePayment {
             System.err.println("Error occurred while sending SOAP Request to Server");
             e.printStackTrace();
         }
+    }
+    
+    public static String makeCall() {
+        String response = "";
+        
+        try {
+            // Create SOAP Connection
+            SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
+            SOAPConnection soapConnection = soapConnectionFactory.createConnection();
+
+            // Send SOAP Message to SOAP Server
+            String url = "https://test.docdatapayments.com/ps/services/paymentservice/1_3";
+            SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(), url);
+            
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            Source sourceContent = soapResponse.getSOAPPart().getContent();
+            System.out.print("\nResponse SOAP Message = ");
+            StreamResult result = new StreamResult(System.out);
+            transformer.transform(sourceContent, result);
+
+            // Process the SOAP Response
+            //printSOAPResponse(soapResponse);
+            NodeList responseElement = soapResponse.getSOAPBody().getElementsByTagName("key");
+            
+            if(null!=responseElement){
+                response = responseElement.item(0).getFirstChild().getNodeValue(); 
+            }else{
+                response="ERROR";
+            }  
+
+            soapConnection.close();
+            
+            return response;
+        } catch (Exception e) {
+            System.err.println("Error occurred while sending SOAP Request to Server");
+            e.printStackTrace();
+            return "ERROR";
+        }
+        
     }
 
     private static SOAPMessage createSOAPRequest() throws Exception {
@@ -78,7 +133,7 @@ public class CreatePayment {
         
         //merchantorderreference
         SOAPElement orderRef = createRequest.addChildElement("merchantOrderReference","ns1");
-        orderRef.addTextNode("123456");
+        orderRef.addTextNode(myOrderRef);
         
         //paymentpreferences
         SOAPElement paymentPreferences = createRequest.addChildElement("paymentPreferences","ns1");
@@ -92,14 +147,14 @@ public class CreatePayment {
         //shopper
         SOAPElement shopper = createRequest.addChildElement("shopper","ns1");
         Name clientID = envelope.createName("id");
-        shopper.addAttribute(clientID,"1234");
+        shopper.addAttribute(clientID,myClientID);
         SOAPElement name = shopper.addChildElement("name","ns1");
         SOAPElement first = name.addChildElement("first","ns1");
-        first.addTextNode("Jan");
+        first.addTextNode(myFirst);
         SOAPElement last = name.addChildElement("last","ns1");
-        last.addTextNode("Blonde");
+        last.addTextNode(myLast);
         SOAPElement email = shopper.addChildElement("email","ns1");
-        email.addTextNode("jan.blonde@icloud.com");
+        email.addTextNode(myEmail);
         SOAPElement language = shopper.addChildElement("language","ns1");
         Name languageCode = envelope.createName("code");
         language.addAttribute(languageCode,"nl");
@@ -110,25 +165,25 @@ public class CreatePayment {
         SOAPElement totalGrossAmount = createRequest.addChildElement("totalGrossAmount","ns1");
         Name currency = envelope.createName("currency");
         totalGrossAmount.addAttribute(currency,"EUR");
-        totalGrossAmount.addTextNode("980");
+        totalGrossAmount.addTextNode(myAmount);
         
         //billTo
         SOAPElement billTo = createRequest.addChildElement("billTo","ns1");
         SOAPElement billName = billTo.addChildElement("name","ns1");
         SOAPElement billFirst = billName.addChildElement("first","ns1");
-        billFirst.addTextNode("Jan");
+        billFirst.addTextNode(myFirst);
         SOAPElement billLast = billName.addChildElement("last","ns1");
-        billLast.addTextNode("Blonde");
+        billLast.addTextNode(myLast);
         
         SOAPElement billAddress = billTo.addChildElement("address","ns1");
         SOAPElement street = billAddress.addChildElement("street","ns1");
-        street.addTextNode("Huybrechtsstraat");
+        street.addTextNode(myStreet);
         SOAPElement houseNumber = billAddress.addChildElement("houseNumber","ns1");
-        houseNumber.addTextNode("76");
+        houseNumber.addTextNode(myHouseNumber);
         SOAPElement postalCode = billAddress.addChildElement("postalCode","ns1");
-        postalCode.addTextNode("2140");
+        postalCode.addTextNode(myPostalCode);
         SOAPElement city = billAddress.addChildElement("city","ns1");
-        city.addTextNode("Borgerhout");
+        city.addTextNode(myCity);
         SOAPElement country = billAddress.addChildElement("country","ns1");
         Name countryCode = envelope.createName("code");
         country.addAttribute(countryCode, "BE");
@@ -161,6 +216,7 @@ public class CreatePayment {
         System.out.print("\nResponse SOAP Message = ");
         StreamResult result = new StreamResult(System.out);
         transformer.transform(sourceContent, result);
+
     }
 
 }

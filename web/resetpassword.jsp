@@ -1,5 +1,7 @@
 <%@ page import ="java.sql.*" %>
+<%@ page import ="com.mycompany.myfileupload.Properties" %>
 <!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=iso-8859-1" pageEncoding="iso-8859-1"%>
 <html lang="en">
 
 <head>
@@ -53,37 +55,24 @@
 
 <body id="page-top">
 <%
-    ResultSet rs2 = null;
-    String naam = "";
-    String firstName = "";
-    String lastName = "";
-    
-if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
-%>
-    You are not logged in<br/>
-    <a href="agency.html">Log on</a>
-<%}
-else
-{
-    String userid = (String)session.getAttribute("userid");
-    naam = (String)session.getAttribute("naam");
+String random = (String)request.getParameter("id");
 
+//check if random is available in database
+try{ 
     Class.forName("com.mysql.jdbc.Driver");
-    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
-    Statement st = con.createStatement();
-    ResultSet rs1;
-    rs1 = st.executeQuery("select * from Members where email='" + userid + "';");
+}catch(ClassNotFoundException e){
+    System.out.println(e);
+}
+
+try{
+    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", Properties.username, Properties.password);
     
-    if (rs1.next()){
-        String memberID = rs1.getString("id");
-        firstName = rs1.getString("first_name");
-        lastName = rs1.getString("last_name");
-        
-        rs2 = st.executeQuery("select * from Brieven where member_id=" + memberID + ";");
-    }
-}%>
-
-
+    String SQLfind = "SELECT id from PasswordReset where random = ?";
+    PreparedStatement statementFind = con.prepareStatement(SQLfind);
+    statementFind.setString(1,random);
+    ResultSet rsFind = statementFind.executeQuery();
+    
+    if(rsFind.next()){%>
 
     <!-- Navigation -->
     <!-- Note: navbar-default and navbar-inverse are both supported with this theme. -->
@@ -108,7 +97,7 @@ else
                         <a class="page-scroll" href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#about">Welkom <%=naam%></a>
+                        <a class="page-scroll" href="#about">Welkom</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="profile.jsp">Profiel</a>
@@ -128,81 +117,29 @@ else
         </div>
         <!-- /.container -->
     </nav>
-    <header style="height:1500px;">
-        <div>
-            <button type="submit" class="btn btn-outline-dark" onclick="window.location.href='credits.jsp'" style="position:relative;top:80px;left:80px">Terug naar overzicht</button><br><br>
-        </div>
-
-    <section id="process" class="services">
+    <header>
+        <section id="process" class="services">
         <div class="container">        
             <div class="row content-row">
                 
-              <form action="upload" method="post" enctype="multipart/form-data">
-                <legend>Gegevens bestemmeling</legend>
-                <div class="form-group">             
-                  <input type="text" class="form-control" name="destinationfirstname" placeholder="Voornaam">
+              <form id="upload" action="savepassword" method="post">
+                <legend>Kies een nieuw paswoord</legend>
+                <div class="form-group">
+                  <label for="senderpassword">Nieuw paswoord: <span style="color:red">*</span></label>
+                  <input id="senderpassword" type="text" class="form-control" name="senderpassword" style="width:40%">
+                  <span class="error">Dit is een verplicht veld</span>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" name="destinationlastname" placeholder="Naam">
+                  <label for="senderpasswordcheck">Geef dit nieuwe paswoord nogmaals in: <span style="color:red">*</span></label>
+                  <input id="senderpasswordcheck" type="text" class="form-control" name="senderpasswordcheck" style="width:40%">
+                  <span class="error">Dit is een verplicht veld</span>
                 </div>
-                <div class="form-group">              
-                  <input type="text" class="form-control" name="destinationstreetname" placeholder="Straatnaam">
-                </div>
-                <div class="form-group">              
-                  <input type="text" class="form-control" name="destinationstreetnumber" placeholder="Straatnummer">
-                </div>
-                <div class="form-group">              
-                  <input type="text" class="form-control" name="destinationzipcode" placeholder="Postcode">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="destinationcity" placeholder="Stad">
-                </div>
-                <div class="form-group">
-                  <input type="email" class="form-control" name="destinationEmail" placeholder="E-mail adres">
-                </div>
-                <legend>Te verzenden document</legend>
-                <div class="form-group">
-                  <input id="input-1" name="file" type="file" class="file">
-                </div>
-                <legend>Uw gegevens</legend>
-                <div class="form-group">             
-                  <input type="text" class="form-control" name="senderfirstname" placeholder="Voornaam" value="<%=firstName%>">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="senderlastname" placeholder="Naam" value="<%=lastName%>">
-                </div>
-                <div class="form-group">              
-                  <input type="text" class="form-control" name="senderstreetname" placeholder="Straatnaam">
-                </div>
-                <div class="form-group">              
-                  <input type="text" class="form-control" name="senderstreetnumber" placeholder="Straatnummer">
-                </div>
-                <div class="form-group">              
-                  <input type="text" class="form-control" name="senderzipcode" placeholder="Postcode">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="sendercity" placeholder="Stad">
-                </div>
-                <div class="form-group">
-                  <input type="submit" class="btn btn-lg btn-default" value="verzenden"/>
-                  <a id="closebutton" class="btn btn-lg btn-default">Cancel</a><br>
-                </div>
+                <input type="hidden" name="random" value="<%=random%>">
+                <input id="reset" type="submit" class="btn btn-lg btn-default" name="reset" value="Reset"/>
               </form>
             </div>
         </div>
-    </section>
-        
-        <div class="login-form">
-        </div>
-    
-        <div class="getstarted-form">
-        </div>
-    
-    
-        
-        <div class="scroll-down">
-            <a class="btn page-scroll" href="#about"><i class="fa fa-angle-down fa-fw"></i></a>
-        </div>
+        </section>
     </header>
 
     <footer class="footer" style="background-image: url('assets/img/bg-footer.jpg')">
@@ -261,6 +198,19 @@ else
     <script src="assets/js/plugins/jqBootstrapValidation.js"></script>
     <!-- Vitality Theme Scripts -->
     <script src="assets/js/vitality.js"></script>
+    
+<%    }else{ %>
+
+    Not authorized<br/>
+    <a href="index.html">Log on</a>
+
+<%    }
+    
+}catch(SQLException se){
+    System.err.println(se);
+    response.setStatus(500);
+}%>
+
 </body>
 
 </html>

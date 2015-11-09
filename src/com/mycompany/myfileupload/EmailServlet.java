@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.mycompany.myfileupload.Properties;
+
 import java.util.*;
 
 public class EmailServlet extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
@@ -36,8 +38,6 @@ public class EmailServlet extends javax.servlet.http.HttpServlet implements java
         // Instead we are using them as information to make changes to the server,
         // in this case, adding more bands and albums.
         String email = Arrays.asList(parameterInfo.get("email")).get(0);
-
-        System.err.println(email);
         
         try{ 
             Class.forName("com.mysql.jdbc.Driver");
@@ -47,7 +47,7 @@ public class EmailServlet extends javax.servlet.http.HttpServlet implements java
         }
         
         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", Properties.username, Properties.password);
             Statement st = con.createStatement();
             st.executeUpdate("INSERT INTO Emails (email) VALUES ('" + email + "');");
         }catch(SQLException s) {

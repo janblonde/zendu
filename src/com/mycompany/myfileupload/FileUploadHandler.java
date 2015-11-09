@@ -24,6 +24,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.mindrot.jbcrypt.BCrypt;
 
+import com.mycompany.myfileupload.Properties;
+
 /**
  * Servlet to handle File upload request from Client
  * @author Javin Paul
@@ -52,7 +54,7 @@ public class FileUploadHandler extends HttpServlet {
         String senderCompany = "";
         String senderVAT = "";
         String senderLastName = "";
-        String senderFirstName = "";
+        String senderFirstName = "DhrMevr";
         String senderStreetName = "";
         String senderStreetNumber = "";
         String senderZipCode = "";
@@ -115,7 +117,6 @@ public class FileUploadHandler extends HttpServlet {
                         if(fieldName.equals("senderpassword"))
                             senderPassword = fieldValue;
                                                 
-                        
                     }
                 }
                 
@@ -140,7 +141,7 @@ public class FileUploadHandler extends HttpServlet {
                 }
 
                 try{
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", Properties.username, Properties.password);
                     
                     String SQLfind = "SELECT id, first_name, last_name from Members where email = ?";
                     PreparedStatement statementFind = con.prepareStatement(SQLfind);
@@ -150,11 +151,11 @@ public class FileUploadHandler extends HttpServlet {
                     if(rsFind.next()){
                         if(testUser){
                             request.setAttribute("message"," 1 gratis verzending reeds opgebruikt - please login first");
-                            request.getRequestDispatcher("/index.html").forward(request, response);
+                            request.getRequestDispatcher("/index.jsp").forward(request, response);
                         }else{
                             idMembers = rsFind.getInt(1);
-                            senderFirstName = rsFind.getString(2);
-                            senderLastName = rsFind.getString(3);
+                            //senderFirstName = rsFind.getString(2);
+                            //senderLastName = rsFind.getString(3);
                             
                             
                         }
@@ -187,8 +188,8 @@ public class FileUploadHandler extends HttpServlet {
                     
                     String SQLbrieven = "INSERT INTO Brieven (destinationLastName,destinationFirstName,destinationStreetName," +
                     "destinationStreetNumber,destinationZipCode,destinationCity,destinationEmail,senderLastName,"+
-                    "senderFirstName,senderStreetName,senderStreetNumber,senderZipCode,senderCity,senderEmail,member_id,status,destinationCompay,senderCompany)"+
-                    " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    "senderFirstName,senderStreetName,senderStreetNumber,senderZipCode,senderCity,senderEmail,member_id,status,destinationCompany,senderCompany)"+
+                    " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     
                     PreparedStatement statement = con.prepareStatement(SQLbrieven,Statement.RETURN_GENERATED_KEYS);
                     statement.setString(1,destinationLastName);
@@ -272,7 +273,6 @@ public class FileUploadHandler extends HttpServlet {
            
                //File uploaded successfully
                request.setAttribute("message", "File Uploaded Successfully " + returnMessage);
-               System.err.println("id in attribute: " + id);
                request.setAttribute("orderid", Integer.toString(id));
             } catch (Exception ex) {
                request.setAttribute("message", "File Upload Failed due to " + ex);
@@ -291,14 +291,25 @@ public class FileUploadHandler extends HttpServlet {
         //if second time and no credits: dispatch to payment page        
         if (testUser){
             session.setAttribute("origin","testuser");
-            response.sendRedirect("/zendu/success.jsp");
+            response.sendRedirect("success.jsp");
             //request.getRequestDispatcher("/success.jsp").forward(request, response);
         }else{
             if(creditUser){
                 session.setAttribute("origin","testuser");
-                response.sendRedirect("/zendu/success.jsp");
+                response.sendRedirect("success.jsp");
                 //request.getRequestDispatcher("/success.jsp").forward(request, response);        
             }else{
+                //goto payment page
+                request.setAttribute("orderref",id);
+                request.setAttribute("clientid",idMembers);
+                request.setAttribute("first",senderFirstName);
+                request.setAttribute("last",senderLastName);
+                request.setAttribute("email",senderEmail);
+                request.setAttribute("street",senderStreetName);
+                request.setAttribute("housenumber",senderStreetNumber);
+                request.setAttribute("postalcode",senderZipCode);
+                request.setAttribute("city",senderCity);
+                request.setAttribute("returnpage","success.jsp");
                 request.getRequestDispatcher("/payment.jsp").forward(request, response);
             }
         }

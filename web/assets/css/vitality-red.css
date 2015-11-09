@@ -1267,3 +1267,35 @@ input.invalid{
 input.valid{
   border: 1px solid #ccc;
 }
+
+.required::-webkit-input-placeholder:after {
+    content: " *";
+    color: red;
+}
+
+.required:-moz-placeholder:after {
+    content: " *";
+    color: red;  
+}
+
+.required::-moz-placeholder:after { 
+    content: " *";
+    color: red;  
+}
+
+.required:-ms-input-placeholder:after {  
+    content: " *";
+    color: red;  
+}
+
+.passwordlink {
+  color: white;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  transition: all 0.5s;
+}
+.passwordlink:hover,
+.passwordlink:focus {
+  color: red;
+  text-decoration: none;
+}

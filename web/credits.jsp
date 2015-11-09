@@ -1,6 +1,8 @@
 <%@ page import ="java.sql.*" %>
 <%@ page import ="java.security.*" %>
 <%@ page import ="java.math.*" %>
+<%@ page import ="com.mycompany.myfileupload.Properties" %>
+
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=iso-8859-1" pageEncoding="iso-8859-1"%>
 <html lang="en">
@@ -67,17 +69,13 @@
     int huidigTotaal = 0;
 
 if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
-%>
-    You are not logged in<br/>
-    <a href="agency.html">Log on</a>
-<%}
-else
-{
+    response.sendRedirect("index.jsp");
+}else{
     String userid = (String)session.getAttribute("userid");
     naam = (String)session.getAttribute("naam");
 
     Class.forName("com.mysql.jdbc.Driver");
-    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
+    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", Properties.username, Properties.password);
     
     Statement st = con.createStatement();
     ResultSet rs1;
@@ -111,35 +109,8 @@ else
 
         rs2 = st.executeQuery("select * from CreditLog where member_id=" + memberID + " ORDER BY reg_date DESC;");
         
-    }
-    
-    //String orderID = (String)request.getAttribute("orderid");
+    }%>
 
-    String text10 = "ACCEPTURL=https://java-tomcat-janblonde.c9.io/zendu/credits.jspweliveinnumber76AMOUNT=8800weliveinnumber76CURRENCY=EUR" +
-                  "weliveinnumber76LANGUAGE=en_USweliveinnumber76ORDERID="+ orderID +"weliveinnumber76PSPID=zenduweliveinnumber76" +
-                  "TITLE=PAYMENTweliveinnumber76";
-
-    String text50 = "ACCEPTURL=https://java-tomcat-janblonde.c9.io/zendu/credits.jspweliveinnumber76AMOUNT=42500weliveinnumber76CURRENCY=EUR" +
-                  "weliveinnumber76LANGUAGE=en_USweliveinnumber76ORDERID="+ orderID +"weliveinnumber76PSPID=zenduweliveinnumber76" +
-                  "TITLE=PAYMENTweliveinnumber76";
-                  
-    String text100 = "ACCEPTURL=https://java-tomcat-janblonde.c9.io/zendu/credits.jspweliveinnumber76AMOUNT=82000weliveinnumber76CURRENCY=EUR" +
-                  "weliveinnumber76LANGUAGE=en_USweliveinnumber76ORDERID="+ orderID +"weliveinnumber76PSPID=zenduweliveinnumber76" +
-                  "TITLE=PAYMENTweliveinnumber76";
-    
-    MessageDigest crypt = MessageDigest.getInstance("SHA-1");
-    crypt.reset();
-    crypt.update(text10.getBytes("UTF-8"));
-    result10 = new BigInteger(1, crypt.digest()).toString(16);
-    
-    crypt.reset();
-    crypt.update(text50.getBytes("UTF-8"));
-    result50 = new BigInteger(1, crypt.digest()).toString(16);
-    
-    crypt.reset();
-    crypt.update(text100.getBytes("UTF-8"));
-    result100 = new BigInteger(1, crypt.digest()).toString(16);
-}%>
 
     <!-- Navigation -->
     <!-- Note: navbar-default and navbar-inverse are both supported with this theme. -->
@@ -164,10 +135,7 @@ else
                         <a class="page-scroll" href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#about">Welkom <%=naam%></a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="profile.jsp">Profiel</a>
+                        <a class="page-scroll" href="profile.jsp">Welkom <%=naam%></a>
                     </li>
                     <li>
                         <a class="page-scroll" href="credits.jsp">Credits</a>
@@ -176,7 +144,7 @@ else
                         <a class="page-scroll" href="invoices.jsp">Facturen</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="index.html">Uitloggen</a>
+                        <a class="page-scroll" href="index.jsp">Uitloggen</a>
                     </li>
                 </ul>
             </div>
@@ -187,8 +155,24 @@ else
     <header>
         <div>
             <button type="submit" class="btn btn-outline-dark" id="payment_button" style="position:relative;top:80px;left:80px">Credits aankopen</button><br><br>
+            <div id="payment_choices" style="position:relative;top:25px;left:350px" hidden>
+              <div class="btn btn-lg btn-default" onclick="document.getElementById('paymentform10').submit();">10 credits: 88 EUR
+              </div>
+              <div class="btn btn-lg btn-default" onclick="document.getElementById('paymentform50').submit();">50 credits: 425 EUR
+              </div>
+              <div class="btn btn-lg btn-default" onclick="document.getElementById('paymentform100').submit();">100 credits: 820 EUR
+              </div>
+            </div>
             
-            <table id="hor-minimalist-b" style="position:relative;top:80px;left:80px">
+        </div>
+        
+        <section id="process" class="services">
+        <div class="container">        
+            <div class="row content-row">
+            
+            <legend>Historiek van verrichtingen</legend>
+            
+            <table id="hor-minimalist-b">
             <thead>
               <tr>
                 <th scope="col">Datum</th>
@@ -197,26 +181,27 @@ else
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td style="font-size:14px"><i>Huidig aantal: </i></td>
+                <td style="font-size:14px;text-align:right;"><i><%=huidigTotaal%></i></td>
+                <td></td>
+              </tr>
             <%while (rs2.next()){%>
                 <tr>
-                  <td style="color:black;"><%=rs2.getString("reg_date")%></td>
-                  <td style="color:black;"><%=rs2.getString("amount")%></td>
+                  <td style="color:black;"><%=rs2.getString("reg_date").substring(0,16)%></td>
+                  <td style="color:black;text-align:right;"><%=rs2.getString("amount")%></td>
                   <td style="color:black;"><%=rs2.getString("brief_id")%></td>
                 </tr>
             <%}%>
             </tbody>
             </table>
-            
-            <div style="position:absolute;left:400px;top:80px;border-color:red;border-style:solid;padding:10px;border-radius:6px;border-width:2px;font-size:30px;">huidig aantal: <%=huidigTotaal%></div>
-            <div id="payment_choices" style="position:relative;top:120px;left:80px" hidden>
-              <div class="btn btn-lg btn-default" onclick="document.getElementById('paymentform10').submit();">10 credits: 88 EUR
-              </div><br><br>
-              <div class="btn btn-lg btn-default" onclick="document.getElementById('paymentform50').submit();">50 credits: 425 EUR
-              </div><br><br>
-              <div class="btn btn-lg btn-default" onclick="document.getElementById('paymentform100').submit();">100 credits: 820 EUR
-              </div>
-            </div>
         </div>
+        </div>
+    </section>
+            
+            <!--<div style="position:absolute;left:400px;top:80px;border-color:red;border-style:solid;padding:10px;border-radius:6px;border-width:2px;font-size:30px;">huidig aantal: </div>-->
+
+        
         <div class="intro-content">
 
         </div>
@@ -330,6 +315,7 @@ else
             });
         });
     </script>-->
+<%}%>
 </body>
 
 </html>

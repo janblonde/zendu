@@ -1,4 +1,5 @@
 <%@ page import ="java.sql.*" %>
+<%@ page import ="com.mycompany.myfileupload.Properties" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -61,20 +62,18 @@
     String streetNumber = "";
     String zipCode = "";
     String city = "";
+    String company = "";
     boolean credits = false; 
     
 if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
-%>
-    You are not logged in<br/>
-    <a href="agency.html">Log on</a>
-<%}
-else
-{
+    response.sendRedirect("index.jsp");
+}else{
+
     String userid = (String)session.getAttribute("userid");
     naam = (String)session.getAttribute("naam");
 
     Class.forName("com.mysql.jdbc.Driver");
-    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
+    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", Properties.username, Properties.password);
     Statement st = con.createStatement();
     ResultSet rs1;
     rs1 = st.executeQuery("select * from Members where email='" + userid + "';");
@@ -95,8 +94,8 @@ else
         }
         
         rs2 = st.executeQuery("select * from Brieven where member_id=" + memberID + ";");
-    }
-}%>
+    }%>
+
 
 
 
@@ -123,10 +122,7 @@ else
                         <a class="page-scroll" href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#about">Welkom <%=naam%></a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="profile.jsp">Profiel</a>
+                        <a class="page-scroll" href="profile.jsp">Welkom <%=naam%></a>
                     </li>
                     <li>
                         <a class="page-scroll" href="credits.jsp">Credits</a>
@@ -135,7 +131,7 @@ else
                         <a class="page-scroll" href="invoices.jsp">Facturen</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="index.html">Uitloggen</a>
+                        <a class="page-scroll" href="index.jsp">Uitloggen</a>
                     </li>
                 </ul>
             </div>
@@ -143,7 +139,7 @@ else
         </div>
         <!-- /.container -->
     </nav>
-    <header style="height:1500px;">
+    <header style="height:1800px;">
         <div>
             <button type="submit" class="btn btn-outline-dark" onclick="window.location.href='success.jsp'" style="position:relative;top:80px;left:80px">Terug naar overzicht</button><br><br>
         </div>
@@ -164,7 +160,7 @@ else
                   <span class="error">Dit is een verplicht veld</span>
                 </div>
                 <div class="form-group">
-                  <label for="destinationlastname">Vennootschap: </span></label>
+                  <label for="destinationlastname">Bedrijf: </span></label>
                   <input id="destinationcompany" type="text" class="form-control valid" name="destinationcompany" style="width:40%">
                 </div>
                 <div class="form-group">
@@ -194,7 +190,8 @@ else
                 </div>
                 <legend>Te verzenden document <span style="color:red">*</span></legend>
                 <div class="form-group">
-                  <input id="file" name="file" type="file" class="file">
+                  <input id="file" name="file" type="file" class="file" accept="application/pdf">
+                  <span class="error"><br>We aanvaarden enkel PDF documenten, omdat we enkel zo kunnen garanderen dat uw opmaak exact behouden blijft.<br>Dus graag uw document eerst opslaan in PDF formaat voor u het oplaadt.</span>
                 </div>
                 <legend>Uw gegevens</legend>
                 <div class="form-group">
@@ -311,6 +308,7 @@ else
     <script src="assets/js/plugins/jqBootstrapValidation.js"></script>
     <!-- Vitality Theme Scripts -->
     <script src="assets/js/vitality.js"></script>
+<%}%>
 </body>
 
 </html>

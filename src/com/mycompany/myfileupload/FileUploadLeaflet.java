@@ -106,7 +106,7 @@ public class FileUploadLeaflet extends HttpServlet {
         }
     
         //request.getRequestDispatcher("/admin.jsp").forward(request, response);
-        response.sendRedirect("/zendu/admin.jsp");
+        response.sendRedirect("admin.jsp");
      
     }
   

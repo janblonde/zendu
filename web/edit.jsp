@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page import="java.sql.*" %>
+<%@ page import="com.mycompany.myfileupload.Properties" %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -13,8 +14,8 @@ try
 {
 Class.forName("com.mysql.jdbc.Driver");
 String url="jdbc:mysql://localhost:3306/c9";
-String username="janblonde";
-String password="";
+String username=Properties.username;
+String password=Properties.password;
 String query="select * from Brieven where id=" + request.getParameter("id");
 Connection conn=DriverManager.getConnection(url,username,password);
 Statement stmt=conn.createStatement();

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="google-site-verification" content="gZ54clVPOUx41t9LywNdxzpT5VvOvN6NFjNMcdxi1jQ" /> 
     <meta charset="iso-8859-1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="description" content="Zendu Aangetekende brief">
-    <meta name="author" content="Zendu Aangetekende brief brieven zendingen">
+    <meta name="author" content="Zendu Aangetekende brieven zendingen">
     <title>Zendu | Aangetekende brieven</title>
     <!-- Bootstrap Core CSS -->
     <link href="assets/css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -14,15 +13,15 @@
     <!-- Font Awesome -->
     <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <!-- Default Fonts -->
-    <link href='http://fonts.googleapis.com/css?family=Roboto:900,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:900,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,600,500,700,800,900' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:400,100,200,300,600,500,700,800,900' rel='stylesheet' type='text/css'>
     <!-- Modern Style Fonts (Include these is you are using body.modern!) -->
-    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Cardo:400,400italic,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Cardo:400,400italic,700' rel='stylesheet' type='text/css'>
     <!-- Vintage Style Fonts (Include these if you are using body.vintage!) -->
-    <link href='http://fonts.googleapis.com/css?family=Sanchez:400italic,400' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Cardo:400,400italic,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Sanchez:400italic,400' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Cardo:400,400italic,700' rel='stylesheet' type='text/css'>
     <!-- Plugin CSS -->
     <link href="assets/css/plugins/owl-carousel/owl.carousel.css" rel="stylesheet" type="text/css">
     <link href="assets/css/plugins/owl-carousel/owl.theme.css" rel="stylesheet" type="text/css">
@@ -77,7 +76,10 @@
                         <a class="page-scroll" href="#about">Hoe werkt het</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#register">Starten</a>
+                        <a class="page-scroll" href="#process">Starten</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#work">Over Ons</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#pricing">Prijzen</a>
@@ -96,21 +98,26 @@
 <!--            <img src="assets/img/profile.png" class="img-responsive img-centered" alt="">-->
             <div class="brand-name">Zen<span style="color:firebrick">du</span></div>
             <hr class="colored">
-            <div class="brand-name-subtext">Aangetekende brieven<br> digitaal verzenden en beheren.</div>          
+            <div class="brand-name-subtext">Aangetekende brieven digitaal <br>verzenden en beheren.</div>          
         </div>
         
         <div class="login-form">
             
             <form method="post" action="login.jsp" id="login_form">
-                <input type="text" class="login-input" placeholder=" email" name="email" tabindex="1"></input><br>
-                <input type="password" class="login-input" placeholder=" paswoord" name="pass" tabindex="2"></input><br>            
-                <button type="submit" class="btn btn-outline-light page-scroll" tabindex="3" value="LOGIN">Login</button>
-        </form>
+                <input id="email" type="text" class="login-input" placeholder=" email" name="email" tabindex="1"></input><br>
+                <input id="pass" type="password" class="login-input" placeholder=" paswoord" name="pass" tabindex="2"></input><br>            
+                <button id="login" type="submit" class="btn btn-outline-light page-scroll" tabindex="3" value="LOGIN">Login</button>
+                <div id="reset2" class="btn btn-outline-light page-scroll" tabindex="4" style="display:none;">Reset paswoord</div>
+            </form>
+            <br>
+            <% String loginmessage = ""; if(null!=session.getAttribute("loginmessage")) loginmessage = (String)session.getAttribute("loginmessage");%>
+            <a id="reset1" href="#" class="passwordlink"><%=loginmessage%>Paswoord vergeten?</a>
+            <a id="back1" href="#" class="passwordlink" style="display:none;">Terug naar login scherm</a>
         </div>
     
         <div class="getstarted-form">
             
-            <form><a class="page-scroll login-btn" href="#register">Start gratis</a>
+            <form><a class="page-scroll login-btn" href="#process">Start gratis</a>
         </form>
         </div>
     
@@ -125,7 +132,7 @@
             <div class="row text-center">
                 <div class="col-lg-12 wow fadeIn">
                     <h1>Hoe werkt het?</h1>
-                    <p>Wij printen uw brief en versturen hem aangetekend.</p>
+                    <p>Wij printen uw aangetekende brief en versturen aangetekend.</p>
                     <hr class="colored">
                 </div>
             </div>
@@ -155,37 +162,127 @@
                     <div class="about-content">
                         <i class="fa fa-heart fa-4x"></i>
                         <h3>De geadresseerde ontvangt zijn aangetekende brief.</h3>
-                        <p>Net alsof u de brief zelf naar het postkantoor had gebracht.</p>
+                        <p>Op dezelfde manier alsof u de brief zelf naar het postkantoor had gebracht.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <section id="register" class="cta-form bg-dark">
-        <div class="container text-center">
-            <h3>We gaan binnenkort live! Laat hieronder je e-mail achter en we verwittigen je zodra je kan starten.</h3>
-            <hr class="colored">
+    <aside class="cta-quote" style="background-image: url('assets/img/bg-aside.jpg');">
+        <div class="container wow fadeIn">
             <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
-                    <!-- MailChimp Signup Form -->
-                    <div id="mc_embed_signup">
-                        <!-- Replace the form action in the line below with your MailChimp embed action! For more informatin on how to do this please visit the Docs! -->
-                        <!--<form role="form" action="//startbootstrap.us3.list-manage.com/subscribe/post?u=531af730d8629808bd96cf489&amp;id=afb284632f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate>-->
-                            <div class="input-group input-group-lg">
-                                <input type="email" name="EMAIL" class="form-control" id="mce-EMAIL" placeholder="Email adres...">
-                                <span class="input-group-btn">
-                                    <button type="submit" name="subscribe" id="mc-embedded-subscribe" class="btn btn-primary">Hou me op de hoogte!</button>
-                                </span>
-                            </div>
-                            <div id="mce-responses">
-                                <div class="response" id="mce-error-response" style="display:none"></div>
-                                <div class="response" id="mce-success-response" style="text-align:left;"></div>
-                            </div>
-                        <!--</form>-->
-                    </div>
-                    <!-- End MailChimp Signup Form -->
+                <div class="col-md-10 col-md-offset-1">
+                    <span class="quote">Verzend <span class="text-primary">digitaal.</span> Legale aangetekende brieven. Beheer van de brieven op een eenvoudige manier.</span>
+                    <hr class=" colored">
+                    <a class="btn btn-outline-light page-scroll" href="#process">Gratis starten</a>
                 </div>
             </div>
+        </div>
+    </aside>
+    <section id="process" class="services">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-lg-12 wow fadeIn">
+                    <h2>starten</h2>
+                    <hr class="colored">
+                    <p>Probeer het uit en verzend 1 gratis aangetekende brief.</p>
+                </div>
+            </div>
+            <div class="row content-row">
+                
+              <form id="upload" action="upload" method="post" enctype="multipart/form-data">
+                <legend>Gegevens bestemmeling</legend>
+                <div class="form-group">             
+                  <input type="text" class="form-control valid" name="destinationfirstname" id="destinationfirstname" placeholder="Voornaam" style="width:40%">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control required" name="destinationlastname" id="destinationlastname" placeholder="Naam" style="width:40%">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">             
+                  <input type="text" class="form-control valid" name="destinationcompany" id="destinationcompany" placeholder="Bedrijf" style="width:40%">
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control required" name="destinationstreetname" id="destinationstreetname" placeholder="Straatnaam"style="width:70%">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control required" name="destinationstreetnumber" id="destinationstreetnumber" placeholder="Straatnummer" style="width:15%">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control required" name="destinationzipcode" id="destinationzipcode" placeholder="Postcode" style="width:20%">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control required" name="destinationcity" id="destinationcity" placeholder="Stad" style="width:40%">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <input type="email" class="form-control valid" name="destinationEmail" id="destinationEmail" placeholder="E-mail adres" style="width:40%">
+                </div>
+                <legend>Te verzenden document</legend>
+                <div class="form-group">
+                  <input id="file" name="file" type="file" class="file" accept="application/pdf">
+                  <span class="error"><br>We aanvaarden enkel PDF documenten, omdat we enkel zo kunnen garanderen dat uw opmaak exact behouden blijft.<br>Dus graag uw document eerst opslaan in PDF formaat voor u het oplaadt.</span>
+                </div>
+                <legend>Uw gegevens</legend>
+                <div class="form-group">             
+                  <input type="text" class="form-control valid" name="senderfirstname" id="senderfirstname" placeholder="Voornaam" style="width:40%">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control required" name="senderlastname" id="senderlastname" placeholder="Naam" style="width:40%">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">             
+                  <input type="text" class="form-control valid" name="sendercompany" id="sendercompany" placeholder="Bedrijf" style="width:40%">
+                </div>
+                <div class="form-group">             
+                  <input type="text" class="form-control valid" name="sendervat" id="sendervat" placeholder="BTW-nummer" style="width:40%">
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control required" name="senderstreetname" id="senderstreetname" placeholder="Straatnaam" style="width:70%">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control required" name="senderstreetnumber" id="senderstreetnumber" placeholder="Straatnummer" style="width:15%">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">              
+                  <input type="text" class="form-control required" name="senderzipcode" id="senderzipcode" placeholder="Postcode" style="width:20%">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control required" name="sendercity" id="sendercity" placeholder="Stad" style="width:40%">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <input id="senderemail" type="email" class="form-control required" name="senderemail" placeholder="E-mail adres" style="width:40%">
+                  <span class="error">Gelieve een geldig email adres in te geven</span>
+                  <p class="error"><br>Dit e-mail adres is reeds geregistreerd. <br>Kies een ander e-mail adres of login hierboven. </p>
+                </div>
+                <div class="form-group">
+                  <input id="senderpassword" type="password" class="form-control required" name="senderpassword" placeholder="Kies een paswoord">
+                  <span class="error">Dit is een verplicht veld</span>
+                </div>
+                <div class="form-group">
+                  <input id="senderpasswordcheck" type="password" class="form-control required valid" name="senderpasswordcheck" placeholder="Herhaal het paswoord">
+                  <p class="error"><br>De door u ingevulde paswoorden verschillen. Graag even nakijken aub.</p>
+                </div>
+                <div id="success_test"></div>
+                <div class="form-group">
+                  <input id="payment_test" type="submit" class="btn btn-lg btn-default" value="verzenden"/>
+                  <a id="closebutton" class="btn btn-lg btn-default">Cancel</a><br>
+                </div>
+              </form>
+            </div>
+        </div>
+    </section>
+    <section id="work" class="bg-gray">
+        <div class="container text-center wow fadeIn">
+            <h2>Over ons</h2>
+            <hr class="colored">
+            <p>Examples of our work which represent our design and marketing capabilities.</p>
         </div>
     </section>
     <section id="pricing" class="pricing" style="background-image: url('assets/img/bg-pricing.jpg')">
@@ -194,7 +291,7 @@
                 <div class="col-lg-12">
                     <h2>Prijzen</h2>
                     <hr class="colored">
-                    <p></p>
+                    <!--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum, quae, laborum, voluptate delectus odio doloremque error porro obcaecati nemo animi ducimus quaerat nostrum? Ab molestiae eaque et atque architecto reiciendis.</p>-->
                 </div>
             </div>
             <div class="row content-row">
@@ -202,12 +299,12 @@
                     <div class="pricing-item featured-first">
                         <h3>Basic</h3>
                         <hr class="colored">
-                        <div class="price"><span class="number">9.80 <sup>EUR</sup></span> / brief</div>
+                        <div class="price"><span class="number">9.80<sup>&euro;</sup></span> / brief</div>
                         <ul class="list-group">
                             <li class="list-group-item">1 individuele brief</li>
                             <li class="list-group-item">Maximum 10 pagina's</li>
                             <li class="list-group-item">Opgeladen voor 15u00, dezelfde dag verzonden</li>
-                            <li class="list-group-item">Uw eerste brief is gratis</li>
+                            <li class="list-group-item">Uw eerste aangetekende brief is gratis</li>
                         </ul>
                         <a href="#process" class="btn btn-outline-dark">Starten</a>
                     </div>
@@ -216,10 +313,10 @@
                     <div class="pricing-item featured">
                         <h3>Plus</h3>
                         <hr class="colored">
-                        <div class="price"><span class="number">8.80 <sup>EUR</sup></span> / brief</div>
+                        <div class="price"><span class="number">8.80<sup>&euro;</sup></span> / brief</div>
                         <ul class="list-group">
                             <li class="list-group-item">Pakket van <strong>10</strong> brieven</li>
-                            <li class="list-group-item">Totaal: 88 EUR, inc. BTW</li>
+                            <li class="list-group-item">Totaal: 88 &euro;, inc. BTW</li>
                             <li class="list-group-item">Opgeladen voor 15u00, dezelfde dag verzonden</li>
                         </ul>
                         <a href="#" class="btn btn-outline-dark">Log in om te bestellen</a>
@@ -229,14 +326,39 @@
                     <div class="pricing-item featured-last">
                         <h3>Premium</h3>
                         <hr class="colored">
-                        <div class="price"><span class="number">8.20 <sup>EUR</sup></span> / brief</div>
+                        <div class="price"><span class="number">8.50<sup>&euro;</sup></span> / brief</div>
                         <ul class="list-group">
                             <li class="list-group-item">Pakket van 50 brieven</li>
-                            <li class="list-group-item">Totaal: 410 EUR, inc. BTW</li>
+                            <li class="list-group-item">Totaal: 425 &euro;, inc. BTW</li>
                             <li class="list-group-item">Opgeladen voor 15u00, dezelfde dag verzonden</li>
                         </ul>
                         <a href="#" class="btn btn-outline-dark">Log in om te bestellen</a>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="cta-form bg-dark">
+        <div class="container text-center">
+            <h3>We gaan binnenkort live! Laat je e-mail hieronder achter.</h3>
+            <hr class="colored">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <!-- MailChimp Signup Form -->
+                    <div id="mc_embed_signup">
+                        <!-- Replace the form action in the line below with your MailChimp embed action! For more informatin on how to do this please visit the Docs! -->
+                            <div class="input-group input-group-lg">
+                                <input type="email" name="EMAIL" class="form-control" id="mce-EMAIL" placeholder="Email address...">
+                                <span class="input-group-btn">
+                                    <button type="submit" name="subscribe" id="mc-embedded-subscribe" class="btn btn-primary">Hou me op de hoogte!</button>
+                                </span>
+                            </div>
+                            <div id="mce-responses">
+                                <div class="response" id="mce-error-response" style="display:none"></div>
+                                <div class="response" id="mce-success-response" style="text-align:left;"></div>
+                            </div>
+                    </div>
+                    <!-- End MailChimp Signup Form -->
                 </div>
             </div>
         </div>
@@ -255,28 +377,28 @@
                     <form name="sentMessage" id="contactForm" novalidate>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Name</label>
+                                <label>Naam</label>
                                 <input type="text" class="form-control" placeholder="Naam" id="name" required data-validation-required-message="Laat uw naam achter aub.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Email Address</label>
+                                <label>Email Adres</label>
                                 <input type="email" class="form-control" placeholder="Email" id="email" required data-validation-required-message="Laat uw email achter aub.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Phone Number</label>
-                                <input type="tel" class="form-control" placeholder="Telefoonnummber" id="phone">
+                                <label>Telefoonnummer</label>
+                                <input type="tel" class="form-control" placeholder="Telefoonnummer" id="phone">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Message</label>
+                                <label>Boodschap</label>
                                 <textarea rows="5" class="form-control" placeholder="Boodschap" id="message" required data-validation-required-message="Laat een boodschap achter aub."></textarea>
                                 <p class="help-block text-danger"></p>
                             </div>
@@ -297,18 +419,17 @@
         <div class="container text-center">
             <div class="row">
                 <div class="col-md-4 contact-details">
-                    <h4><i class="fa fa-phone"></i> Bel</h4>
+                    <h4><i class="fa fa-phone"></i> Call</h4>
                     <p>0489 62 19 67</p>
                 </div>
                 <div class="col-md-4 contact-details">
-                    <h4><i class="fa fa-map-marker"></i> Adres</h4>
-                    <p>BVBA CEEJAY</p>
+                    <h4><i class="fa fa-map-marker"></i> Visit</h4>
                     <p>Huybrechtsstraat 76
                         <br>2140 Borgerhout</p>
                 </div>
                 <div class="col-md-4 contact-details">
                     <h4><i class="fa fa-envelope"></i> Email</h4>
-                    <p><a href="mailto:mail@example.com">info@zendu.be</a>
+                    <p><a href="mailto:mail@example.com">jan@zendu.be</a>
                     </p>
                 </div>
             </div>
@@ -349,15 +470,6 @@
     <script src="assets/js/plugins/jqBootstrapValidation.js"></script>
     <!-- Vitality Theme Scripts -->
     <script src="assets/js/vitality.js"></script>
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    
-      ga('create', 'UA-69587403-1', 'auto');
-      ga('send', 'pageview');
-    </script>
 </body>
 
 </html>
