@@ -90,7 +90,7 @@ if (null == (session.getAttribute("userid")) || ("" == session.getAttribute("use
     if (rs1.next()){
         String memberID = rs1.getString("id");
 
-        rs2 = st.executeQuery("select * from Brieven where member_id=" + memberID + " and status='paid' OR status='sent';");
+        rs2 = st.executeQuery("select * from Brieven where member_id=" + memberID + " and (status='paid' OR status='sent') ORDER BY id DESC;");
     }%>
 
 

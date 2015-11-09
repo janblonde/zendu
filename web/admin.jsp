@@ -16,7 +16,10 @@
 <td>ID</td>
 <td>LASTNAME</td>
 <td>FIRSTNAME</td>
-<td>ACTION</td>
+<td>STATUS</td>
+<td>BRIEF</td>
+<td>LEAFLET</td>
+<td>ACTIE</td>
 </tr>
 <%
 try
@@ -25,7 +28,7 @@ Class.forName("com.mysql.jdbc.Driver");
 String url="jdbc:mysql://localhost:3306/c9";
 String username=Properties.username;
 String password=Properties.password;
-String query="select * from Brieven";
+String query="select * from Brieven where status='paid';";
 Connection conn=DriverManager.getConnection(url,username,password);
 Statement stmt=conn.createStatement();
 ResultSet rs=stmt.executeQuery(query);

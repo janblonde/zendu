@@ -309,7 +309,7 @@ public class FileUploadHandler extends HttpServlet {
                 request.setAttribute("housenumber",senderStreetNumber);
                 request.setAttribute("postalcode",senderZipCode);
                 request.setAttribute("city",senderCity);
-                request.setAttribute("returnpage","success.jsp");
+                request.setAttribute("returnpage","letters");
                 request.getRequestDispatcher("/payment.jsp").forward(request, response);
             }
         }
