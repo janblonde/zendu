@@ -88,13 +88,13 @@ if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") 
         if(null!=request.getParameter("amount")){
             int credits = 0;
             String amount = request.getParameter("amount");
-            if(amount.equals("88")){
+            if(amount.equals("10")){
                 credits = 10;
             }
-            if(amount.equals("425")){
+            if(amount.equals("50")){
                 credits = 50;
             }
-            if(amount.equals("820")){
+            if(amount.equals("100")){
                 credits = 100;
             }
             Statement paymentStatement = con.createStatement();
@@ -156,8 +156,8 @@ if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") 
         <div>
             <button type="submit" class="btn btn-outline-dark" id="payment_button" style="position:relative;top:80px;left:80px">Credits aankopen</button><br><br>
             <div id="payment_choices" style="position:relative;top:25px;left:350px" hidden>
-              <div class="btn btn-lg btn-default" onclick="document.getElementById('paymentform10').submit();">10 credits: 88 EUR
-              </div>
+              <a class="btn btn-lg btn-default" href="payment10.jsp">10 credits: 88 EUR
+              </a>
               <div class="btn btn-lg btn-default" onclick="document.getElementById('paymentform50').submit();">50 credits: 425 EUR
               </div>
               <div class="btn btn-lg btn-default" onclick="document.getElementById('paymentform100').submit();">100 credits: 820 EUR
@@ -257,16 +257,16 @@ if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") 
             <div class="row">
                 <div class="col-md-4 contact-details">
                     <h4><i class="fa fa-phone"></i> Call</h4>
-                    <p>555-213-4567</p>
+                    <p>0489 62 19 67</p>
                 </div>
                 <div class="col-md-4 contact-details">
                     <h4><i class="fa fa-map-marker"></i> Visit</h4>
-                    <p>3481 Melrose Place
-                        <br>Beverly Hills, CA 90210</p>
+                    <p>Huybrechtsstraat 76
+                        <br>2140 Borgerhout</p>
                 </div>
                 <div class="col-md-4 contact-details">
                     <h4><i class="fa fa-envelope"></i> Email</h4>
-                    <p><a href="mailto:mail@example.com">mail@example.com</a>
+                    <p><a href="mailto:mail@example.com">jan@zendu.be</a>
                     </p>
                 </div>
             </div>
@@ -284,7 +284,8 @@ if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") 
             </div>
             <div class="row copyright">
                 <div class="col-lg-12">
-                    <p class="small">&copy; 2015 Start Bootstrap Themes</p>
+                    <p class="small">&copy; 2015 Zendu.be Aangetekende brieven</p>
+                    <p class="small"><a href="disclaimer.html">Disclaimer</a> &nbsp &nbsp <a href="cookies.html">Cookies Policy</a></p>
                 </div>
             </div>
         </div>

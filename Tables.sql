@@ -68,3 +68,6 @@ random VARCHAR(30),
 userid INT(6),
 reg_date TIMESTAMP
 ) ENGINE=INNODB;
+
+INSERT INTO Members(first_name,last_name,email,pass,streetname,streetnumber,zipcode,city)
+VALUES("demo1", "demo1", "demo@demo.be","$2a$10$.M.kdaoRUyJk57Wncs0k2OgYRTPAegQzM9.a/eCVPVH7YeyxqxRJC","demostraat","99","9999","city");

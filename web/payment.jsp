@@ -65,32 +65,74 @@
     String orderRef = "";
 
 if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
-    SOAPresponse="not logged in";
-%>
-    You are not logged in<br/>
-    <a href="index.html">Log on</a>
-<%}
-else
-{
+    response.sendRedirect("index.jsp");
+}else{
 
-    CreatePaymentRequest.myOrderRef = request.getAttribute("orderref").toString();
-    CreatePaymentRequest.myClientID = request.getAttribute("clientid").toString();
-    CreatePaymentRequest.myFirst = (String)request.getAttribute("first");
-    CreatePaymentRequest.myLast = (String)request.getAttribute("last");
-    CreatePaymentRequest.myEmail = (String)request.getAttribute("email");
-    CreatePaymentRequest.myStreet = (String)request.getAttribute("street");
-    CreatePaymentRequest.myHouseNumber = (String)request.getAttribute("housenumber");
-    CreatePaymentRequest.myPostalCode = (String)request.getAttribute("postalcode");
-    CreatePaymentRequest.myCity = (String)request.getAttribute("city");
+    CreatePaymentRequest.myOrderRef = session.getAttribute("orderref").toString();
+    CreatePaymentRequest.myClientID = session.getAttribute("clientid").toString();
+    CreatePaymentRequest.myFirst = (String)session.getAttribute("first");
+    CreatePaymentRequest.myLast = (String)session.getAttribute("last");
+    CreatePaymentRequest.myEmail = (String)session.getAttribute("email");
+    CreatePaymentRequest.myStreet = (String)session.getAttribute("street");
+    CreatePaymentRequest.myHouseNumber = (String)session.getAttribute("housenumber");
+    CreatePaymentRequest.myPostalCode = (String)session.getAttribute("postalcode");
+    CreatePaymentRequest.myCity = (String)session.getAttribute("city");
     
     SOAPresponse = CreatePaymentRequest.makeCall();
-    returnPage = (String)request.getAttribute("returnpage");
-    orderRef = request.getAttribute("orderref").toString();
+    returnPage = (String)session.getAttribute("returnpage");
+    orderRef = session.getAttribute("orderref").toString();
+    
+    session.removeAttribute("orderref");
+    session.removeAttribute("clientid");
+    session.removeAttribute("first");
+    session.removeAttribute("last");
+    session.removeAttribute("email");
+    session.removeAttribute("street");
+    session.removeAttribute("housenumber");
+    session.removeAttribute("postalcode");
+    session.removeAttribute("city");
+    session.removeAttribute("returnpage");
     
 }%>
 
-<%=SOAPresponse%>
-<%=returnPage%>
+    <nav class="navbar navbar-inverse navbar-fixed">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">
+                    Zen<span style="color:firebrick">du</span>
+                </a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a class="page-scroll" href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="profile.jsp"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="credits.jsp"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="invoices.jsp"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="index.jsp"></a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
 
     <header>
         <div class="intro-content" style="top:150px;">

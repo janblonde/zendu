@@ -247,6 +247,7 @@ public class FileUploadHandler extends HttpServlet {
                             statement = con.prepareStatement(SQLCredits,Statement.RETURN_GENERATED_KEYS);
                             statement.setInt(1,id);
                             statement.execute();
+                            
                         }
                     }
                               
@@ -261,18 +262,9 @@ public class FileUploadHandler extends HttpServlet {
                         item.write( new File(UPLOAD_DIRECTORY + File.separator + "brieven" + id + ".pdf"));
                     }
                 }
-
-                //send e-mail
-                SendFileEmail myMail = new SendFileEmail();
-                myMail.setMailTo("jan.blonde@icloud.com");
-                //myMail.setMailTo(senderEmail);
-                myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + "brieven" + id +".pdf");
-                myMail.setSubject("Uw brief werd succesvol opgeladen op zendu.be");
-                myMail.setMessage("We verzenden de brief zo snel mogelijk aangetekend. U vindt de door u opgeladen brief als bijlage bij deze e-mail.");
-                String returnMessage = myMail.getMessage();
            
                //File uploaded successfully
-               request.setAttribute("message", "File Uploaded Successfully " + returnMessage);
+               request.setAttribute("message", "File Uploaded Successfully ");
                request.setAttribute("orderid", Integer.toString(id));
             } catch (Exception ex) {
                request.setAttribute("message", "File Upload Failed due to " + ex);
@@ -287,30 +279,52 @@ public class FileUploadHandler extends HttpServlet {
         session.setAttribute("userid", senderEmail);
         session.setAttribute("naam", senderFirstName + " " + senderLastName);
         
+        //test
+        GenerateInvoice generator = new GenerateInvoice();
+        generator.generateForLetter("37");
+        
         //if first time or credits: dispatch to user home page
         //if second time and no credits: dispatch to payment page        
         if (testUser){
+            //send email
+            SendFileEmail myMail = new SendFileEmail();
+            myMail.setMailTo("jan.blonde@icloud.com");
+            //myMail.setMailTo(senderEmail);
+            myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + "brieven" + id +".pdf");
+            myMail.setSubject("Uw brief werd succesvol opgeladen op zendu.be");
+            myMail.setMessage("We verzenden de brief zo snel mogelijk aangetekend. U vindt de door u opgeladen brief als bijlage bij deze e-mail.");
+            String returnMessage = myMail.getMessage();
+            
             session.setAttribute("origin","testuser");
             response.sendRedirect("success.jsp");
             //request.getRequestDispatcher("/success.jsp").forward(request, response);
         }else{
             if(creditUser){
+                //send email
+                SendFileEmail myMail = new SendFileEmail();
+                myMail.setMailTo("jan.blonde@icloud.com");
+                //myMail.setMailTo(senderEmail);
+                myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + "brieven" + id +".pdf");
+                myMail.setSubject("Uw brief werd succesvol opgeladen op zendu.be");
+                myMail.setMessage("We verzenden de brief zo snel mogelijk aangetekend. U vindt de door u opgeladen brief als bijlage bij deze e-mail.");
+                String returnMessage = myMail.getMessage();
+                
                 session.setAttribute("origin","testuser");
                 response.sendRedirect("success.jsp");
                 //request.getRequestDispatcher("/success.jsp").forward(request, response);        
             }else{
                 //goto payment page
-                request.setAttribute("orderref",id);
-                request.setAttribute("clientid",idMembers);
-                request.setAttribute("first",senderFirstName);
-                request.setAttribute("last",senderLastName);
-                request.setAttribute("email",senderEmail);
-                request.setAttribute("street",senderStreetName);
-                request.setAttribute("housenumber",senderStreetNumber);
-                request.setAttribute("postalcode",senderZipCode);
-                request.setAttribute("city",senderCity);
-                request.setAttribute("returnpage","letters");
-                request.getRequestDispatcher("/payment.jsp").forward(request, response);
+                session.setAttribute("orderref",id);
+                session.setAttribute("clientid",idMembers);
+                session.setAttribute("first",senderFirstName);
+                session.setAttribute("last",senderLastName);
+                session.setAttribute("email",senderEmail);
+                session.setAttribute("street",senderStreetName);
+                session.setAttribute("housenumber",senderStreetNumber);
+                session.setAttribute("postalcode",senderZipCode);
+                session.setAttribute("city",senderCity);
+                session.setAttribute("returnpage","letters");
+                response.sendRedirect("payment.jsp");
             }
         }
         

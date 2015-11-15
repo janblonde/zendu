@@ -1,5 +1,6 @@
 <%@ page import ="java.sql.*" %>
 <%@ page import ="com.mycompany.myfileupload.Properties" %>
+<%@ page import ="com.mycompany.myfileupload.SendFileEmail" %>
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=iso-8859-1" pageEncoding="iso-8859-1"%>
 <html lang="en">
@@ -71,10 +72,18 @@ if (null == (session.getAttribute("userid")) || ("" == session.getAttribute("use
     
     //return from payment screens
     if(null!=request.getParameter("orderID")){
-        System.err.println(request.getParameter("orderID"));
         Statement paymentStatement = con.createStatement();
         paymentStatement.executeUpdate("UPDATE Brieven set status='paid' where id=" + request.getParameter("orderID") + ";");
         successfulPayment = true;
+        
+        //send e-mail
+        SendFileEmail myMail = new SendFileEmail();
+        myMail.setMailTo("jan.blonde@icloud.com");
+        //myMail.setMailTo(senderEmail);
+        //myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + "brieven" + request.getParameter("orderID") +".pdf");
+        myMail.setSubject("Uw brief werd succesvol opgeladen op zendu.be");
+        myMail.setMessage("We verzenden de brief zo snel mogelijk aangetekend.");
+        String returnMessage = myMail.getMessage();
     }
     
     //check for testuser
@@ -232,16 +241,16 @@ if (null == (session.getAttribute("userid")) || ("" == session.getAttribute("use
             <div class="row">
                 <div class="col-md-4 contact-details">
                     <h4><i class="fa fa-phone"></i> Call</h4>
-                    <p>555-213-4567</p>
+                    <p>0489 62 19 67</p>
                 </div>
                 <div class="col-md-4 contact-details">
                     <h4><i class="fa fa-map-marker"></i> Visit</h4>
-                    <p>3481 Melrose Place
-                        <br>Beverly Hills, CA 90210</p>
+                    <p>Huybrechtsstraat 76
+                        <br>2140 Borgerhout</p>
                 </div>
                 <div class="col-md-4 contact-details">
                     <h4><i class="fa fa-envelope"></i> Email</h4>
-                    <p><a href="mailto:mail@example.com">mail@example.com</a>
+                    <p><a href="mailto:mail@example.com">jan@zendu.be</a>
                     </p>
                 </div>
             </div>
@@ -259,7 +268,8 @@ if (null == (session.getAttribute("userid")) || ("" == session.getAttribute("use
             </div>
             <div class="row copyright">
                 <div class="col-lg-12">
-                    <p class="small">&copy; 2015 Start Bootstrap Themes</p>
+                    <p class="small">&copy; 2015 Zendu.be Aangetekende brieven</p>
+                    <p class="small"><a href="disclaimer.html">Disclaimer</a> &nbsp &nbsp <a href="cookies.html">Cookies Policy</a></p>
                 </div>
             </div>
         </div>
