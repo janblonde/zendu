@@ -1,0 +1,1 @@
+export CLASSPATH=/home/ubuntu/workspace/apache-tomcat-8.0.23/lib/pdfbox-1.8.10.jar:/home/ubuntu/workspace/apache-tomcat-8.0.23/lib/commons-logging-1.2.jar:/home/ubuntu/workspace/apache-tomcat-8.0.23/lib/mysql-connector-java-5.1.36-bin.jar:/home/ubuntu/workspace/apache-tomcat-8.0.23/lib/fontbox-1.8.10.jar:$CLASSPATH

@@ -32,9 +32,7 @@ public class ContactServlet extends javax.servlet.http.HttpServlet implements ja
 	    performTask(request, response);
 	}
 
-	private void performTask(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-			IOException {
-		System.err.println("entry");	    
+	private void performTask(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 			    
 		Map<String, String[]> parameterInfo = request.getParameterMap();
         
@@ -48,31 +46,20 @@ public class ContactServlet extends javax.servlet.http.HttpServlet implements ja
 
         System.err.println(name);
         
-        SendFileEmail myMail = new SendFileEmail();
-        myMail.setMailTo("jan.blonde@icloud.com");
-        myMail.setMessage(name + " | " + phone + " | " + email + " | " + message);
-        String returnMessage = myMail.getMessage();
+        AmazonSES ses = new AmazonSES();
         
+        ses.setTO("jan.blonde@icloud.com");
+        ses.setSUBJECT("New message from Zendu.be");
+        ses.setBODY(name + " | " + phone + " | " + email + " | " + message);
         
-        // try{ 
-        //     Class.forName("com.mysql.jdbc.Driver");
-        // }catch(ClassNotFoundException e){
-        //     System.err.println(e);
-        //     response.setStatus(500);
-        // }
-        
-        // try {
-        //     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
-        //     Statement st = con.createStatement();
-        //     st.executeUpdate("INSERT INTO Emails (email) VALUES ('" + email + "');");
-        // }catch(SQLException s) {
-        //     System.err.println(s);
-        //     response.setStatus(500);
-        // }
+        try{
+            ses.sendMessage();
+        }catch(Exception e){
+            System.err.println("PROBLEM" + e);
+            response.setStatus(500);
+        }
 
         // return success
-        response.setStatus(200); 
-			    
-
+        response.setStatus(200);
 	}
 }

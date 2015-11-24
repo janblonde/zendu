@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="iso-8859-1">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="description" content="Zendu Aangetekende brief">
-    <meta name="author" content="Zendu Aangetekende brieven zendingen">
+    <meta name="description" content="Aangetekende brief verzenden">
+    <meta name="author" content="Zendu Aangetekende brieven versturen">
     <title>Zendu | Aangetekende brief verzenden</title>
     <!-- Bootstrap Core CSS -->
     <link href="assets/css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
     <!-- Retina.js - Load first for faster HQ mobile images. -->
     <script src="assets/js/plugins/retina/retina.min.js"></script>
+    <link href="favicon.ico" rel="icon" type="image/x-icon" />
+	<link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <!-- Font Awesome -->
     <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <!-- Default Fonts -->
@@ -139,14 +141,14 @@
                     <div class="about-content">
                         <i class="fa fa-eye fa-4x"></i>
                         <h3>U schrijft de brief en laadt hem op op de website.</h3>
-                        <p>Opladen is eenvoudig, we aanvaarden brieven in PDF of MS Word formaat. </p>
+                        <p>Opladen is eenvoudig, we aanvaarden brieven in PDF formaat. </p>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 wow fadeIn" data-wow-delay=".4s">
                     <div class="about-content">
                         <i class="fa fa-edit fa-4x"></i>
                         <h3>Wij printen uw brief en versturen hem aangetekend via de reguliere post.</h3>
-                        <p>Brieven opgeladen voor 14u00 worden dezelfde werkdag nog verstuurd, na 14u00 de volgende werkdag.</p>
+                        <p>Brieven opgeladen voor 15u00 worden dezelfde werkdag nog verstuurd, na 15u00 de volgende werkdag.</p>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 wow fadeIn" data-wow-delay=".6s">
@@ -280,7 +282,7 @@
         <div class="container text-center wow fadeIn">
             <h2>Over ons</h2>
             <hr class="colored">
-            <p style="text-align:left">We zijn ervan overtuigd dat het verzenden van aangetekende brieven makkelijker moet kunnen. De verplichte trip naar het postkantoor is tijdrovend en onefficient.</p>
+            <p style="text-align:left">We zijn ervan overtuigd dat het verzenden van aangetekende brieven makkelijker moet kunnen. De verplichte trip naar het postkantoor is tijdrovend en onefficiënt.</p>
             <p style="text-align:left">Maar ook het beheer van de verstuurde brieven kan beter en vooral eenvoudiger. Het huidig systeem van afgestempelde bewijsstrookjes is achterhaald, omslachtig en werkt fouten in de hand.</p>
             <p style="text-align:left">Dat kan beter.  We maakten daarom een toepassing die u toelaat uw brief in pdf formaat op te laden en waarbij wij de verdere stappen van het proces van aangetekende verzending afhandelen. Resultaat: tijdswinst, foutloze afhandeling en efficiënt beheer van bewijs.</p>
             <p style="text-align:left">Daarnaast willen we nog een stap verder gaan. De EU Richtlijn 910/2014 laat toe om op legale wijze aangetekende brieven via elektronische weg te verzenden en dit vanaf 1 juli 2016. Onze technologie laat toe om tegen dan het volledig automatisch elektronische behandelen van uw aangetekende brief.
@@ -305,7 +307,7 @@
                         <ul class="list-group">
                             <li class="list-group-item">1 individuele brief</li>
                             <li class="list-group-item">Maximum 10 pagina's</li>
-                            <li class="list-group-item">Opgeladen voor 14u00, dezelfde dag aangetekend verzonden</li>
+                            <li class="list-group-item">Opgeladen voor 15u00, dezelfde dag aangetekend verzonden</li>
                             <li class="list-group-item">Uw eerste aangetekende brief is gratis</li>
                         </ul>
                         <a href="#brief" class="btn btn-outline-dark">Starten</a>
@@ -319,7 +321,7 @@
                         <ul class="list-group">
                             <li class="list-group-item">Pakket van <strong>10</strong> brieven</li>
                             <li class="list-group-item">Totaal: 88 &euro;, inc. BTW</li>
-                            <li class="list-group-item">Opgeladen voor 14u00, dezelfde dag aangetekend verzonden</li>
+                            <li class="list-group-item">Opgeladen voor 15u00, dezelfde dag aangetekend verzonden</li>
                         </ul>
                         <a href="#" class="btn btn-outline-dark">Log in om te bestellen</a>
                     </div>
@@ -332,7 +334,7 @@
                         <ul class="list-group">
                             <li class="list-group-item">Pakket van 50 brieven</li>
                             <li class="list-group-item">Totaal: 425 &euro;, inc. BTW</li>
-                            <li class="list-group-item">Opgeladen voor 14u00, dezelfde dag aangetekend verzonden</li>
+                            <li class="list-group-item">Opgeladen voor 15u00, dezelfde dag aangetekend verzonden</li>
                         </ul>
                         <a href="#" class="btn btn-outline-dark">Log in om te bestellen</a>
                     </div>

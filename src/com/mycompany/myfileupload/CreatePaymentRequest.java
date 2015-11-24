@@ -24,23 +24,43 @@ public class CreatePaymentRequest {
      * Starting point for the SAAJ - SOAP Client Testing
      */
     public static void main(String args[]) {
+        String response = "";
+        
         try {
             // Create SOAP Connection
             SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
             SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
             // Send SOAP Message to SOAP Server
-            String url = "https://test.docdatapayments.com/ps/services/paymentservice/1_3";
+            //String url = "https://test.docdatapayments.com/ps/services/paymentservice/1_3";
+            String url = "https://secure.docdatapayments.com/ps/services/paymentservice/1_3";
             SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(), url);
+            
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            Source sourceContent = soapResponse.getSOAPPart().getContent();
+            System.out.print("\nResponse SOAP Message = ");
+            StreamResult result = new StreamResult(System.out);
+            transformer.transform(sourceContent, result);
 
             // Process the SOAP Response
-            printSOAPResponse(soapResponse);
+            //printSOAPResponse(soapResponse);
+            NodeList responseElement = soapResponse.getSOAPBody().getElementsByTagName("key");
+            
+            if(null!=responseElement){
+                response = responseElement.item(0).getFirstChild().getNodeValue(); 
+            }else{
+                response="ERROR";
+            }  
 
             soapConnection.close();
+            
+            //return response;
         } catch (Exception e) {
             System.err.println("Error occurred while sending SOAP Request to Server");
             e.printStackTrace();
-        }
+            //return "ERROR";
+        }        
     }
     
     public static String makeCall() {
@@ -52,7 +72,8 @@ public class CreatePaymentRequest {
             SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
             // Send SOAP Message to SOAP Server
-            String url = "https://test.docdatapayments.com/ps/services/paymentservice/1_3";
+            //String url = "https://test.docdatapayments.com/ps/services/paymentservice/1_3";
+            String url = "https://secure.docdatapayments.com:443/ps/services/paymentservice/1_3";
             SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(), url);
             
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -88,12 +109,13 @@ public class CreatePaymentRequest {
         SOAPMessage soapMessage = messageFactory.createMessage();
         SOAPPart soapPart = soapMessage.getSOAPPart();
 
-        String serverURI = "https://test.docdatapayments.com/ps/services/paymentservice/1_3";
+        String serverURI = "https://www.docdatapayments.com/services/paymentservice/1_3/";
+        //String serverURI = "https://secure.docdatapayments.com/ps/services/paymentservice/1_3";
 
         // SOAP Envelope
         SOAPEnvelope envelope = soapPart.getEnvelope();
         envelope.addNamespaceDeclaration("ns1", "http://www.docdatapayments.com/services/paymentservice/1_3/");
-        //envelope.addNamespaceDeclaration("ns1", "https://secure.docdatapayments.com/ps/services/paymentservice/1_3");
+        //envelope.addNamespaceDeclaration("ns1", "http://www.docdatapayments.com/services/paymentservice/1_3/");
 
         /*
         Constructed SOAP Request Message:
@@ -110,17 +132,12 @@ public class CreatePaymentRequest {
 
         // SOAP Body
         SOAPBody soapBody = soapMessage.getSOAPBody();
+        //Name bodyName = envelope.createName("createRequest", "ns1","http://www.docdatapayments.com/services/paymentservice/1_3/");
         Name bodyName = envelope.createName("createRequest", "ns1","http://www.docdatapayments.com/services/paymentservice/1_3/");
-        //Name bodyName = envelope.createName("createRequest", "ns1","https://secure.docdatapayments.com/ps/services/paymentservice/1_3");
         SOAPBodyElement createRequest = soapBody.addBodyElement(bodyName);
-        
-        //SOAPBody soapBody = envelope.getBody();
-        //SOAPElement createRequest = soapBody.addChildElement("createRequest");
         
         Name version = envelope.createName("version");
         createRequest.addAttribute(version, "1.3");
-        //Name xmlns = envelope.createName("xmlns");
-        //createRequest.addAttribute(xmlns,"xyz");
         
         //merchant
         SOAPElement merchant = createRequest.addChildElement("merchant","ns1");
@@ -129,7 +146,8 @@ public class CreatePaymentRequest {
         merchant.addAttribute(merchantName,"zendu_be");
         
         Name password = envelope.createName("password");
-        merchant.addAttribute(password,"Quyazu3e");
+        //merchant.addAttribute(password,"Quyazu3e");
+        merchant.addAttribute(password,"StED6xun");
         
         //merchantorderreference
         SOAPElement orderRef = createRequest.addChildElement("merchantOrderReference","ns1");

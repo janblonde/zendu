@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.mycompany.myfileupload.Properties;
+
 public class DocumentServlet extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 
 	private static final long serialVersionUID = 1L;
@@ -55,11 +57,17 @@ public class DocumentServlet extends javax.servlet.http.HttpServlet implements j
                 rs = st.executeQuery("select * from Members where email='" + email + "';");
                 
                 if (rs.next()){
-                
-                    ResultSet rs2 = st.executeQuery("select * from Brieven where member_id=" + rs.getInt("id")+";");
                     
                     String docid = request.getParameter("docid");
                     String doctype = request.getParameter("doctype");
+                    
+                    ResultSet rs2 = null;
+                    
+                    if(doctype.equals("factuur")){
+                        rs2 = st.executeQuery("select * from Invoices where member_id=" + rs.getInt("id")+";");
+                    }else{
+                        rs2 = st.executeQuery("select * from Brieven where member_id=" + rs.getInt("id")+";");
+                    }
                     
                     while (rs2.next()){
                         if (Integer.toString(rs2.getInt("id")).equals(docid)){
@@ -67,7 +75,7 @@ public class DocumentServlet extends javax.servlet.http.HttpServlet implements j
                     		String pdfFileName = doctype + docid + ".pdf"; 
                     		System.err.println(pdfFileName);
                     		//String contextPath = getServletContext().getRealPath(File.separator);
-                    		String contextPath = "/home/ubuntu/workspace/documents/";
+                    		String contextPath = com.mycompany.myfileupload.Properties.documentRoot;
                     		File pdfFile = new File(contextPath + pdfFileName);
                     
                     		response.setContentType("application/pdf");

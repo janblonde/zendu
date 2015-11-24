@@ -26,7 +26,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  * @author Javin Paul
  */
 public class FileUploadLeaflet extends HttpServlet {
-    private final String UPLOAD_DIRECTORY = "/home/ubuntu/workspace/documents";
+    private final String UPLOAD_DIRECTORY = com.mycompany.myfileupload.Properties.documentRoot;
   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -60,17 +60,8 @@ public class FileUploadLeaflet extends HttpServlet {
                         item.write( new File(UPLOAD_DIRECTORY + File.separator + "bewijs" + id + ".pdf"));
                     }
                 }
-
-                //send e-mail
-                SendFileEmail myMail = new SendFileEmail();
-                myMail.setMailTo("jan.blonde@icloud.com");
-                //myMail.setMailTo(senderEmail);
-                myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + "bewijs" + id +".pdf");
-                myMail.setSubject("Uw brief werd aangetekend verzonden door zendu.be");
-                myMail.setMessage("Uw brief werd zojuist via BPost aangetekend verzonden. U vindt een scan van het bewijsstrookje als bijlage bij deze e-mail.");
-                String returnMessage = myMail.getMessage();
                 
-                //update database
+                //update database + send email
                 try{ 
                     Class.forName("com.mysql.jdbc.Driver");
                 }catch(ClassNotFoundException e){
@@ -89,6 +80,29 @@ public class FileUploadLeaflet extends HttpServlet {
                     SQL = "UPDATE Brieven SET sent_date = NOW() where id=" + id;
                     
                     stmt.executeUpdate(SQL);
+                    
+                    SQL = "SELECT member_id from Brieven where id=" + id;
+                    ResultSet rs = stmt.executeQuery(SQL);
+                    while(rs.next()){
+                        int memberID = rs.getInt("member_id");
+                        
+                        SQL = "SELECT email from Members where id=" + Integer.toString(memberID);
+                        ResultSet rs2 = stmt.executeQuery(SQL);
+                        while(rs2.next()){
+                            String senderEmail = rs2.getString("email");
+                            
+                            //send e-mail
+                            AmazonSESAttachment mailer = new AmazonSESAttachment();
+                            mailer.setTO(senderEmail);
+                            mailer.setBODY("Uw brief werd zojuist aangetekend verzonden via de reguliere post. U vindt een scan van het bewijsstrookje als bijlage bij deze e-mail.");
+                            mailer.setSUBJECT("Uw brief werd aangetekend verzonden door Zendu.be");
+                            mailer.setFileName("bewijs"+id+".pdf");
+                            mailer.sendMessage();
+                            
+                        }
+                    }
+                    
+                    
 
                 }catch(SQLException e){
                     System.err.println(e);

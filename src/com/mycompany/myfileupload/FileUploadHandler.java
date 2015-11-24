@@ -31,7 +31,7 @@ import com.mycompany.myfileupload.Properties;
  * @author Javin Paul
  */
 public class FileUploadHandler extends HttpServlet {
-    private final String UPLOAD_DIRECTORY = "/home/ubuntu/workspace/documents";
+    private final String UPLOAD_DIRECTORY = com.mycompany.myfileupload.Properties.documentRoot;
   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -278,22 +278,25 @@ public class FileUploadHandler extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("userid", senderEmail);
         session.setAttribute("naam", senderFirstName + " " + senderLastName);
-        
-        //test
-        GenerateInvoice generator = new GenerateInvoice();
-        generator.generateForLetter("37");
-        
+
         //if first time or credits: dispatch to user home page
         //if second time and no credits: dispatch to payment page        
         if (testUser){
             //send email
-            SendFileEmail myMail = new SendFileEmail();
-            myMail.setMailTo("jan.blonde@icloud.com");
+            AmazonSESAttachment mailer = new AmazonSESAttachment();
+            mailer.setTO(senderEmail);
+            mailer.setBODY("We verzenden de brief zo snel mogelijk aangetekend. U vindt de door u opgeladen brief als bijlage bij deze e-mail.");
+            mailer.setSUBJECT("Uw brief werd succesvol opgeladen op Zendu.be");
+            mailer.setFileName("brieven"+id+".pdf");
+            mailer.sendMessage();
+            
+            //SendFileEmail myMail = new SendFileEmail();
+            //myMail.setMailTo("jan.blonde@icloud.com");
             //myMail.setMailTo(senderEmail);
-            myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + "brieven" + id +".pdf");
-            myMail.setSubject("Uw brief werd succesvol opgeladen op zendu.be");
-            myMail.setMessage("We verzenden de brief zo snel mogelijk aangetekend. U vindt de door u opgeladen brief als bijlage bij deze e-mail.");
-            String returnMessage = myMail.getMessage();
+            //myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + "brieven" + id +".pdf");
+            //myMail.setSubject("Uw brief werd succesvol opgeladen op zendu.be");
+            //myMail.setMessage("We verzenden de brief zo snel mogelijk aangetekend. U vindt de door u opgeladen brief als bijlage bij deze e-mail.");
+            //String returnMessage = myMail.getMessage();
             
             session.setAttribute("origin","testuser");
             response.sendRedirect("success.jsp");
@@ -311,7 +314,7 @@ public class FileUploadHandler extends HttpServlet {
                 
                 session.setAttribute("origin","testuser");
                 response.sendRedirect("success.jsp");
-                //request.getRequestDispatcher("/success.jsp").forward(request, response);        
+                        
             }else{
                 //goto payment page
                 session.setAttribute("orderref",id);

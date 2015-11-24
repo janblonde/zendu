@@ -48,6 +48,7 @@ member_id INT(6),
 amount INT(6),
 reg_date TIMESTAMP,
 brief_id INT(6),
+status VARCHAR(10),
 INDEX member_idx(member_id),
 INDEX brief_idx(brief_id),
 FOREIGN KEY (member_id) REFERENCES Members(id) ON DELETE CASCADE,
@@ -67,6 +68,17 @@ PRIMARY KEY (id),
 random VARCHAR(30),
 userid INT(6),
 reg_date TIMESTAMP
+) ENGINE=INNODB;
+
+CREATE TABLE Invoices (
+id INT NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (id),
+member_id INT(6),
+title VARCHAR(100),
+amount VARCHAR(20),
+reg_date TIMESTAMP,
+INDEX member_idx(member_id),
+FOREIGN KEY (member_id) REFERENCES Members(id) ON DELETE CASCADE
 ) ENGINE=INNODB;
 
 INSERT INTO Members(first_name,last_name,email,pass,streetname,streetnumber,zipcode,city)

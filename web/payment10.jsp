@@ -88,12 +88,23 @@ if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") 
         String zipcode = rs1.getString("zipcode");
         String city = rs1.getString("city");
 
-        SecureRandom random = new SecureRandom();
-        String myRandom = new BigInteger(130, random).toString(6);
+        //SecureRandom random = new SecureRandom();
+        //String myRandom = new BigInteger(130, random).toString(6);
         
-        orderRef = memberID + random;
+        //orderRef = memberID + random;
+        
+        String SQL = "INSERT INTO CreditLog (member_id, amount, status) VALUES(?,'10','open')";
+        PreparedStatement statement = con.prepareStatement(SQL,Statement.RETURN_GENERATED_KEYS);
+        statement.setString(1,memberID);
+    
+        statement.execute();
+        ResultSet rs2 = statement.getGeneratedKeys();
+                        
+        if(rs2.next()){
+            orderRef = Integer.toString(rs2.getInt(1));
+        }
 
-        CreatePaymentRequest.myOrderRef = orderRef;
+        CreatePaymentRequest.myOrderRef = "C" + orderRef;
         CreatePaymentRequest.myClientID = memberID;
         CreatePaymentRequest.myFirst = first_name;
         CreatePaymentRequest.myLast = last_name;
@@ -106,7 +117,6 @@ if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") 
     
         SOAPresponse = CreatePaymentRequest.makeCall();
     }
-
     
 }%>
 
@@ -156,7 +166,7 @@ if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") 
 <FORM id="paymentform" METHOD="post" ACTION="https://test.docdatapayments.com/ps/menu" id=form1 name=form1>
 <INPUT type="hidden" NAME="payment_cluster_key" value="<%=SOAPresponse%>">
 <INPUT type="hidden" NAME="merchant_name" VALUE="zendu_be">
-<INPUT type="hidden" NAME="return_url_success" VALUE="http://java-tomcat-janblonde.c9.io/zendu/credits.jsp?amount=10">
+<INPUT type="hidden" NAME="return_url_success" VALUE="http://java-tomcat-janblonde.c9.io/zendu/credits.jsp?order=<%=orderRef%>">
 <INPUT type="hidden" NAME="return_url_canceled" VALUE="http://java-tomcat-janblonde.c9.io/zendu/success.jsp">
 <INPUT type="hidden" NAME="return_url_error" VALUE="http://java-tomcat-janblonde.c9.io/zendu/success.jsp">
 <input type="submit" value="SUBMIT" id="submit2" name="submit2" hidden>

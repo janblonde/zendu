@@ -2,6 +2,7 @@
 <%@ page import ="java.security.*" %>
 <%@ page import ="java.math.*" %>
 <%@ page import ="com.mycompany.myfileupload.Properties" %>
+<%@ page import ="com.mycompany.myfileupload.GenerateInvoice" %>
 
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=iso-8859-1" pageEncoding="iso-8859-1"%>
@@ -85,29 +86,23 @@ if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") 
         String memberID = rs1.getString("id");
         orderID = memberID;
         
-        if(null!=request.getParameter("amount")){
-            int credits = 0;
-            String amount = request.getParameter("amount");
-            if(amount.equals("10")){
-                credits = 10;
-            }
-            if(amount.equals("50")){
-                credits = 50;
-            }
-            if(amount.equals("100")){
-                credits = 100;
-            }
+        if(null!=request.getParameter("order")){
+            String orderRef = request.getParameter("order");
             Statement paymentStatement = con.createStatement();
-            paymentStatement.executeUpdate("INSERT INTO CreditLog (member_id, amount) VALUES("+memberID+","+credits+");");
+            paymentStatement.executeUpdate("UPDATE CreditLog set status = 'paid' where id='" + orderRef + "';");
             successfulPayment = true;
+            
+            //generate invoice
+            GenerateInvoice generator = new GenerateInvoice();
+            generator.generateForCredits(orderRef);
         }
         
-        ResultSet rs3 = st.executeQuery("select SUM(amount) as huidigTotaal from CreditLog where member_id=" + memberID +";");
+        ResultSet rs3 = st.executeQuery("select SUM(amount) as huidigTotaal from CreditLog where status = 'paid' and member_id=" + memberID +";");
         if (rs3.next()){
             huidigTotaal = rs3.getInt("huidigTotaal");
         }
 
-        rs2 = st.executeQuery("select * from CreditLog where member_id=" + memberID + " ORDER BY reg_date DESC;");
+        rs2 = st.executeQuery("select * from CreditLog where status = 'paid' and member_id=" + memberID + " ORDER BY reg_date DESC;");
         
     }%>
 

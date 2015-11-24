@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Zendu | Aangetekende brieven</title>
+    <title>Zendu | Facturen</title>
     <!-- Bootstrap Core CSS -->
     <link href="assets/css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
     <!-- Retina.js - Load first for faster HQ mobile images. -->
@@ -55,24 +55,30 @@
 
 <body id="page-top">
 <%
-String random = (String)request.getParameter("id");
+    ResultSet rs2 = null;
+    String naam = "";
+    boolean successfulPayment = false;
+    boolean testUser = false;
 
-//check if random is available in database
-try{ 
+if (null == (session.getAttribute("userid")) || ("" == session.getAttribute("userid"))) {
+  response.sendRedirect("index.jsp");
+}else{
+    String userid = (String)session.getAttribute("userid");
+    naam = (String)session.getAttribute("naam");
+
     Class.forName("com.mysql.jdbc.Driver");
-}catch(ClassNotFoundException e){
-    System.out.println(e);
-}
+    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", Properties.username, Properties.password);    
+    
+    Statement st = con.createStatement();
+    ResultSet rs1;
+    rs1 = st.executeQuery("select * from Members where email='" + userid + "';");
+    
+    if (rs1.next()){
+        String memberID = rs1.getString("id");
 
-try{
-    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", Properties.username, Properties.password);
-    
-    String SQLfind = "SELECT id from PasswordReset where random = ?";
-    PreparedStatement statementFind = con.prepareStatement(SQLfind);
-    statementFind.setString(1,random);
-    ResultSet rsFind = statementFind.executeQuery();
-    
-    if(rsFind.next()){%>
+        rs2 = st.executeQuery("select * from Invoices where member_id=" + memberID + " ORDER BY id DESC;");
+    }%>
+
 
     <!-- Navigation -->
     <!-- Note: navbar-default and navbar-inverse are both supported with this theme. -->
@@ -97,10 +103,7 @@ try{
                         <a class="page-scroll" href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#about">Welkom</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="profile.jsp">Profiel</a>
+                        <a class="page-scroll" href="profile.jsp">Welkom <%=naam%></a>
                     </li>
                     <li>
                         <a class="page-scroll" href="credits.jsp">Credits</a>
@@ -109,7 +112,7 @@ try{
                         <a class="page-scroll" href="invoices.jsp">Facturen</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="index.html">Uitloggen</a>
+                        <a class="page-scroll" href="index.jsp">Uitloggen</a>
                     </li>
                 </ul>
             </div>
@@ -118,28 +121,57 @@ try{
         <!-- /.container -->
     </nav>
     <header>
-        <section id="process" class="services">
+        <div>
+            <button type="submit" class="btn btn-outline-dark" onclick="window.location.href='new.jsp'" style="position:relative;top:80px;left:80px">Nieuwe aangetekende brief</button><br><br>
+        </div>
+        
+    <section id="process" class="services">
         <div class="container">        
             <div class="row content-row">
-                
-              <form id="upload" action="savepassword" method="post">
-                <legend>Kies een nieuw paswoord</legend>
-                <div class="form-group">
-                  <label for="senderpassword">Nieuw paswoord: <span style="color:red">*</span></label>
-                  <input id="senderpassword" type="password" class="form-control" name="senderpassword" style="width:40%">
-                  <span class="error">Dit is een verplicht veld</span>
-                </div>
-                <div class="form-group">
-                  <label for="senderpasswordcheck">Geef dit nieuwe paswoord nogmaals in: <span style="color:red">*</span></label>
-                  <input id="senderpasswordcheck" type="password" class="form-control" name="senderpasswordcheck" style="width:40%">
-                  <span class="error">Dit is een verplicht veld</span>
-                </div>
-                <input type="hidden" name="random" value="<%=random%>">
-                <input id="reset" type="submit" class="btn btn-lg btn-default" name="reset" value="Reset"/>
-              </form>
-            </div>
+            <legend>Overzicht van facturen</legend>
+            
+            <table id="hor-minimalist-b">
+            <thead>
+              <tr>
+                <th scope="col">Factuurnummer</th>
+                <th scope="col">Omschrijving</th>
+                <th scope="col">Bedrag</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Download</th>
+              </tr>
+            </thead>
+            <tbody>
+            <%while (rs2.next()){%>
+                <tr>
+                  <td style="color:black;">F<%=rs2.getInt("id")%></td>
+                  <td style="color:black;"><%=rs2.getString("title")%></td>
+                  <td style="color:black;"><%=rs2.getString("amount")%></td>
+                  <td style="color:black;"><%=rs2.getString("reg_date").substring(0,16)%></td>
+                  <td style="color:black;"><a href="/zendu/documentservlet?docid=<%=rs2.getInt("id")%>&doctype=factuur" target="_blank"><img src="/zendu/assets/img/ico_pdf.png" height=20px width=20px/></a></td>   
+                </tr>
+            <%}%>
+            </tbody>
+            </table>
         </div>
-        </section>
+        </div>
+    </section>
+
+        <div class="intro-content">
+            <br>
+
+        </div>
+        
+        <div class="login-form">
+        </div>
+    
+        <div class="getstarted-form">
+        </div>
+    
+    
+        
+        <div class="scroll-down">
+            <a class="btn page-scroll" href="#about"><i class="fa fa-angle-down fa-fw"></i></a>
+        </div>
     </header>
 
     <footer class="footer" style="background-image: url('assets/img/bg-footer.jpg')">
@@ -199,19 +231,7 @@ try{
     <script src="assets/js/plugins/jqBootstrapValidation.js"></script>
     <!-- Vitality Theme Scripts -->
     <script src="assets/js/vitality.js"></script>
-    
-<%    }else{ %>
-
-    Not authorized<br/>
-    <a href="index.html">Log on</a>
-
-<%    }
-    
-}catch(SQLException se){
-    System.err.println(se);
-    response.setStatus(500);
-}%>
-
+    <%}%>
 </body>
 
 </html>

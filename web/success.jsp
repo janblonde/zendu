@@ -1,6 +1,7 @@
 <%@ page import ="java.sql.*" %>
 <%@ page import ="com.mycompany.myfileupload.Properties" %>
-<%@ page import ="com.mycompany.myfileupload.SendFileEmail" %>
+<%@ page import ="com.mycompany.myfileupload.AmazonSESAttachment" %>
+<%@ page import ="com.mycompany.myfileupload.GenerateInvoice" %>
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=iso-8859-1" pageEncoding="iso-8859-1"%>
 <html lang="en">
@@ -77,13 +78,16 @@ if (null == (session.getAttribute("userid")) || ("" == session.getAttribute("use
         successfulPayment = true;
         
         //send e-mail
-        SendFileEmail myMail = new SendFileEmail();
-        myMail.setMailTo("jan.blonde@icloud.com");
-        //myMail.setMailTo(senderEmail);
-        //myMail.setAttachmentName(UPLOAD_DIRECTORY+File.separator + "brieven" + request.getParameter("orderID") +".pdf");
-        myMail.setSubject("Uw brief werd succesvol opgeladen op zendu.be");
-        myMail.setMessage("We verzenden de brief zo snel mogelijk aangetekend.");
-        String returnMessage = myMail.getMessage();
+        AmazonSESAttachment mailer = new AmazonSESAttachment();
+        mailer.setTO(userid);
+        mailer.setBODY("We verzenden de brief zo snel mogelijk aangetekend. U vindt de door u opgeladen brief als bijlage bij deze e-mail.");
+        mailer.setSUBJECT("Uw brief werd succesvol opgeladen op Zendu.be");
+        mailer.setFileName("brieven"+request.getParameter("orderID")+".pdf");
+        mailer.sendMessage();
+        
+        //generate invoice
+        GenerateInvoice generator = new GenerateInvoice();
+        generator.generateForLetter(request.getParameter("orderID"));
     }
     
     //check for testuser

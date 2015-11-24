@@ -33,10 +33,10 @@ public class SendFileEmail{
       String to = mailTo;
 
       // Sender's email ID needs to be mentioned
-      String from = "jan@strategydesigners.be";
+      String from = "info@zendu.be";
 
       // Get system properties
-      Properties properties = System.getProperties();
+      java.util.Properties properties = System.getProperties();
 
       // Setup mail server
       //properties.setProperty("mail.smtp.host", host);
