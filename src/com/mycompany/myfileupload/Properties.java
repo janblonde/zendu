@@ -6,5 +6,5 @@ public class Properties {
     //public static String documentRoot = "/home/ubuntu/workspace/documents/";
     public static String username = "root";
     public static String password = "ciFEja51";
-    public static String documentRoot = "/var/lib/tomcat7/documents/";
+    public static String documentRoot = "/home/demo/documents/";
 }

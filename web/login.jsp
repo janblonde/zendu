@@ -19,14 +19,14 @@
 	        session.setAttribute("userid",email);
 	        session.setAttribute("naam", firstName + " " + lastName);
 	        session.setAttribute("loginmessage","");
-	        response.sendRedirect("success.jsp");
+	        response.sendRedirect("https://www.zendu.be/success.jsp");
         }else{
             session.setAttribute("loginmessage", "Dit is een ongeldige email/paswoord combinatie. ");
-	        response.sendRedirect("index.jsp");
+	        response.sendRedirect("aangetekende-brief.jsp");
 	    }
 
     } else {
         session.setAttribute("loginmessage", "Dit is een ongeldige email/paswoord combinatie. ");
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("aangetekende-brief.jsp");
     }
 %>

@@ -21,6 +21,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import com.mycompany.myfileupload.Properties;
+
 /**
  * Servlet to handle File upload request from Client
  * @author Javin Paul
@@ -69,7 +71,7 @@ public class FileUploadLeaflet extends HttpServlet {
                 }
 
                 try{
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", Properties.username, Properties.password);
                     Statement stmt = con.createStatement();                   
                    
 

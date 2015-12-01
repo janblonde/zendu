@@ -51,7 +51,7 @@ public class DocumentServlet extends javax.servlet.http.HttpServlet implements j
             }
             
             try {
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", "janblonde", "");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", Properties.username, Properties.password);
                 Statement st = con.createStatement();
                 ResultSet rs;
                 rs = st.executeQuery("select * from Members where email='" + email + "';");

@@ -151,7 +151,7 @@ public class FileUploadHandler extends HttpServlet {
                     if(rsFind.next()){
                         if(testUser){
                             request.setAttribute("message"," 1 gratis verzending reeds opgebruikt - please login first");
-                            request.getRequestDispatcher("/index.jsp").forward(request, response);
+                            request.getRequestDispatcher("/aangetekende-brief.jsp").forward(request, response);
                         }else{
                             idMembers = rsFind.getInt(1);
                             //senderFirstName = rsFind.getString(2);
@@ -290,6 +290,13 @@ public class FileUploadHandler extends HttpServlet {
             mailer.setFileName("brieven"+id+".pdf");
             mailer.sendMessage();
             
+            //notification
+            AmazonSES mailer2 = new AmazonSES();
+            mailer2.setTO("jan.blonde@icloud.com");
+            mailer2.setBODY("NOTIFICATION: nieuwe Zendu brief!");
+            mailer2.setSUBJECT("NOTIFICATION: nieuwe Zendu brief!");
+            mailer2.sendMessage();
+            
             //SendFileEmail myMail = new SendFileEmail();
             //myMail.setMailTo("jan.blonde@icloud.com");
             //myMail.setMailTo(senderEmail);
@@ -299,7 +306,7 @@ public class FileUploadHandler extends HttpServlet {
             //String returnMessage = myMail.getMessage();
             
             session.setAttribute("origin","testuser");
-            response.sendRedirect("success.jsp");
+            response.sendRedirect("https://www.zendu.be/success.jsp");
             //request.getRequestDispatcher("/success.jsp").forward(request, response);
         }else{
             if(creditUser){
@@ -313,7 +320,7 @@ public class FileUploadHandler extends HttpServlet {
                 String returnMessage = myMail.getMessage();
                 
                 session.setAttribute("origin","testuser");
-                response.sendRedirect("success.jsp");
+                response.sendRedirect("https://www.zendu.be/success.jsp");
                         
             }else{
                 //goto payment page
