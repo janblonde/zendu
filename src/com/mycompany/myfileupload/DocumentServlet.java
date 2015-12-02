@@ -44,6 +44,26 @@ public class DocumentServlet extends javax.servlet.http.HttpServlet implements j
             
             String email = (String)session.getAttribute("userid");
             
+            if (email.equals("adminzendu")){
+                String docid2 = request.getParameter("docid");
+                String doctype2 = request.getParameter("doctype");
+                String pdfFileName2 = doctype2 + docid2 + ".pdf"; 
+        		//String contextPath = getServletContext().getRealPath(File.separator);
+        		String contextPath2 = com.mycompany.myfileupload.Properties.documentRoot;
+        		File pdfFile2 = new File(contextPath2 + pdfFileName2);
+        
+        		response.setContentType("application/pdf");
+        		response.addHeader("Content-Disposition", "inline; filename=" + pdfFileName2);
+        		response.setContentLength((int) pdfFile2.length());
+        
+        		FileInputStream fileInputStream2 = new FileInputStream(pdfFile2);
+        		OutputStream responseOutputStream2 = response.getOutputStream();
+        		int bytes2;
+        		while ((bytes2 = fileInputStream2.read()) != -1) {
+        			responseOutputStream2.write(bytes2);
+        		}
+            }
+            
             try{ 
                 Class.forName("com.mysql.jdbc.Driver");
             }catch(ClassNotFoundException e){
