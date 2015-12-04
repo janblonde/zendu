@@ -122,7 +122,7 @@ public class FileUploadLeaflet extends HttpServlet {
         }
     
         //request.getRequestDispatcher("/admin.jsp").forward(request, response);
-        response.sendRedirect("admin.jsp");
+        response.sendRedirect("backend/admin.jsp");
      
     }
   

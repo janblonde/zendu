@@ -74,8 +74,8 @@
     </welcome-file-list>
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>A JSP page</web-resource-name>
-            <url-pattern>/admin.jsp</url-pattern>
+            <web-resource-name>Backend pages</web-resource-name>
+            <url-pattern>/backend/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>tomcat</role-name>

@@ -83,3 +83,7 @@ FOREIGN KEY (member_id) REFERENCES Members(id) ON DELETE CASCADE
 
 INSERT INTO Members(first_name,last_name,email,pass,streetname,streetnumber,zipcode,city)
 VALUES("demo1", "demo1", "demo@demo.be","$2a$10$.M.kdaoRUyJk57Wncs0k2OgYRTPAegQzM9.a/eCVPVH7YeyxqxRJC","demostraat","99","9999","city");
+
+INSERT INTO Members(first_name,last_name,email,pass,streetname,streetnumber,zipcode,city)
+VALUES("Bart", "Van Wassenhove", "bart@bold.be","$2a$10$a0cv0mG0U5TMRj52cxl.teLzXrfCJSFDJbF8C4SCckBiwUBYGPNsC","Souverainestraat","58 bus 2","9800","Deinze");
+

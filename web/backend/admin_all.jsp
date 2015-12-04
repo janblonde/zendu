@@ -4,13 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Backend | Alle brieven</title>
 </head>
 <body>
 
-</body>
-<form method="post">
+<h1>Alle Brieven</h1><a href="admin.jsp">Link naar brieven todo </a><br>
 
+<form method="post">
 <table border="2">
 <tr>
 <td>ID</td>
@@ -40,7 +40,7 @@ Class.forName("com.mysql.jdbc.Driver");
 String url="jdbc:mysql://localhost:3306/c9";
 String username=Properties.username;
 String password=Properties.password;
-String query="select * from Brieven where status='paid';";
+String query="select * from Brieven where status='paid' or status='sent' order by reg_date DESC;";
 Connection conn=DriverManager.getConnection(url,username,password);
 Statement stmt=conn.createStatement();
 ResultSet rs=stmt.executeQuery(query);
@@ -64,8 +64,8 @@ while(rs.next())
         <td><%=rs.getString("senderZipCode") %></td>
         <td><%=rs.getString("senderCity") %></td>
         <td><%=rs.getString("status") %></td>
-        <td><a href="documentservlet?docid=<%=rs.getInt("id")%>&doctype=brieven">Download brief</a></td>
-        <td><a href="documentservlet?docid=<%=rs.getInt("id")%>&doctype=bewijs">Download leaflet</a></td>
+        <td><a href="/documentservlet?docid=<%=rs.getInt("id")%>&doctype=brieven">Download brief</a></td>
+        <td><a href="/documentservlet?docid=<%=rs.getInt("id")%>&doctype=bewijs">Download leaflet</a></td>
         <td><a href="edit.jsp?id=<%=rs.getInt("id")%>">Edit</a></td></tr>
 <%
 }

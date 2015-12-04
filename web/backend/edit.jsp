@@ -24,7 +24,7 @@ while(rs.next())
 {
 %>
     <h1>ID: <%= request.getParameter("id") %></h1><br>
-    <form action="uploadleaflet" method="post" enctype="multipart/form-data">
+    <form action="/uploadleaflet" method="post" enctype="multipart/form-data">
       <input type="hidden" name="id" value="<%= request.getParameter("id") %>"/>
       Last Name: <input type="text" name="destinationlastname" value="<%=rs.getString("destinationLastName")%>"/><br>
       First Name: <input type="text" name="destinationfirstname" value="<%=rs.getString("destinationFirstName")%>"/><br><br><br>
