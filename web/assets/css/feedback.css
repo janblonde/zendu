@@ -26,13 +26,13 @@
 
 #feedback-tab {
 	float: right;
-	color: #fff;
+	color: white;
 	font-size: 20px;
 	cursor: pointer;
 	text-align: center;
 	width: 120px;
 	height: 42px;
-	background-color: rgba(0,0,0,0.5);
+	background-color: firebrick;
 	margin-top: 60px;
 	margin-left: -42px;
 	padding-top: 5px;
@@ -47,7 +47,8 @@
 }
 
 #feedback-tab:hover {
-	background-color: rgba(0,0,0,0.4);
+	background-color: firebrick;
+	color: white;
 }
 
 #feedback-form textarea {

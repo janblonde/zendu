@@ -32,6 +32,10 @@
         <servlet-name>SavePasswordServlet</servlet-name>
         <servlet-class>com.mycompany.myfileupload.SavePasswordServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <servlet-class>com.mycompany.myfileupload.FeedbackServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>FileUploadHandler</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -63,6 +67,10 @@
     <servlet-mapping>
         <servlet-name>SavePasswordServlet</servlet-name>
         <url-pattern>/savepassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <url-pattern>/feedback</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

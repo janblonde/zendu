@@ -22,6 +22,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.mycompany.myfileupload.Properties;
+import com.mycompany.myfileupload.SendFileEmail;
 
 /**
  * Servlet to handle File upload request from Client
@@ -94,17 +95,22 @@ public class FileUploadLeaflet extends HttpServlet {
                             String senderEmail = rs2.getString("email");
                             
                             //send e-mail
-                            AmazonSESAttachment mailer = new AmazonSESAttachment();
-                            mailer.setTO(senderEmail);
-                            mailer.setBODY("Uw brief werd zojuist aangetekend verzonden via de reguliere post. U vindt een scan van het bewijsstrookje als bijlage bij deze e-mail.");
-                            mailer.setSUBJECT("Uw brief werd aangetekend verzonden door Zendu.be");
-                            mailer.setFileName("bewijs"+id+".pdf");
-                            mailer.sendMessage();
+                            SendFileEmail mailer = new SendFileEmail();
+                            mailer.setMailTo(senderEmail);
+                            mailer.setMessage("Uw brief werd zojuist aangetekend verzonden via de reguliere post. U vindt een scan van het bewijsstrookje als bijlage bij deze e-mail.");
+                            mailer.setSubject("Uw brief werd aangetekend verzonden door Zendu.be");
+                            mailer.setAttachmentName(UPLOAD_DIRECTORY + "bewijs"+id+".pdf");
+                            mailer.getMessage();
+                            
+                            // AmazonSESAttachment mailer = new AmazonSESAttachment();
+                            // mailer.setTO(senderEmail);
+                            // mailer.setBODY("Uw brief werd zojuist aangetekend verzonden via de reguliere post. U vindt een scan van het bewijsstrookje als bijlage bij deze e-mail.");
+                            // mailer.setSUBJECT("Uw brief werd aangetekend verzonden door Zendu.be");
+                            // mailer.setFileName("bewijs"+id+".pdf");
+                            // mailer.sendMessage();
                             
                         }
                     }
-                    
-                    
 
                 }catch(SQLException e){
                     System.err.println(e);

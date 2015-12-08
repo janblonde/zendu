@@ -21,6 +21,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 import com.mycompany.myfileupload.Properties;
+import com.mycompany.myfileupload.SendFileEmail;
 
 import java.util.*;
 
@@ -71,11 +72,17 @@ public class RequestPasswordServlet extends javax.servlet.http.HttpServlet imple
                 statement.execute();
         
                 //send mail including url referencing the hash
-                AmazonSES mailer = new AmazonSES();
-                mailer.setTO(email);
-                mailer.setBODY("Klik op volgende link om u een nieuw paswoord in te geven: http://www.zendu.be/resetpassword.jsp?id="+myRandom);
-                mailer.setSUBJECT("Uw aanvraag om uw paswoord te resetten op Zendu.be");
-                mailer.sendMessage();
+                SendFileEmail myMail = new SendFileEmail();
+                myMail.setMailTo(email);
+                myMail.setSubject("Uw aanvraag om uw paswoord te resetten op Zendu.be");
+                myMail.setMessage("Klik op volgende link om u een nieuw paswoord in te geven: https://www.zendu.be/resetpassword.jsp?id="+myRandom);
+                String returnMessage = myMail.getMessage();
+                
+                //AmazonSES mailer = new AmazonSES();
+                //mailer.setTO(email);
+                //mailer.setBODY("Klik op volgende link om u een nieuw paswoord in te geven: http://www.zendu.be/resetpassword.jsp?id="+myRandom);
+                //mailer.setSUBJECT("Uw aanvraag om uw paswoord te resetten op Zendu.be");
+                //mailer.sendMessage();
                 
                 response.setStatus(200);
             

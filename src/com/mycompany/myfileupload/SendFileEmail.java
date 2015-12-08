@@ -48,8 +48,8 @@ public class SendFileEmail{
       properties.put("mail.smtp.socketFactory.port", "465");
       properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
       properties.put("mail.smtp.socketFactory.fallback", "false");
-      properties.setProperty("mail.user", "jan@strategydesigners.be");
-      properties.setProperty("mail.password", "ciFEja51");
+      properties.setProperty("mail.user", "info@zendu.be");
+      properties.setProperty("mail.password", "coPRbi51");
 
       // Get the default Session object.
       //Session session = Session.getDefaultInstance(properties);
@@ -57,7 +57,7 @@ public class SendFileEmail{
       Session emailSession = Session.getInstance(properties,
            new javax.mail.Authenticator() {
                protected PasswordAuthentication getPasswordAuthentication() {
-               return new PasswordAuthentication("jan@strategydesigners.be","ciFEja51");
+               return new PasswordAuthentication("info@zendu.be","coPRbi51");
            }
        });
 

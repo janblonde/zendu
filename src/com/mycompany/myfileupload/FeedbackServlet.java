@@ -17,45 +17,46 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.mycompany.myfileupload.Properties;
-
 import java.util.*;
 
-public class EmailServlet extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
+public class FeedbackServlet extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+		performTask(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
+	    performTask(request, response);
+	}
+
+	private void performTask(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 			    
-        Map<String, String[]> parameterInfo = request.getParameterMap();
+		Map<String, String[]> parameterInfo = request.getParameterMap();
         
         // In this case here we are not using the data sent to just do different things.
         // Instead we are using them as information to make changes to the server,
         // in this case, adding more bands and albums.
         String email = Arrays.asList(parameterInfo.get("email")).get(0);
+        String body = Arrays.asList(parameterInfo.get("body")).get(0);
+        String screen = Arrays.asList(parameterInfo.get("screen")).get(0);
         
-        try{ 
-            Class.forName("com.mysql.jdbc.Driver");
-        }catch(ClassNotFoundException e){
-            System.err.println(e);
-            response.setStatus(500);
-        }
+        AmazonSES ses = new AmazonSES();
         
-        try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/c9", Properties.username, Properties.password);
-            Statement st = con.createStatement();
-            st.executeUpdate("INSERT INTO Emails (email) VALUES ('" + email + "');");
-        }catch(SQLException s) {
-            System.err.println(s);
+        ses.setTO("jan.blonde@icloud.com");
+        ses.setSUBJECT("New message from Zendu.be");
+        ses.setBODY(email + " | " + body + " | " + screen);
+        
+        try{
+            ses.sendMessage();
+        }catch(Exception e){
+            System.err.println("PROBLEM" + e);
             response.setStatus(500);
         }
 
         // return success
-        response.setStatus(200); 
+        response.setStatus(200);
 	}
 }
