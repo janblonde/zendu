@@ -282,33 +282,24 @@ public class FileUploadHandler extends HttpServlet {
 
         //if first time or credits: dispatch to user home page
         //if second time and no credits: dispatch to payment page        
-        if (testUser){
-            SendFileEmail mailer = new SendFileEmail();
-            mailer.setMailTo(senderEmail);
-            mailer.setMessage("We verzenden de brief zo snel mogelijk aangetekend. U vindt de door u opgeladen brief als bijlage bij deze e-mail.");
-            mailer.setSubject("Uw brief werd succesvol opgeladen op Zendu.be");
-            mailer.setAttachmentName(UPLOAD_DIRECTORY + "brieven"+id+".pdf");
-            mailer.getMessage();
+        // if (testUser){
+        //     SendFileEmail mailer = new SendFileEmail();
+        //     mailer.setMailTo(senderEmail);
+        //     mailer.setMessage("We verzenden de brief zo snel mogelijk aangetekend. U vindt de door u opgeladen brief als bijlage bij deze e-mail.");
+        //     mailer.setSubject("Uw brief werd succesvol opgeladen op Zendu.be");
+        //     mailer.setAttachmentName(UPLOAD_DIRECTORY + "brieven"+id+".pdf");
+        //     mailer.getMessage();
             
-            //send email
-/*          AmazonSESAttachment mailer = new AmazonSESAttachment();
-            mailer.setTO(senderEmail);
-            mailer.setBODY("We verzenden de brief zo snel mogelijk aangetekend. U vindt de door u opgeladen brief als bijlage bij deze e-mail.");
-            mailer.setSUBJECT("Uw brief werd succesvol opgeladen op Zendu.be");
-            mailer.setFileName("brieven"+id+".pdf");
-            mailer.sendMessage();*/
+        //     //notification
+        //     mailer.setMailTo("jan.blonde@icloud.com");
+        //     mailer.setMessage("NOTIFICATION: nieuwe Zendu brief!");
+        //     mailer.setSubject("NOTIFICATION: nieuwe Zendu brief!");
+        //     mailer.getMessage();
             
-            //notification
-            AmazonSES mailer2 = new AmazonSES();
-            mailer2.setTO("jan.blonde@icloud.com");
-            mailer2.setBODY("NOTIFICATION: nieuwe Zendu brief!");
-            mailer2.setSUBJECT("NOTIFICATION: nieuwe Zendu brief!");
-            mailer2.sendMessage();
-            
-            session.setAttribute("origin","testuser");
-            response.sendRedirect("https://www.zendu.be/success.jsp");
-            //request.getRequestDispatcher("/success.jsp").forward(request, response);
-        }else{
+        //     session.setAttribute("origin","testuser");
+        //     response.sendRedirect("https://www.zendu.be/success.jsp");
+        //     //request.getRequestDispatcher("/success.jsp").forward(request, response);
+        // }else{
             if(creditUser){
                 //send email
                 SendFileEmail myMail = new SendFileEmail();
@@ -317,6 +308,13 @@ public class FileUploadHandler extends HttpServlet {
                 myMail.setSubject("Uw brief werd succesvol opgeladen op zendu.be");
                 myMail.setMessage("We verzenden de brief zo snel mogelijk aangetekend. U vindt de door u opgeladen brief als bijlage bij deze e-mail.");
                 String returnMessage = myMail.getMessage();
+                
+                //notification
+                SendFileEmail mailer = new SendFileEmail();
+                mailer.setMailTo("jan.blonde@icloud.com");
+                mailer.setMessage("NOTIFICATION: nieuwe Zendu brief!");
+                mailer.setSubject("NOTIFICATION: nieuwe Zendu brief!");
+                mailer.getMessage();
                 
                 session.setAttribute("origin","testuser");
                 response.sendRedirect("https://www.zendu.be/success.jsp");
@@ -335,7 +333,7 @@ public class FileUploadHandler extends HttpServlet {
                 session.setAttribute("returnpage","letters");
                 response.sendRedirect("payment.jsp");
             }
-        }
+        //}
         
     }
 }
