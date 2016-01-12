@@ -98,7 +98,7 @@ public class GenerateInvoice{
                 statement = con.prepareStatement(SQL,Statement.RETURN_GENERATED_KEYS);
                 statement.setString(1,memberID);
                 statement.setString(2,"Verzending 1 aangetekende brief");
-                statement.setString(3,"9.80 &euro;");
+                statement.setString(3,"8.50 &euro;");
 
                 statement.execute();                        
                 ResultSet rs3 = statement.getGeneratedKeys();
@@ -238,19 +238,19 @@ public class GenerateInvoice{
             contentStream.beginText();
             contentStream.setFont( font, 10 );
             contentStream.moveTextPositionByAmount( 470 , 480 );
-            contentStream.drawString( "8.10 EUR");
+            contentStream.drawString( "7.02 EUR");
             contentStream.endText();
 
             contentStream.beginText();
             contentStream.setFont( font, 10 );
             contentStream.moveTextPositionByAmount( 470, 470 );
-            contentStream.drawString("1.70 EUR");
+            contentStream.drawString("1.48 EUR");
             contentStream.endText();
 
             contentStream.beginText();
             contentStream.setFont( font, 10 );
             contentStream.moveTextPositionByAmount( 470 , 455 );
-            contentStream.drawString( "9.80 EUR");
+            contentStream.drawString( "8.50 EUR");
             contentStream.endText();
 
 
@@ -321,9 +321,9 @@ public class GenerateInvoice{
                 statement.setString(1,memberID);
                 statement.setString(2,"Aankoop credits voor het verzenden van " + amount + " aangetekende brieven");
                 if(amount.equals("10"))
-                    statement.setString(3,"88 &euro;");
+                    statement.setString(3,"75 &euro;");
                 if(amount.equals("50"))
-                    statement.setString(3,"425 &euro;");
+                    statement.setString(3,"360 &euro;");
                 if(amount.equals("100"))
                     statement.setString(3,"820 &euro;");
     
@@ -472,7 +472,7 @@ public class GenerateInvoice{
             contentStream.setFont( font, 10 );
             contentStream.moveTextPositionByAmount( 470 , 480 );
             if(amount.equals("10"))
-                contentStream.drawString( " 72.73 EUR");
+                contentStream.drawString( " 61.98 EUR");
             if(amount.equals("50"))
                 contentStream.drawString( "351.24 EUR");
             if(amount.equals("100"))
@@ -483,7 +483,7 @@ public class GenerateInvoice{
             contentStream.setFont( font, 10 );
             contentStream.moveTextPositionByAmount( 470, 470 );
             if(amount.equals("10"))
-                contentStream.drawString( " 15.27 EUR");
+                contentStream.drawString( " 13.02 EUR");
             if(amount.equals("50"))
                 contentStream.drawString( "  73.76 EUR");
             if(amount.equals("100"))

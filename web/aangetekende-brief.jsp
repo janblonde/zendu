@@ -108,6 +108,7 @@
         <div class="login-form">
             
             <form method="post" action="https://www.zendu.be/login.jsp" id="login_form">
+            <!-- REMOVE <form method="post" action="https://java-tomcat-janblonde.c9.io/login.jsp" id="login_form">-->
                 <input id="email" type="text" class="login-input" placeholder=" email" name="email" tabindex="1"></input><br>
                 <input id="pass" type="password" class="login-input" placeholder=" paswoord" name="pass" tabindex="2"></input><br>            
                 <button id="login" type="submit" class="btn btn-outline-light page-scroll" tabindex="3" value="LOGIN">Login</button>
@@ -291,6 +292,7 @@
                 <div id="success_test"></div>
                 <div class="form-group">
                   <input id="payment_test" type="submit" class="btn btn-lg btn-default" value="verzenden en betalen" onclick="ga('send','event','button','click','home_form')"/>
+                  <!--REMOVE <input id="payment_test" type="submit" class="btn btn-lg btn-default" value="verzenden en betalen"/>-->
                   <a id="closebutton" class="btn btn-lg btn-default">Cancel</a><br>
                 </div>
               </form>
@@ -482,7 +484,6 @@
                 <div class="col-lg-12">
                     <p class="small">&copy; 2015 Zendu.be Aangetekende brieven</p>
                     <p class="small"><a href="disclaimer.html">Disclaimer</a> &nbsp &nbsp <a href="cookies.html">Cookies Policy</a> &nbsp &nbsp <a href="geheimhouding.html">Geheimhoudingsverklaring</a></p>
-                    <img src="https://www.linkedin.com/profile/view?authToken=zRgB&authType=name&id=AAIAAADm-1sBm8NoA7CQmlDLKmclhk_7dL2OuW8"/>
                 </div>
             </div>
         </div>
@@ -506,6 +507,7 @@
     <script src="assets/js/feedback.js"></script>
     <!-- Vitality Theme Scripts -->
     <script src="assets/js/vitality.js"></script>
+    <!-- REMOVE -->
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

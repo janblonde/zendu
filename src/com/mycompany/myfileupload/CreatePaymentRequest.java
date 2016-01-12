@@ -14,7 +14,7 @@ public class CreatePaymentRequest {
     public static String myFirst = "Jan";
     public static String myLast = "Blonde";
     public static String myEmail = "jan.blonde@icloud.com";
-    public static String myAmount = "980";
+    public static String myAmount = "850";
     public static String myStreet = "Huybrechtsstraat";
     public static String myHouseNumber = "76";
     public static String myPostalCode = "2140";
@@ -32,7 +32,7 @@ public class CreatePaymentRequest {
             SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
             // Send SOAP Message to SOAP Server
-            //String url = "https://test.docdatapayments.com/ps/services/paymentservice/1_3";
+            //REMOVE String url = "https://test.docdatapayments.com/ps/services/paymentservice/1_3";
             String url = "https://secure.docdatapayments.com/ps/services/paymentservice/1_3";
             SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(), url);
             
@@ -72,7 +72,7 @@ public class CreatePaymentRequest {
             SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
             // Send SOAP Message to SOAP Server
-            //String url = "https://test.docdatapayments.com/ps/services/paymentservice/1_3";
+            //REMOVE String url = "https://test.docdatapayments.com/ps/services/paymentservice/1_3";
             String url = "https://secure.docdatapayments.com:443/ps/services/paymentservice/1_3";
             SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(), url);
             
@@ -109,13 +109,12 @@ public class CreatePaymentRequest {
         SOAPMessage soapMessage = messageFactory.createMessage();
         SOAPPart soapPart = soapMessage.getSOAPPart();
 
-        String serverURI = "https://www.docdatapayments.com/services/paymentservice/1_3/";
-        //String serverURI = "https://secure.docdatapayments.com/ps/services/paymentservice/1_3";
+        //REMOVE String serverURI = "https://www.docdatapayments.com/services/paymentservice/1_3/";
+        String serverURI = "https://secure.docdatapayments.com/ps/services/paymentservice/1_3";
 
         // SOAP Envelope
         SOAPEnvelope envelope = soapPart.getEnvelope();
         envelope.addNamespaceDeclaration("ns1", "http://www.docdatapayments.com/services/paymentservice/1_3/");
-        //envelope.addNamespaceDeclaration("ns1", "http://www.docdatapayments.com/services/paymentservice/1_3/");
 
         /*
         Constructed SOAP Request Message:
@@ -132,7 +131,6 @@ public class CreatePaymentRequest {
 
         // SOAP Body
         SOAPBody soapBody = soapMessage.getSOAPBody();
-        //Name bodyName = envelope.createName("createRequest", "ns1","http://www.docdatapayments.com/services/paymentservice/1_3/");
         Name bodyName = envelope.createName("createRequest", "ns1","http://www.docdatapayments.com/services/paymentservice/1_3/");
         SOAPBodyElement createRequest = soapBody.addBodyElement(bodyName);
         
@@ -146,12 +144,13 @@ public class CreatePaymentRequest {
         merchant.addAttribute(merchantName,"zendu_be");
         
         Name password = envelope.createName("password");
-        //merchant.addAttribute(password,"Quyazu3e");
+        //REMOVE merchant.addAttribute(password,"Quyazu3e");
         merchant.addAttribute(password,"StED6xun");
         
         //merchantorderreference
         SOAPElement orderRef = createRequest.addChildElement("merchantOrderReference","ns1");
         orderRef.addTextNode(myOrderRef);
+        //REMOVE orderRef.addTextNode("X0612" + myOrderRef);
         
         //paymentpreferences
         SOAPElement paymentPreferences = createRequest.addChildElement("paymentPreferences","ns1");
@@ -160,7 +159,11 @@ public class CreatePaymentRequest {
         SOAPElement nrOfDays = paymentPreferences.addChildElement("numberOfDaysToPay","ns1");
         nrOfDays.addTextNode("14");
         
-        //menupreferences - TODO at a later stage
+        //menupreferences
+        SOAPElement menuPreferences = createRequest.addChildElement("menuPreferences","ns1");
+        SOAPElement css = menuPreferences.addChildElement("css","ns1");
+        Name cssID = envelope.createName("id");
+        css.addAttribute(cssID,"1");
         
         //shopper
         SOAPElement shopper = createRequest.addChildElement("shopper","ns1");
